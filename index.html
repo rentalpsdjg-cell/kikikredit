@@ -3,161 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - Real Matching Style</title>
+  <title>Kiki Kredit Solution - Full Page Thermal</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     /* ============================================================
-       1. TAMPILAN APLIKASI DI LAYAR HP (MEWAH & RESPONSIVE)
+       1. INTERFACE LAYAR HP - DESAIN KHUSUS PREVIEW TERMAL
        ============================================================ */
     body { 
-      background: #f4f6f9; 
-      padding: 15px; 
-      font-size: 16px; 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      color: #2b2b2b;
+      background: #555555; 
+      padding: 10px; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    .card { 
-      border-radius: 16px; 
-      border: none; 
-      box-shadow: 0 4px 16px rgba(0,0,0,0.04); 
-      margin-bottom: 20px; 
-      background: #ffffff; 
-      padding: 20px;
+    
+    /* Kontainer utama menyerupai kertas struk gulungan asli */
+    .thermal-page {
+      background: #ffffff;
+      max-width: 400px;
+      margin: 0 auto 30px auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      padding: 20px 15px;
+      border-radius: 4px;
     }
-    .header-card { 
-      background: linear-gradient(135deg, #11698e, #1f4068); 
-      color: white; 
-      border-radius: 16px; 
-      padding: 24px; 
-      box-shadow: 0 6px 20px rgba(31, 64, 104, 0.15);
-    }
-    .form-control-lg {
+
+    .app-card {
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
       border-radius: 12px;
-      font-size: 16px;
-      border: 2px solid #e2e8f0;
-      padding: 12px 16px;
+      max-width: 400px;
+      margin: 0 auto 20px auto;
+      padding: 15px;
+    }
+
+    .form-control-custom {
+      border-radius: 8px;
+      font-size: 14px;
+      border: 2px solid #ced4da;
+      padding: 10px;
       height: auto;
+      margin-bottom: 10px;
     }
-    .form-control-lg:focus {
+    
+    .form-control-custom:focus {
       border-color: #11698e;
-      box-shadow: 0 0 0 3px rgba(17, 105, 142, 0.1);
+      box-shadow: none;
     }
-    .btn-lg-custom {
-      border-radius: 12px;
-      font-size: 16px;
+
+    .btn-action {
+      font-size: 13px;
       font-weight: bold;
-      padding: 14px;
-      background: #11698e;
-      border: none;
-      color: white;
-    }
-    .btn-sm-custom { 
-      font-size: 13px !important; 
-      padding: 10px 12px !important; 
-      margin: 4px !important; 
-      font-weight: bold !important; 
-      border-radius: 8px !important; 
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin: 2px;
       flex: 1;
-      min-width: 80px;
       text-align: center;
-      border: none;
     }
+
     #overlay { 
       display: none; 
       position: fixed; 
       top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(255, 255, 255, 0.9); 
+      background: rgba(0, 0, 0, 0.7); 
       z-index: 9999; 
       justify-content: center; 
       align-items: center; 
       flex-direction: column; 
+      color: white;
     }
-    
-    /* Sembunyikan cetakan struk dari layar HP kasir */
-    #strukCetak { display: none; }
 
     /* ============================================================
-       2. RE-ARSITEKTUR STRUK ADAPTIF (MENGIKUTI CONTOH FOTO)
+       2. GAYA STRUK KIKI KREDIT (PERSIS SEPERTI CONTOH FOTO SUKSES)
+       ============================================================ */
+    .nota-container {
+      width: 100%;
+      background: #ffffff;
+      color: #000000;
+      font-family: 'Courier New', Courier, monospace; 
+      font-size: 15px; 
+      font-weight: bold;
+      line-height: 1.4;
+    }
+    
+    .nota-header { 
+      text-align: center; 
+      font-size: 17px; 
+      font-weight: bold;
+      line-height: 1.3; 
+      margin-bottom: 4px; 
+      text-transform: uppercase;
+    }
+    
+    .nota-garis { 
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      margin: 3px 0; 
+      font-size: 15px;
+      font-weight: bold;
+    }
+    .nota-garis::after {
+      content: "------------------------------------------"; 
+      display: block;
+    }
+    
+    .nota-item-group {
+      margin-bottom: 3px;
+    }
+    
+    .nota-label {
+      text-align: left;
+      font-weight: bold;
+      display: block;
+    }
+    
+    .nota-value {
+      text-align: left;
+      display: block;
+      padding-left: 2px;
+      margin-bottom: 2px;
+    }
+    
+    .nota-footer {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 6px;
+      line-height: 1.3;
+    }
+
+    /* ============================================================
+       3. ARSITEKTUR ENGINE CETAK OTOMATIS (MURNI TERMAL)
        ============================================================ */
     @media print {
-      body * { display: none !important; }
+      /* Hilangkan semua panel kontrol kasir, tombol, dan background gelap */
+      body { 
+        background: #ffffff !important; 
+        padding: 0 !important; 
+      }
+      .app-card, #overlay, .no-print, .header-card { 
+        display: none !important; 
+      }
       
-      /* Membiarkan browser menentukan ukuran halaman terbaik, tanpa paksaan keras */
+      /* Set halaman tanpa margin paksa */
       @page { 
         size: auto; 
         margin: 0mm !important; 
       }
       
-      #strukCetak, #strukCetak * { display: block !important; }
-      
-      #strukCetak { 
-        display: block !important; 
-        width: 100% !important; 
-        max-width: 100% !important;
+      .thermal-page {
+        box-shadow: none !important;
         margin: 0 !important;
-        padding: 0 !important;
-        background: #ffffff !important;
-      }
-      
-      .nota-container {
+        padding: 5mm 4mm !important; /* Pas untuk ruang cetak mini */
         width: 100% !important;
-        padding: 6mm 5mm !important;
-        box-sizing: border-box !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        /* Menggunakan font mesin ketik/printer thermal murni */
-        font-family: 'Courier New', Courier, monospace !important; 
-        font-size: 14px !important; 
-        line-height: 1.5 !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
       }
-      
-      .nota-header { 
-        text-align: center !important; 
-        font-size: 16px !important; 
-        font-weight: bold !important;
-        line-height: 1.3 !important; 
-        margin-bottom: 3mm !important; 
-        text-transform: uppercase !important;
-      }
-      
-      /* Garis pembatas putus-putus presisi sesuai contoh foto */
-      .nota-garis { 
-        text-align: center !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        margin: 2mm 0 !important; 
+
+      .nota-container {
         font-size: 14px !important;
-        font-weight: bold !important;
       }
-      .nota-garis::after {
-        content: "------------------------------------------" !important; 
-        display: block !important;
-      }
-      
-      /* Penataan Baris Data Menurun Sesuai Foto Contoh */
-      .nota-item-group {
-        margin-bottom: 2mm !important;
-      }
-      
-      .nota-label {
-        text-align: left !important;
-        font-weight: bold !important;
-        display: block !important;
-      }
-      
-      .nota-value {
-        text-align: left !important;
-        display: block !important;
-        padding-left: 2px !important;
-        margin-bottom: 1mm !important;
-      }
-      
-      .nota-footer {
-        text-align: center !important;
-        font-size: 13px !important;
-        margin-top: 4mm !important;
-        line-height: 1.4 !important;
+      .nota-header {
+        font-size: 16px !important;
       }
     }
   </style>
@@ -165,11 +170,16 @@
 <body>
 
   <div id="overlay">
-    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
-    <b class="mt-3 text-primary h5">Menghubungkan Database Cloud...</b>
+    <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;"></div>
+    <b class="mt-3 h5">Sinkronisasi Cloud...</b>
   </div>
 
-  <div id="strukCetak">
+  <div class="app-card text-center bg-dark text-white border-0 py-3 shadow">
+    <h5 class="font-weight-bold mb-0">KIKI KREDIT KASIR TERMAL</h5>
+    <small class="text-white-50" id="statInfo">Memuat info piutang...</small>
+  </div>
+
+  <div class="thermal-page">
     <div class="nota-container">
       <div class="nota-header">KIKI KREDIT<br>SOLUTION</div>
       
@@ -177,12 +187,12 @@
       
       <div class="nota-item-group">
         <div class="nota-label">Tgl:</div>
-        <div class="nota-value" id="pTgl">-</div>
+        <div class="nota-value" id="pTgl">28/5/2026</div>
       </div>
       
       <div class="nota-item-group">
         <div class="nota-label">Nama:</div>
-        <div class="nota-value" id="pNama">-</div>
+        <div class="nota-value" id="pNama">PILIH PELANGGAN DI BAWAH</div>
       </div>
       
       <div class="nota-item-group">
@@ -211,64 +221,42 @@
     </div>
   </div>
 
-  <div class="header-card text-center mb-4">
-    <h3 class="font-weight-bold mb-1">USAHA KIKI KREDIT</h3>
-    <small class="d-block text-white-50">Sistem Kasir Cloud Pintar & Aman</small>
-    <div class="row mt-4">
-      <div class="col-6 border-right border-white-20">
-        <small class="text-uppercase text-white-50" style="font-size:11px; letter-spacing:1px;">TOTAL PIUTANG</small>
-        <h4 id="statPiutang" class="font-weight-bold mt-1 text-white">Rp 0</h4>
-      </div>
-      <div class="col-6">
-        <small class="text-uppercase text-white-50" style="font-size:11px; letter-spacing:1px;">PELANGGAN AKTIF</small>
-        <h4 id="statAktif" class="font-weight-bold mt-1 text-white">0</h4>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h5 id="formTitle" class="text-primary font-weight-bold mb-3"><i class="fas fa-user-plus mr-2"></i>Registrasi Pelanggan Baru</h5>
+  <div class="app-card shadow-sm no-print">
+    <h6 id="formTitle" class="text-primary font-weight-bold mb-2"><i class="fas fa-user-plus mr-1"></i>Pelanggan Baru</h6>
     <input type="hidden" id="editRowNum">
+    <input type="text" id="nama" class="form-control form-control-custom" placeholder="Nama Pelanggan">
+    <input type="text" id="alamat" class="form-control form-control-custom" placeholder="Alamat">
+    <input type="text" id="barang" class="form-control form-control-custom" placeholder="Nama Barang">
     
-    <div class="form-group mb-2"><input type="text" id="nama" class="form-control form-control-lg" placeholder="Nama Lengkap Pelanggan"></div>
-    <div class="form-group mb-2"><input type="text" id="alamat" class="form-control form-control-lg" placeholder="Alamat Tempat Tinggal"></div>
-    <div class="form-group mb-2"><input type="text" id="barang" class="form-control form-control-lg" placeholder="Nama Barang Kredit"></div>
-    
-    <div class="form-row mb-2">
-      <div class="col-7"><input type="number" id="harga" class="form-control form-control-lg" placeholder="Harga Total (Rp)" oninput="autoIsiSisa()"></div>
-      <div class="col-5"><input type="number" id="tenor" class="form-control form-control-lg" placeholder="Tenor / Kali"></div>
+    <div class="form-row">
+      <div class="col-7"><input type="number" id="harga" class="form-control form-control-custom" placeholder="Harga (Rp)" oninput="autoIsiSisa()"></div>
+      <div class="col-5"><input type="number" id="tenor" class="form-control form-control-custom" placeholder="Tenor"></div>
     </div>
     
-    <div class="form-row mb-3">
-      <div class="col-7">
-        <small class="text-muted font-weight-bold d-block mb-1">Sisa Utang Awal:</small>
-        <input type="number" id="sisaUtang" class="form-control form-control-lg" placeholder="Rp 0">
-      </div>
+    <div class="form-row">
+      <div class="col-7"><input type="number" id="sisaUtang" class="form-control form-control-custom" placeholder="Sisa Utang"></div>
       <div class="col-5">
-        <small class="text-muted font-weight-bold d-block mb-1">Tipe Tenor:</small>
-        <select id="tipeTenor" class="form-control form-control-lg" style="height: calc(1.5em + 1rem + 5px);">
+        <select id="tipeTenor" class="form-control form-control-custom" style="padding: 5px;">
           <option value="Bulanan">Bulanan</option>
           <option value="Mingguan">Mingguan</option>
         </select>
       </div>
     </div>
     
-    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-block btn-lg-custom shadow-sm">SIMPAN TRANSAKSI KE SERVER</button>
-    <button onclick="resetForm()" class="btn btn-light btn-block mt-2 text-muted font-weight-bold" style="border-radius:12px; padding:10px; font-size:14px;">Batal / Reset Form</button>
+    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-block font-weight-bold py-2 shadow-sm" style="border-radius:8px;">SIMPAN KE SERVER CLOUD</button>
+    <button onclick="resetForm()" class="btn btn-light btn-block btn-sm text-muted mt-2 border" style="border-radius:6px;">Reset Form</button>
   </div>
 
-  <div class="card p-2 mb-3" style="border-radius: 12px;">
-    <div class="input-group">
-      <div class="input-group-prepend"><span class="input-group-text border-0 bg-transparent text-muted"><i class="fas fa-search"></i></span></div>
-      <input type="text" id="cariInput" class="form-control form-control-lg border-0 pl-1" placeholder="Cari nama pelanggan di sini..." onkeyup="filterTabel()" style="background: transparent;">
+  <div class="app-card shadow-sm no-print">
+    <div class="input-group mb-2">
+      <div class="input-group-prepend"><span class="input-group-text bg-transparent border-right-0"><i class="fas fa-search text-muted"></i></span></div>
+      <input type="text" id="cariInput" class="form-control border-left-0" placeholder="Cari nama..." onkeyup="filterTabel()">
     </div>
-  </div>
-  
-  <div class="card p-2">
-    <div class="table-responsive" style="overflow-x: hidden;">
-      <table class="table table-hover mb-0">
+    
+    <div style="max-height: 350px; overflow-y: auto;">
+      <table class="table table-sm table-hover mb-0">
         <tbody id="tabelBody">
-          <tr><td class="text-center py-4 text-muted">Sedang sinkronisasi data cloud...</td></tr>
+          <tr><td class="text-center py-3 text-muted">Menghubungkan ke server...</td></tr>
         </tbody>
       </table>
     </div>
@@ -294,43 +282,34 @@
       
       let totalPiutang = data.stats && data.stats.totalPiutang ? data.stats.totalPiutang : 0;
       let aktif = data.stats && data.stats.aktif ? data.stats.aktif : 0;
-      
-      document.getElementById('statPiutang').innerText = "Rp " + totalPiutang.toLocaleString('id-ID');
-      document.getElementById('statAktif').innerText = aktif;
+      document.getElementById('statInfo').innerText = "Piutang: Rp " + totalPiutang.toLocaleString('id-ID') + " | Aktif: " + aktif;
       
       let html = "";
       dataStorage.forEach(p => {
         let namaPel = p.nama || "-";
         let barangPel = p.barang || "-";
         let sisaPel = p.sisa || 0;
-        let statusPel = p.status || "AKTIF";
-        let tenorPel = p.tenor || "0";
-        let tipePel = p.tipe || "Bulanan";
         let row = p.rowNum;
 
-        html += `<tr class="border-bottom"><td class="py-4 px-1" style="border-top: none;">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="text-dark font-weight-bold" style="font-size: 19px;">${namaPel.toUpperCase()}</span> 
-            <span class="badge px-3 py-2 font-weight-bold" style="font-size: 12px; border-radius: 6px; ${statusPel==='LUNAS'?'background-color: #d4edda; color: #155724;':'background-color: #f8d7da; color: #721c24;'}">${statusPel}</span>
-          </div>
-          <div class="text-dark mb-1" style="font-size: 15px; font-weight: 600;"><i class="fas fa-box text-muted mr-1"></i> ${barangPel}</div>
-          <div class="text-dark mb-2" style="font-size: 16px; font-weight: 500;">Sisa Utang: <span class="text-danger font-weight-bold" style="font-size: 17px;">Rp ${Number(sisaPel).toLocaleString('id-ID')}</span></div>
-          <div class="text-muted mb-3" style="font-size: 13px; font-weight: bold;"><i class="fas fa-history mr-1"></i> Tenor: ${tenorPel} Kali (${tipePel})</div>
-          
-          <div class="d-flex flex-wrap m-n1">
-            <button onclick="bayar(${row})" class="btn btn-success btn-sm-custom shadow-sm"><i class="fas fa-money-bill-wave d-block mb-1"></i> Angsur</button>
-            <button onclick="cetakLokal(${row})" class="btn btn-primary btn-sm-custom shadow-sm"><i class="fas fa-print d-block mb-1"></i> Struk</button>
-            <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-sm-custom shadow-sm"><i class="fas fa-edit d-block mb-1"></i> Edit</button>
-            <button onclick="hapus(${row})" class="btn btn-danger btn-sm-custom shadow-sm"><i class="fas fa-trash d-block mb-1"></i> Hapus</button>
-          </div>
-        </td></tr>`;
+        html += `<tr class="border-bottom">
+          <td class="py-2">
+            <div class="d-flex justify-content-between">
+              <span class="text-dark font-weight-bold" style="font-size:15px;">${namaPel.toUpperCase()}</span>
+              <span class="text-danger font-weight-bold" style="font-size:14px;">Rp ${Number(sisaPel).toLocaleString('id-ID')}</span>
+            </div>
+            <small class="text-muted d-block mb-1">Barang: ${barangPel} | Tenor: ${p.tenor}x (${p.tipe})</small>
+            <div class="d-flex">
+              <button onclick="bayar(${row})" class="btn btn-success btn-action"><i class="fas fa-money-bill-wave"></i> Angsur</button>
+              <button onclick="loadKeStruk(${row})" class="btn btn-dark btn-action"><i class="fas fa-eye"></i> Lihat</button>
+              <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-action"><i class="fas fa-edit"></i> Edit</button>
+              <button onclick="hapus(${row})" class="btn btn-danger btn-action"><i class="fas fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>`;
       });
-      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center py-4 font-weight-bold text-muted'>Belum ada data pelanggan</td></tr>";
+      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center text-muted py-3'>Tidak ada data</td></tr>";
       document.getElementById('overlay').style.display = 'none';
-    }).catch((err) => { 
-      console.error(err);
-      document.getElementById('overlay').style.display = 'none'; 
-    });
+    }).catch(() => { document.getElementById('overlay').style.display = 'none'; });
   }
 
   function simpan() {
@@ -346,7 +325,7 @@
       tenor: document.getElementById('tenor').value,
       sisaUtang: sisaInput ? sisaInput : hargaInput
     };
-    if(!data.nama || !data.totalHarga) return alert("Nama Pelanggan dan Harga wajib diisi!");
+    if(!data.nama || !data.totalHarga) return alert("Nama dan Harga wajib diisi!");
     document.getElementById('overlay').style.display = 'flex';
     fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "simpan", data: data }) })
     .then(res => res.text()).then(textData => { 
@@ -373,26 +352,20 @@
     });
   }
 
-  function findPelanggan(rowNum) {
-    return dataStorage.find(item => item.rowNum === rowNum);
-  }
-
-  function cetakLokal(rowNum) {
-    let p = findPelanggan(rowNum);
+  function loadKeStruk(rowNum) {
+    let p = dataStorage.find(item => item.rowNum === rowNum);
     if (!p) return;
-
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
     document.getElementById('pNama').innerText = p.nama.toUpperCase();
     document.getElementById('pBrg').innerText = p.barang.toUpperCase();
     document.getElementById('pBayar').innerText = "CEK SISA";
     document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
-    setTimeout(() => { window.print(); }, 200);
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   function pindahKeEdit(rowNum) {
-    let p = findPelanggan(rowNum);
+    let p = dataStorage.find(item => item.rowNum === rowNum);
     if (!p) return;
-    
     document.getElementById('editRowNum').value = p.rowNum;
     document.getElementById('nama').value = p.nama;
     document.getElementById('alamat').value = p.alamat;
@@ -401,16 +374,15 @@
     document.getElementById('tenor').value = p.tenor;
     document.getElementById('tipeTenor').value = p.tipe;
     document.getElementById('sisaUtang').value = p.sisa;
-    document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit mr-2'></i>Ubah Data: " + p.nama.toUpperCase();
-    document.getElementById('btnSimpan').innerText = "PERBARUI DATA TRANSAKSI";
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit mr-1'></i>Ubah: " + p.nama.toUpperCase();
+    document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
   }
 
   function resetForm() {
     document.getElementById('editRowNum').value = "";
     document.querySelectorAll('input').forEach(i => i.value = "");
-    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-2'></i>Registrasi Pelanggan Baru";
-    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI KE SERVER";
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-1'></i>Pelanggan Baru";
+    document.getElementById('btnSimpan').innerText = "SIMPAN KE SERVER CLOUD";
   }
 
   function filterTabel() {
@@ -423,7 +395,7 @@
   }
 
   function hapus(rowNum) {
-    if(confirm("Hapus data pelanggan ini secara permanen dari server database?")) {
+    if(confirm("Hapus data pelanggan ini?")) {
       document.getElementById('overlay').style.display = 'flex';
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
       .then(res => res.text()).then(() => muatData());
