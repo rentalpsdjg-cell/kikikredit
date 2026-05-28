@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
-    /* LAYOUT UTAMA DI LAYAR HP */
+    /* TAMPILAN UTAMA DI LAYAR HP Kasir */
     body { background: #f4f7f6; padding: 12px; font-size: 16px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     .card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 15px; background: #fff; }
     .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 22px; }
@@ -25,23 +25,20 @@
     
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* SEMBUNYIKAN STRUK DARI LAYAR HP AGAR TIDAK MENGGANGGU */
+    /* SEMBUNYIKAN STRUK SAAT DI LAYAR HP */
     #strukCetak { display: none; }
 
     /* ============================================================
-       PENGATURAN CETAK ULTRA-SERIUS: PAKSA UKURAN FISIK KERTAS A9
+       PENGATURAN CETAK PRINTER THERMAL KERTAS A8 + RATA TENGAH (CENTER)
        ============================================================ */
     @media print {
-      /* Sembunyikan seluruh elemen aplikasi web kasir */
       body * { display: none !important; }
       
-      /* Paksa ukuran halaman browser ke standar Internasional A9 */
       @page { 
-        size: A9 portrait; 
-        margin: 0mm !important; 
+        size: A8 portrait; 
+        margin: 0mm !important; /* Hilangkan margin kertas agar tidak geser */
       }
       
-      /* Tampilkan hanya area struk kasir */
       #strukCetak, #strukCetak * { display: block !important; }
       #strukCetak { 
         display: block !important; 
@@ -50,57 +47,67 @@
         padding: 0 !important;
       }
       
-      /* Kontainer Struk dioptimalkan penuh untuk area cetak mikro A9 */
       .nota-container {
         width: 100% !important;
-        max-width: 37mm !important; /* Batas fisik lebar kertas A9 */
-        padding: 1mm !important;
+        max-width: 52mm !important; /* Presisi lebar kertas A8 */
+        margin: 0 auto !important;
+        padding: 3mm 2mm !important;
         background: #fff !important;
         color: #000 !important;
         font-family: 'Courier New', Courier, monospace !important;
-        
-        /* HURUF DISETEL RAKSASA SECARA ABSOLUT (PT) UNTUK SKALA MIKRO */
-        font-size: 18pt !important; 
-        font-weight: 900 !important; /* Hitam pekat maksimal */
-        line-height: 1.3 !important;
+        font-size: 13pt !important; /* Ukuran huruf besar, jelas, anti sakit mata */
+        font-weight: bold !important;
+        line-height: 1.4 !important;
+        text-align: center !important; /* SEMUA TEKS PAKSA RATA TENGAH */
       }
       
       .nota-header { 
         text-align: center !important; 
         font-weight: 900 !important; 
-        font-size: 20pt !important; 
-        line-height: 1.2 !important; 
-        margin-bottom: 10px !important; 
+        font-size: 15pt !important; 
+        line-height: 1.3 !important; 
+        margin-bottom: 6px !important; 
       }
       
       .nota-garis { 
-        border-top: 4px dashed #000 !important; /* Garis putus dipertebal */
-        margin: 10px 0 !important; 
+        border-top: 3px dashed #000 !important; /* Garis pembatas tebal jelas */
+        margin: 8px 0 !important; 
         height: 0 !important;
         width: 100% !important;
       }
       
+      /* Mengubah item data menjadi rata tengah terstruktur */
       .nota-item { 
-        display: flex !important; 
-        justify-content: space-between !important; 
+        display: block !important; 
+        text-align: center !important; 
         margin-bottom: 8px !important; 
       }
       
       .nota-item span { 
-        font-weight: 900 !important; 
+        font-weight: normal !important;
+        display: inline-block !important;
       }
       
-      /* Nominal angka pembayaran dibuat paling raksasa */
+      /* Mengatur nilai data/angka berada di bawah labelnya agar rapi di posisi center */
+      .nota-item val {
+        display: block !important;
+        font-weight: bold !important;
+        font-size: 14pt !important;
+      }
+      
+      /* Nominal angka BAYAR & SISA dibuat paling besar & mencolok di tengah */
       .nota-item b { 
-        font-size: 22pt !important; 
-        font-weight: 900 !important; 
+        display: block !important;
+        font-size: 18pt !important; 
+        font-weight: 900 !important;
+        margin-top: 2px !important;
       }
       
       .nota-footer {
         text-align: center !important;
-        font-size: 14pt !important;
-        font-weight: 900 !important;
-        margin-top: 15px !important;
+        font-size: 11pt !important;
+        font-weight: bold !important;
+        margin-top: 10px !important;
         line-height: 1.3 !important;
       }
     }
@@ -117,12 +124,16 @@
     <div class="nota-container">
       <div class="nota-header">SLIP PEMBAYARAN<br>KIKI KREDIT</div>
       <div class="nota-garis"></div>
-      <div class="nota-item"><span>Tgl:</span><span id="pTgl">-</span></div>
-      <div class="nota-item"><span>Nama:</span><span id="pNama">-</span></div>
-      <div class="nota-item"><span>Barang:</span><span id="pBrg">-</span></div>
+      
+      <div class="nota-item"><span>Tanggal</span><val id="pTgl">-</val></div>
+      <div class="nota-item"><span>Nama Pelanggan</span><val id="pNama">-</val></div>
+      <div class="nota-item"><span>Nama Barang</span><val id="pBrg">-</val></div>
+      
       <div class="nota-garis"></div>
-      <div class="nota-item"><span>Bayar:</span><b id="pBayar">Rp 0</b></div>
-      <div class="nota-item"><span>Sisa:</span><b id="pSisa">Rp 0</b></div>
+      
+      <div class="nota-item"><span>JUMLAH BAYAR</span><b id="pBayar">Rp 0</b></div>
+      <div class="nota-item"><span>SISA UTANG</span><b id="pSisa">Rp 0</b></div>
+      
       <div class="nota-garis"></div>
       <div class="nota-footer">*** TERIMA KASIH ***<br>KIKI KREDIT SOLUTION</div>
     </div>
@@ -302,4 +313,39 @@
     document.getElementById('alamat').value = p.alamat;
     document.getElementById('barang').value = p.barang;
     document.getElementById('harga').value = p.total;
-    document
+    document.getElementById('tenor').value = p.tenor;
+    document.getElementById('tipeTenor').value = p.tipe;
+    document.getElementById('sisaUtang').value = p.sisa;
+    document.getElementById('formTitle').innerText = "Ubah Data Pelanggan: " + p.nama.toUpperCase();
+    document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function resetForm() {
+    document.getElementById('editRowNum').value = "";
+    document.querySelectorAll('input').forEach(i => i.value = "");
+    document.getElementById('formTitle').innerText = "Registrasi Pelanggan Baru";
+    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
+  }
+
+  function filterTabel() {
+    let input = document.getElementById("cariInput").value.toUpperCase();
+    let tr = document.getElementById("tabelBody").getElementsByTagName("tr");
+    for (let i = 0; i < tr.length; i++) {
+      let td = tr[i].getElementsByTagName("span")[0];
+      if(td) { tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none"; }
+    }
+  }
+
+  function hapus(rowNum) {
+    if(confirm("Hapus data pelanggan ini secara permanen dari server database?")) {
+      document.getElementById('overlay').style.display = 'flex';
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
+      .then(res => res.text()).then(() => muatData());
+    }
+  }
+
+  window.onload = muatData;
+</script>
+</body>
+</html>
