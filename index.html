@@ -6,6 +6,7 @@
   <title>Kiki Kredit Solution</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body { background: #f4f7f6; padding: 10px; font-size: 14px; }
     .card { border-radius: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; }
@@ -13,7 +14,23 @@
     .btn-sm-custom { font-size: 11px; padding: 5px 8px; margin: 2px; }
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* SETTINGAN NOTA BIAR PAS DI PRINTER THERMAL HP BOSQ */
+    /* STYLE NOTA UTAMA (UNTUK PDF DAN TAMPILAN LAYAR) */
+    .nota-container {
+      width: 54mm;
+      padding: 2mm 1mm;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px; /* Ukuran dasar huruf dinaikkan */
+      color: #000;
+      line-height: 1.5;
+      background: #fff;
+    }
+    .nota-header { text-align: center; font-weight: bold; font-size: 16px; line-height: 1.3; margin-bottom: 5px; }
+    .nota-garis { border-top: 2px dashed #000; margin: 6px 0; }
+    .nota-item { display: flex !important; justify-content: space-between; margin-bottom: 4px; }
+    .nota-item span { font-weight: bold; }
+    .nota-item b { font-size: 15px; }
+
+    /* LAYOUT KHUSUS SAAT DI-PRINT KE PRINTER THERMAL 58MM BIAR HURUFNYA BESAR DAN TEBAL */
     #strukCetak { display: none; }
     @media print {
       body * { display: none !important; }
@@ -22,16 +39,13 @@
       @page { size: 58mm auto; margin: 0mm; }
       
       .nota-container {
-        width: 54mm;
-        padding: 2mm;
-        font-family: monospace;
-        font-size: 12px;
-        color: #000;
-        line-height: 1.4;
+        width: 56mm !important;
+        padding: 0mm !important;
+        font-size: 16px !important; /* Huruf super besar khusus cetak thermal */
+        font-weight: bold !important; /* Otomatis cetak tebal biar jelas */
       }
-      .nota-header { text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 4px; }
-      .nota-garis { border-top: 1px dashed #000; margin: 4px 0; }
-      .nota-item { display: flex !important; justify-content: space-between; margin-bottom: 2px; }
+      .nota-header { font-size: 18px !important; }
+      .nota-item b { font-size: 17px !important; }
     }
   </style>
 </head>
@@ -43,8 +57,8 @@
   </div>
 
   <div id="strukCetak">
-    <div class="nota-container">
-      <div class="nota-header">SLIP PEMBAYARAN<br>Kiki Kredit Solution</div>
+    <div class="nota-container" id="notaPdfArea">
+      <div class="nota-header">SLIP PEMBAYARAN<br>KIKI KREDIT SOLUTION</div>
       <div class="nota-garis"></div>
       <div class="nota-item"><span>Tgl:</span><span id="pTgl">-</span></div>
       <div class="nota-item"><span>Nama:</span><span id="pNama">-</span></div>
@@ -53,7 +67,7 @@
       <div class="nota-item"><span>Bayar:</span><b id="pBayar">Rp 0</b></div>
       <div class="nota-item"><span>Sisa:</span><b id="pSisa">Rp 0</b></div>
       <div class="nota-garis"></div>
-      <div style="text-align:center; font-size:10px; margin-top:5px;">*** Terima Kasih ***</div>
+      <div style="text-align:center; font-size:12px; font-weight:bold; margin-top:5px;">*** TERIMA KASIH ***<br>Bukti Pembayaran Sah.</div>
     </div>
   </div>
 
@@ -77,7 +91,7 @@
     </div>
     <div class="form-row mb-2">
       <div class="col-7">
-        <small class="text-muted d-block mb-1">Sisa Utang (Isi manual jika ada):</small>
+        <small class="text-muted d-block mb-1">Sisa Utang (Bisa diisi manual):</small>
         <input type="number" id="sisaUtang" class="form-control form-control-sm" placeholder="Rp 0">
       </div>
       <div class="col-5">
@@ -92,11 +106,13 @@
     <button onclick="resetForm()" class="btn btn-light btn-sm btn-block mt-1">Batal</button>
   </div>
 
-  <div class="card p-2 mb-2"><input type="text" id="cariInput" class="form-control form-control-sm" placeholder="🔍 Cari nama pelanggan..."></div>
+  <div class="card p-2 mb-2">
+    <input type="text" id="cariInput" class="form-control form-control-sm" placeholder="🔍 Cari nama pelanggan..." onkeyup="filterTabel()">
+  </div>
+  
   <div class="card p-2"><div class="table-responsive"><table class="table table-sm"><tbody id="tabelBody"></tbody></table></div></div>
 
 <script>
-  // LINK JALUR DATA SHEET UTAMA BOSQ
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPwNUZ2RxLinAs28fKOV4aSD3Ga29xX7Ij1z1ICoHCF9TZH2k_wRMy4z0D2WgCLin2/exec";
 
   let dataStorage = [];
@@ -117,6 +133,7 @@
           <div class="mt-2">
             <button onclick="bayar(${p.rowNum})" class="btn btn-success btn-sm btn-sm-custom">💵 Bayar</button>
             <button onclick="cetakLokal(${p.rowNum})" class="btn btn-primary btn-sm btn-sm-custom">🖨️ Cetak</button>
+            <button onclick="unduhPdfLokal(${p.rowNum})" class="btn btn-info btn-sm btn-sm-custom">📄 PDF</button>
             <button onclick="pindahKeEdit(${p.rowNum})" class="btn btn-warning text-white btn-sm px-2"><i class="fas fa-edit"></i></button>
             <button onclick="hapus(${p.rowNum})" class="btn btn-danger btn-sm px-2"><i class="fas fa-trash"></i></button>
           </div>
@@ -173,6 +190,28 @@
     window.print();
   }
 
+  function unduhPdfLokal(rowNum) {
+    let p = dataStorage.find(item => item.rowNum === rowNum);
+    if (!p) return;
+    
+    document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
+    document.getElementById('pNama').innerText = p.nama;
+    document.getElementById('pBrg').innerText = p.barang;
+    document.getElementById('pBayar').innerText = "Cek Berkala";
+    document.getElementById('pSisa').innerText = "Rp " + p.sisa.toLocaleString('id-ID');
+    
+    let element = document.getElementById('notaPdfArea');
+    let opsi = {
+      margin:       4,
+      filename:     'Struk_' + p.nama.replace(/\s+/g, '_') + '.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'mm', format: [62, 100], orientation: 'portrait' }
+    };
+    
+    html2pdf().set(opsi).from(element).save();
+  }
+
   function pindahKeEdit(rowNum) {
     let p = dataStorage.find(item => item.rowNum === rowNum);
     document.getElementById('editRowNum').value = rowNum;
@@ -192,6 +231,23 @@
     document.querySelectorAll('input').forEach(i => i.value = "");
     document.getElementById('formTitle').innerText = "Registrasi Pelanggan Baru";
     document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
+  }
+
+  function filterTabel() {
+    let input = document.getElementById("cariInput").value.toUpperCase();
+    let tr = document.getElementById("tabelBody").getElementsByTagName("tr");
+    for (let i = 0; i < tr.length; i++) {
+      let td = tr[i].getElementsByTagName("b")[0];
+      if(td) { tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none"; }
+    }
+  }
+
+  function hapus(rowNum) {
+    if(confirm("Hapus permanen?")) {
+      document.getElementById('overlay').style.display = 'flex';
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
+      .then(res => res.json()).then(() => muatData());
+    }
   }
 
   window.onload = muatData;
