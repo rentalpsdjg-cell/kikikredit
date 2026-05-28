@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - Square 8x8</title>
+  <title>Kiki Kredit Solution - Fixed 58mm Square</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
@@ -78,42 +78,40 @@
     #strukCetak { display: none; }
 
     /* ============================================================
-       2. ARSITEKTUR KUNCI MATI UKURAN KOTAK 8x8 CM (80mm x 80mm)
+       2. OPTIMALISASI STRUK KOTAK PAS UNTUK PRINTER MP58-LITE
        ============================================================ */
     @media print {
-      /* Hilangkan semua elemen web kasir dari kertas saat cetak */
       body * { display: none !important; }
       
-      /* Paksa ukuran kertas browser ke dimensi kotak 80mm x 80mm murni */
+      /* Mengunci tinggi halaman 80mm agar membentuk potongan kotak */
       @page { 
-        size: 80mm 80mm !important; 
+        size: 58mm 80mm !important; 
         margin: 0mm !important; 
       }
       
-      /* Aktifkan area struk saja */
       #strukCetak, #strukCetak * { display: block !important; }
       
       #strukCetak { 
         display: block !important; 
-        width: 80mm !important; 
+        width: 58mm !important; 
         height: 80mm !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #ffffff !important;
-        overflow: hidden !important; /* Lock page agar tidak keluar halaman kedua */
+        overflow: hidden !important;
       }
       
       .nota-container {
-        width: 80mm !important;
-        max-width: 80mm !important;
+        width: 58mm !important;
+        max-width: 58mm !important;
         height: 80mm !important;
         max-height: 80mm !important;
-        padding: 5mm 6mm !important; /* Proporsional untuk kertas 8cm */
+        padding: 4mm 3mm !important;
         box-sizing: border-box !important;
         background: #ffffff !important;
         color: #000000 !important;
         font-family: 'Courier New', Courier, monospace !important; 
-        font-size: 3.8mm !important; /* Ukuran font pas, tegas dan tebal */
+        font-size: 3.5mm !important; 
         font-weight: bold !important;
         line-height: 1.4 !important;
       }
@@ -121,25 +119,23 @@
       .nota-header { 
         text-align: center !important; 
         font-weight: 900 !important; 
-        font-size: 5.5mm !important; /* Judul terlihat kokoh */
+        font-size: 4.2mm !important; 
         line-height: 1.3 !important; 
         margin-bottom: 2mm !important; 
       }
       
-      /* Garis Pembatas Karakter 80mm */
       .nota-garis { 
         text-align: center !important;
         white-space: nowrap !important;
         overflow: hidden !important;
-        margin: 2mm 0 !important; 
-        font-size: 3.5mm !important;
+        margin: 1.5mm 0 !important; 
+        font-size: 3mm !important;
       }
       .nota-garis::after {
-        content: "====================================" !important; 
+        content: "--------------------------------" !important; 
         display: block !important;
       }
       
-      /* Penataan Rata Kiri-Kanan Menempel Sempurna ke Dinding Kertas */
       .nota-item-row {
         display: flex !important;
         justify-content: space-between !important;
@@ -158,25 +154,24 @@
         font-weight: 900 !important;
       }
       
-      /* Area Nominal Angka Pembayaran */
       .nota-total-row {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
         width: 100% !important;
         margin-bottom: 1.5mm !important;
-        font-size: 4.2mm !important;
+        font-size: 3.8mm !important;
       }
       
       .nota-total-row .nota-value {
-        font-size: 5mm !important;
+        font-size: 4.2mm !important;
         font-weight: 900 !important;
       }
       
       .nota-footer {
         text-align: center !important;
-        font-size: 3.2mm !important;
-        margin-top: 4.5mm !important;
+        font-size: 2.8mm !important;
+        margin-top: 4mm !important;
         line-height: 1.3 !important;
       }
     }
@@ -191,31 +186,31 @@
 
   <div id="strukCetak">
     <div class="nota-container">
-      <div class="nota-header">KIKI KREDIT<br>SLIP NOTA RESMI</div>
+      <div class="nota-header">KIKI KREDIT<br>SOLUTION</div>
       
       <div class="nota-garis"></div>
       
       <div class="nota-item-row">
-        <div class="nota-label">Tanggal :</div>
+        <div class="nota-label">Tgl:</div>
         <div class="nota-value" id="pTgl">-</div>
       </div>
       <div class="nota-item-row">
-        <div class="nota-label">Nama    :</div>
+        <div class="nota-label">Nama:</div>
         <div class="nota-value" id="pNama">-</div>
       </div>
       <div class="nota-item-row">
-        <div class="nota-label">Barang  :</div>
+        <div class="nota-label">Barang:</div>
         <div class="nota-value" id="pBrg">-</div>
       </div>
       
       <div class="nota-garis"></div>
       
       <div class="nota-total-row">
-        <div class="nota-label">TOTAL BAYAR :</div>
+        <div class="nota-label">Bayar:</div>
         <div class="nota-value" id="pBayar">Rp 0</div>
       </div>
       <div class="nota-total-row">
-        <div class="nota-label">SISA UTANG  :</div>
+        <div class="nota-label">Sisa:</div>
         <div class="nota-value" id="pSisa">Rp 0</div>
       </div>
       
@@ -223,7 +218,7 @@
       
       <div class="nota-footer">
         *** TERIMA KASIH ***<br>
-        KIKI KREDIT SOLUTION
+        Bukti Pembayaran Sah.
       </div>
     </div>
   </div>
