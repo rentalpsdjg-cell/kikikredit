@@ -13,10 +13,8 @@
     .btn-sm-custom { font-size: 11px; padding: 5px 8px; margin: 2px; }
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* ELEMEN STRUK LOKAL */
+    /* SETTINGAN NOTA BIAR PAS DI PRINTER THERMAL HP BOSQ */
     #strukCetak { display: none; }
-
-    /* PERBAIKAN UKURAN PRINT SUPAYA PAS DI PRINTER BLUETOOTH */
     @media print {
       body * { display: none !important; }
       html, body { background: #fff; margin: 0; padding: 0; width: 58mm; }
@@ -34,8 +32,6 @@
       .nota-header { text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 4px; }
       .nota-garis { border-top: 1px dashed #000; margin: 4px 0; }
       .nota-item { display: flex !important; justify-content: space-between; margin-bottom: 2px; }
-      .nota-item span:first-child { width: 40%; text-align: left; }
-      .nota-item span:last-child { width: 60%; text-align: right; font-weight: bold; }
     }
   </style>
 </head>
@@ -50,14 +46,14 @@
     <div class="nota-container">
       <div class="nota-header">SLIP PEMBAYARAN<br>Kiki Kredit Solution</div>
       <div class="nota-garis"></div>
-      <div class="nota-item"><span>Tgl</span><span id="pTgl">-</span></div>
-      <div class="nota-item"><span>Nama</span><span id="pNama">-</span></div>
-      <div class="nota-item"><span>Barang</span><span id="pBrg">-</span></div>
+      <div class="nota-item"><span>Tgl:</span><span id="pTgl">-</span></div>
+      <div class="nota-item"><span>Nama:</span><span id="pNama">-</span></div>
+      <div class="nota-item"><span>Barang:</span><span id="pBrg">-</span></div>
       <div class="nota-garis"></div>
-      <div class="nota-item"><span>Bayar</span><span id="pBayar">Rp 0</span></div>
-      <div class="nota-item"><span>Sisa Utang</span><span id="pSisa">Rp 0</span></div>
+      <div class="nota-item"><span>Bayar:</span><b id="pBayar">Rp 0</b></div>
+      <div class="nota-item"><span>Sisa:</span><b id="pSisa">Rp 0</b></div>
       <div class="nota-garis"></div>
-      <div style="text-align:center; font-size:10px; margin-top:5px;">*** Terima Kasih ***<br>Bukti Pembayaran Sah.</div>
+      <div style="text-align:center; font-size:10px; margin-top:5px;">*** Terima Kasih ***</div>
     </div>
   </div>
 
@@ -74,21 +70,21 @@
     <input type="hidden" id="editRowNum">
     <input type="text" id="nama" class="form-control form-control-sm mb-2" placeholder="Nama Pelanggan">
     <input type="text" id="alamat" class="form-control form-control-sm mb-2" placeholder="Alamat">
-    <input type="text" id="barang" class="form-control form-control-sm mb-2" placeholder="Nama Barang">
+    <input type="text" id="barang" class="form-control form-control-sm mb-2" placeholder="Nama Barang Kredit">
     <div class="form-row mb-2">
       <div class="col-7"><input type="number" id="harga" class="form-control form-control-sm" placeholder="Harga Total (Rp)"></div>
-      <div class="col-5"><input type="number" id="tenor" class="form-control form-control-sm" placeholder="Tenor"></div>
+      <div class="col-5"><input type="number" id="tenor" class="form-control form-control-sm" placeholder="Tenor (Kali)"></div>
     </div>
     <div class="form-row mb-2">
       <div class="col-7">
-        <small class="text-muted d-block mb-1">Sisa Utang (Isi jika ada sisa sebelumnya):</small>
-        <input type="number" id="sisaUtang" class="form-control form-control-sm" placeholder="Sisa Utang (Rp)">
+        <small class="text-muted d-block mb-1">Sisa Utang (Isi manual jika ada):</small>
+        <input type="number" id="sisaUtang" class="form-control form-control-sm" placeholder="Rp 0">
       </div>
       <div class="col-5">
         <small class="text-muted d-block mb-1">Tipe Tenor:</small>
         <select id="tipeTenor" class="form-control form-control-sm">
-          <option value="Bulanan">Bulanan</option>
-          <option value="Mingguan">Mingguan</option>
+          <option value="Bulanan">Tenor Bulanan</option>
+          <option value="Mingguan">Tenor Mingguan</option>
         </select>
       </div>
     </div>
@@ -96,12 +92,12 @@
     <button onclick="resetForm()" class="btn btn-light btn-sm btn-block mt-1">Batal</button>
   </div>
 
-  <div class="card p-2 mb-2"><input type="text" id="cariInput" class="form-control form-control-sm" placeholder="🔍 Cari nama..." onkeyup="filterTabel()"></div>
+  <div class="card p-2 mb-2"><input type="text" id="cariInput" class="form-control form-control-sm" placeholder="🔍 Cari nama pelanggan..."></div>
   <div class="card p-2"><div class="table-responsive"><table class="table table-sm"><tbody id="tabelBody"></tbody></table></div></div>
 
 <script>
-  // URL JALUR BACKEND GOOGLE SCRIPT ANDA
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZTBAeyi_BYB5C2xna3MjUT_jtlPZSyoYGbSZJUzpclR6q_6KlNLJOmQD-Sx7Mo7A/exec";
+  // LINK JALUR DATA SHEET UTAMA BOSQ
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPwNUZ2RxLinAs28fKOV4aSD3Ga29xX7Ij1z1ICoHCF9TZH2k_wRMy4z0D2WgCLin2/exec";
 
   let dataStorage = [];
 
@@ -119,8 +115,8 @@
           <b>${p.nama}</b> <span class="badge ${p.status==='LUNAS'?'badge-success':'badge-danger'}">${p.status}</span><br>
           <small>${p.barang} | Sisa: <b class="text-danger">Rp ${p.sisa.toLocaleString('id-ID')}</b></small><br>
           <div class="mt-2">
-            <button onclick="bayar(${p.rowNum})" class="btn btn-success btn-sm btn-sm-custom">Bayar</button>
-            <button onclick="cetakLokal(${p.rowNum})" class="btn btn-primary btn-sm btn-sm-custom">Cetak</button>
+            <button onclick="bayar(${p.rowNum})" class="btn btn-success btn-sm btn-sm-custom">💵 Bayar</button>
+            <button onclick="cetakLokal(${p.rowNum})" class="btn btn-primary btn-sm btn-sm-custom">🖨️ Cetak</button>
             <button onclick="pindahKeEdit(${p.rowNum})" class="btn btn-warning text-white btn-sm px-2"><i class="fas fa-edit"></i></button>
             <button onclick="hapus(${p.rowNum})" class="btn btn-danger btn-sm px-2"><i class="fas fa-trash"></i></button>
           </div>
@@ -134,7 +130,6 @@
   function simpan() {
     let hargaInput = document.getElementById('harga').value;
     let sisaInput = document.getElementById('sisaUtang').value;
-    
     let data = {
       rowNum: document.getElementById('editRowNum').value,
       nama: document.getElementById('nama').value,
@@ -143,10 +138,8 @@
       totalHarga: hargaInput,
       tipeTenor: document.getElementById('tipeTenor').value,
       tenor: document.getElementById('tenor').value,
-      // Jika sisa utang kosong saat input baru, otomatis samakan dengan harga total
       sisaUtang: sisaInput ? sisaInput : hargaInput
     };
-    
     if(!data.nama || !data.totalHarga) return alert("Nama dan Harga wajib diisi!");
     document.getElementById('overlay').style.display = 'flex';
     fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "simpan", data: data }) })
@@ -175,7 +168,7 @@
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
     document.getElementById('pNama').innerText = p.nama;
     document.getElementById('pBrg').innerText = p.barang;
-    document.getElementById('pBayar').innerText = "Ulang/Cek";
+    document.getElementById('pBayar').innerText = "Cek Sisa";
     document.getElementById('pSisa').innerText = "Rp " + p.sisa.toLocaleString('id-ID');
     window.print();
   }
@@ -189,7 +182,7 @@
     document.getElementById('harga').value = p.total;
     document.getElementById('tenor').value = p.tenor;
     document.getElementById('tipeTenor').value = p.tipe;
-    document.getElementById('sisaUtang').value = p.sisa; // Berhasil masuk form edit utang
+    document.getElementById('sisaUtang').value = p.sisa;
     document.getElementById('formTitle').innerText = "Ubah Data: " + p.nama;
     document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
   }
@@ -199,23 +192,6 @@
     document.querySelectorAll('input').forEach(i => i.value = "");
     document.getElementById('formTitle').innerText = "Registrasi Pelanggan Baru";
     document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
-  }
-
-  function filterTabel() {
-    let input = document.getElementById("cariInput").value.toUpperCase();
-    let tr = document.getElementById("tabelBody").getElementsByTagName("tr");
-    for (let i = 0; i < tr.length; i++) {
-      let td = tr[i].getElementsByTagName("b")[0];
-      if(td) { tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none"; }
-    }
-  }
-
-  function hapus(rowNum) {
-    if(confirm("Hapus permanen?")) {
-      document.getElementById('overlay').style.display = 'flex';
-      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
-      .then(res => res.json()).then(() => muatData());
-    }
   }
 
   window.onload = muatData;
