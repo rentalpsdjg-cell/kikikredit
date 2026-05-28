@@ -3,61 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution</title>
+  <title>Kiki Kredit Solution - Premium</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
-    /* UTAMA - TAMPILAN DI LAYAR HP */
-    body { background: #f4f7f6; padding: 12px; font-size: 16px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
-    .card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 15px; background: #fff; }
-    .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 22px; }
-    
+    /* ============================================================
+       1. TAMPILAN APLIKASI DI LAYAR HP (MEWAH & RESPONSIVE)
+       ============================================================ */
+    body { 
+      background: #f4f6f9; 
+      padding: 15px; 
+      font-size: 16px; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: #2b2b2b;
+    }
+    .card { 
+      border-radius: 16px; 
+      border: none; 
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04); 
+      margin-bottom: 20px; 
+      background: #ffffff; 
+      padding: 20px;
+    }
+    .header-card { 
+      background: linear-gradient(135deg, #1e3c72, #2a5298); 
+      color: white; 
+      border-radius: 16px; 
+      padding: 24px; 
+      box-shadow: 0 6px 20px rgba(30, 60, 114, 0.15);
+    }
+    .form-control-lg {
+      border-radius: 12px;
+      font-size: 16px;
+      border: 2px solid #e2e8f0;
+      padding: 12px 16px;
+      height: auto;
+    }
+    .form-control-lg:focus {
+      border-color: #1e3c72;
+      box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+    }
+    .btn-lg-custom {
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 14px;
+      background: #1e3c72;
+      border: none;
+      color: white;
+    }
     .btn-sm-custom { 
-      font-size: 14px !important; 
-      padding: 10px 16px !important; 
+      font-size: 13px !important; 
+      padding: 10px 12px !important; 
       margin: 4px !important; 
       font-weight: bold !important; 
       border-radius: 8px !important; 
       flex: 1;
-      min-width: 85px;
+      min-width: 80px;
       text-align: center;
+      border: none;
+    }
+    #overlay { 
+      display: none; 
+      position: fixed; 
+      top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(255, 255, 255, 0.9); 
+      z-index: 9999; 
+      justify-content: center; 
+      align-items: center; 
+      flex-direction: column; 
     }
     
-    #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
-    
-    /* SEMBUNYIKAN STRUK DARI LAYAR HP KASIR */
+    /* Sembunyikan cetakan struk dari layar HP biar rapi */
     #strukCetak { display: none; }
 
     /* ============================================================
-       SISTEM RESET PRINTER: UNTUK KERTAS THERMAL 58MM
+       2. KUNCI MATI SISTEM PRINTER THERMAL A8 (52mm)
        ============================================================ */
     @media print {
-      /* Sembunyikan elemen aplikasi */
+      /* Hilangkan total semua tombol dan form di web saat ngeprint */
       body * { display: none !important; }
       
-      /* Paksa setelan halaman bersih tanpa margin kosong browser */
+      /* Setelan paksa ukuran kertas thermal tanpa margin sampah */
       @page { 
-        size: auto; 
+        size: 52mm auto !important; 
         margin: 0mm !important; 
       }
       
-      /* Munculkan struk secara mutlak */
+      /* Hidupkan area struk saja */
       #strukCetak, #strukCetak * { display: block !important; }
+      
       #strukCetak { 
         display: block !important; 
-        width: 100% !important; 
-        margin: 0 !important; 
+        width: 52mm !important; 
+        margin: 0 !important;
         padding: 0 !important;
+        background: #ffffff !important;
       }
       
-      /* Kontainer Utama Kasir Pas dengan Gulungan Kertas */
       .nota-container {
-        width: 100% !important;
-        padding: 4mm 2mm !important;
-        background: #fff !important;
-        color: #000 !important;
-        font-family: 'Courier New', Courier, monospace !important;
-        font-size: 12pt !important; /* Ukuran pas huruf mesin kasir */
+        width: 52mm !important;
+        max-width: 52mm !important;
+        padding: 5mm 3mm !important;
+        box-sizing: border-box !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: 'Courier New', Courier, monospace !important; 
+        font-size: 3.2mm !important; 
         font-weight: bold !important;
         line-height: 1.4 !important;
       }
@@ -65,53 +117,65 @@
       .nota-header { 
         text-align: center !important; 
         font-weight: 900 !important; 
-        font-size: 14pt !important; 
+        font-size: 4.5mm !important; 
         line-height: 1.2 !important; 
-        margin-bottom: 8px !important; 
+        margin-bottom: 3mm !important; 
       }
       
+      /* Pembatas garis kasir murni */
       .nota-garis { 
-        border-top: 2px dashed #000 !important; 
-        margin: 6px 0 !important; 
-        height: 0 !important;
-        width: 100% !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        margin: 2mm 0 !important; 
+        font-size: 3mm !important;
+      }
+      .nota-garis::after {
+        content: "--------------------------------" !important; 
+        display: block !important;
       }
       
-      /* Format Tabel Kiri-Kanan Stabil */
-      .nota-table {
+      /* Flex spacing: Memaksa teks kiri dan kanan menempel di ujung kertas */
+      .nota-item-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
         width: 100% !important;
-        display: table !important;
-        margin-bottom: 4px !important;
+        margin-bottom: 1.5mm !important;
       }
-      .nota-row {
-        display: table-row !important;
-      }
-      .nota-cell-left {
-        display: table-cell !important;
+      
+      .nota-label {
         text-align: left !important;
-        width: 45% !important;
-        padding: 2px 0 !important;
-      }
-      .nota-cell-right {
-        display: table-cell !important;
-        text-align: right !important;
-        width: 55% !important;
-        font-weight: 900 !important;
-        padding: 2px 0 !important;
+        padding-right: 1mm !important;
+        white-space: nowrap !important;
       }
       
-      /* Desain Highlight Besar untuk Nominal Utama */
+      .nota-value {
+        text-align: right !important;
+        font-weight: 900 !important;
+        word-break: break-all !important;
+      }
+      
+      /* Ukuran font nominal pembayaran (dibuat lebih mencolok) */
       .nota-total-row {
-        display: table-row !important;
-        font-size: 13pt !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin-bottom: 1.5mm !important;
+        font-size: 3.6mm !important;
+      }
+      
+      .nota-total-row .nota-value {
+        font-size: 4.2mm !important;
+        font-weight: 900 !important;
       }
       
       .nota-footer {
         text-align: center !important;
-        font-size: 10pt !important;
-        font-weight: bold !important;
-        margin-top: 12px !important;
-        line-height: 1.3 !important;
+        font-size: 2.8mm !important;
+        margin-top: 5mm !important;
+        line-height: 1.4 !important;
       }
     }
   </style>
@@ -120,99 +184,114 @@
 
   <div id="overlay">
     <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
-    <b class="mt-3 text-primary h5">Memproses Data Cloud...</b>
+    <b class="mt-3 text-primary h5">Menghubungkan Database Cloud...</b>
   </div>
 
   <div id="strukCetak">
     <div class="nota-container">
       <div class="nota-header">SLIP PEMBAYARAN<br>KIKI KREDIT</div>
+      
       <div class="nota-garis"></div>
       
-      <div class="nota-table">
-        <div class="nota-row">
-          <div class="nota-cell-left">Tanggal:</div>
-          <div class="nota-cell-right" id="pTgl">-</div>
-        </div>
-        <div class="nota-row">
-          <div class="nota-cell-left">Nama:</div>
-          <div class="nota-cell-right" id="pNama">-</div>
-        </div>
-        <div class="nota-row">
-          <div class="nota-cell-left">Barang:</div>
-          <div class="nota-cell-right" id="pBrg">-</div>
-        </div>
+      <div class="nota-item-row">
+        <div class="nota-label">Tgl:</div>
+        <div class="nota-value" id="pTgl">-</div>
+      </div>
+      <div class="nota-item-row">
+        <div class="nota-label">Nama:</div>
+        <div class="nota-value" id="pNama">-</div>
+      </div>
+      <div class="nota-item-row">
+        <div class="nota-label">Barang:</div>
+        <div class="nota-value" id="pBrg">-</div>
       </div>
       
       <div class="nota-garis"></div>
       
-      <div class="nota-table">
-        <div class="nota-total-row">
-          <div class="nota-cell-left">BAYAR:</div>
-          <div class="nota-cell-right" style="font-size: 14pt;" id="pBayar">Rp 0</div>
-        </div>
-        <div class="nota-total-row">
-          <div class="nota-cell-left">SISA UTANG:</div>
-          <div class="nota-cell-right" style="font-size: 14pt; color:#000 !important;" id="pSisa">Rp 0</div>
-        </div>
+      <div class="nota-total-row">
+        <div class="nota-label">BAYAR:</div>
+        <div class="nota-value" id="pBayar">Rp 0</div>
+      </div>
+      <div class="nota-total-row">
+        <div class="nota-label">SISA:</div>
+        <div class="nota-value" id="pSisa">Rp 0</div>
       </div>
       
       <div class="nota-garis"></div>
-      <div class="nota-footer">*** TERIMA KASIH ***<br>KIKI KREDIT SOLUTION</div>
+      
+      <div class="nota-footer">
+        *** TERIMA KASIH ***<br>
+        KIKI KREDIT SOLUTION
+      </div>
     </div>
   </div>
 
-  <div class="header-card text-center mb-3">
+  <div class="header-card text-center mb-4">
     <h3 class="font-weight-bold mb-1">USAHA KIKI KREDIT</h3>
-    <small class="d-block opacity-75">Kiki Kredit Solution</small>
+    <small class="d-block text-white-50">Sistem Kasir Cloud Pintar & Aman</small>
     <div class="row mt-4">
-      <div class="col-6 border-right"><small class="text-uppercase tracking-wider">TOTAL PIUTANG</small><h4 id="statPiutang" class="font-weight-bold mt-1">Rp 0</h4></div>
-      <div class="col-6"><small class="text-uppercase tracking-wider">PELANGGAN AKTIF</small><h4 id="statAktif" class="font-weight-bold mt-1">0</h4></div>
+      <div class="col-6 border-right border-white-20">
+        <small class="text-uppercase text-white-50" style="font-size:11px; letter-spacing:1px;">TOTAL PIUTANG</small>
+        <h4 id="statPiutang" class="font-weight-bold mt-1 text-white">Rp 0</h4>
+      </div>
+      <div class="col-6">
+        <small class="text-uppercase text-white-50" style="font-size:11px; letter-spacing:1px;">PELANGGAN AKTIF</small>
+        <h4 id="statAktif" class="font-weight-bold mt-1 text-white">0</h4>
+      </div>
     </div>
   </div>
 
-  <div class="card p-3">
-    <h5 id="formTitle" class="text-primary font-weight-bold mb-3">Registrasi Pelanggan Baru</h5>
+  <div class="card">
+    <h5 id="formTitle" class="text-primary font-weight-bold mb-3"><i class="fas fa-user-plus mr-2"></i>Registrasi Pelanggan Baru</h5>
     <input type="hidden" id="editRowNum">
-    <input type="text" id="nama" class="form-control form-control-lg mb-2" placeholder="Nama Pelanggan" style="font-size: 16px;">
-    <input type="text" id="alamat" class="form-control form-control-lg mb-2" placeholder="Alamat" style="font-size: 16px;">
-    <input type="text" id="barang" class="form-control form-control-lg mb-2" placeholder="Nama Barang Kredit" style="font-size: 16px;">
+    
+    <div class="form-group mb-2"><input type="text" id="nama" class="form-control form-control-lg" placeholder="Nama Lengkap Pelanggan"></div>
+    <div class="form-group mb-2"><input type="text" id="alamat" class="form-control form-control-lg" placeholder="Alamat Tempat Tinggal"></div>
+    <div class="form-group mb-2"><input type="text" id="barang" class="form-control form-control-lg" placeholder="Nama Barang Kredit"></div>
+    
     <div class="form-row mb-2">
-      <div class="col-7"><input type="number" id="harga" class="form-control form-control-lg" placeholder="Harga Total (Rp)" oninput="autoIsiSisa()" style="font-size: 16px;"></div>
-      <div class="col-5"><input type="number" id="tenor" class="form-control form-control-lg" placeholder="Tenor" style="font-size: 16px;"></div>
+      <div class="col-7"><input type="number" id="harga" class="form-control form-control-lg" placeholder="Harga Total (Rp)" oninput="autoIsiSisa()"></div>
+      <div class="col-5"><input type="number" id="tenor" class="form-control form-control-lg" placeholder="Tenor / Kali"></div>
     </div>
-    <div class="form-row mb-2">
+    
+    <div class="form-row mb-3">
       <div class="col-7">
-        <small class="text-muted font-weight-bold d-block mb-1">Sisa Utang (Bisa manual):</small>
-        <input type="number" id="sisaUtang" class="form-control form-control-lg" placeholder="Rp 0" style="font-size: 16px;">
+        <small class="text-muted font-weight-bold d-block mb-1">Sisa Utang Awal:</small>
+        <input type="number" id="sisaUtang" class="form-control form-control-lg" placeholder="Rp 0">
       </div>
       <div class="col-5">
         <small class="text-muted font-weight-bold d-block mb-1">Tipe Tenor:</small>
-        <select id="tipeTenor" class="form-control form-control-lg" style="font-size: 16px; height: calc(1.5em + 1rem + 2px);">
+        <select id="tipeTenor" class="form-control form-control-lg" style="height: calc(1.5em + 1rem + 5px);">
           <option value="Bulanan">Bulanan</option>
           <option value="Mingguan">Mingguan</option>
         </select>
       </div>
     </div>
-    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-lg btn-block font-weight-bold py-3 mt-3 shadow" style="font-size: 16px;">SIMPAN TRANSAKSI</button>
-    <button onclick="resetForm()" class="btn btn-light btn-block mt-2 font-weight-bold text-muted py-2">Batal / Reset</button>
+    
+    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-block btn-lg-custom shadow-sm">SIMPAN TRANSAKSI KE SERVER</button>
+    <button onclick="resetForm()" class="btn btn-light btn-block mt-2 text-muted font-weight-bold" style="border-radius:12px; padding:10px; font-size:14px;">Batal / Reset Form</button>
   </div>
 
-  <div class="card p-2 mb-3">
-    <input type="text" id="cariInput" class="form-control form-control-lg border-0" placeholder="🔍 Ketik nama pelanggan untuk mencari..." onkeyup="filterTabel()" style="font-size: 16px; background: transparent;">
+  <div class="card p-2 mb-3" style="border-radius: 12px;">
+    <div class="input-group">
+      <div class="input-group-prepend"><span class="input-group-text border-0 bg-transparent text-muted"><i class="fas fa-search"></i></span></div>
+      <input type="text" id="cariInput" class="form-control form-control-lg border-0 pl-1" placeholder="Cari nama pelanggan di sini..." onkeyup="filterTabel()" style="background: transparent;">
+    </div>
   </div>
   
   <div class="card p-2">
     <div class="table-responsive" style="overflow-x: hidden;">
       <table class="table table-hover mb-0">
         <tbody id="tabelBody">
-          <tr><td class="text-center py-4 text-muted">Menghubungkan data cloud...</td></tr>
+          <tr><td class="text-center py-4 text-muted">Sedang sinkronisasi data cloud...</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOeWJfWt50FgSYKkreUQo9vX1ShjDW3LmY1nXvN8REibwEpgbxfad4i9XXuNkBzWat/exec";
+  // LINK SUDAH TER-UPDATE DENGAN WEB APP URL TERBARU ANDA
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrL3ITJ4yHhqblHlEjxQlRv0bQGTk_TYmmqlkBbS6Dk323XE78_jwkB920a4-aB4hb/exec";
   let dataStorage = [];
 
   function autoIsiSisa() {
@@ -250,13 +329,13 @@
             <span class="text-dark font-weight-bold" style="font-size: 19px;">${namaPel.toUpperCase()}</span> 
             <span class="badge px-3 py-2 font-weight-bold" style="font-size: 12px; border-radius: 6px; ${statusPel==='LUNAS'?'background-color: #d4edda; color: #155724;':'background-color: #f8d7da; color: #721c24;'}">${statusPel}</span>
           </div>
-          <div class="text-dark mb-1" style="font-size: 15px; font-weight: 600;">📦 ${barangPel}</div>
+          <div class="text-dark mb-1" style="font-size: 15px; font-weight: 600;"><i class="fas fa-box text-muted mr-1"></i> ${barangPel}</div>
           <div class="text-dark mb-2" style="font-size: 16px; font-weight: 500;">Sisa Utang: <span class="text-danger font-weight-bold" style="font-size: 17px;">Rp ${Number(sisaPel).toLocaleString('id-ID')}</span></div>
-          <div class="text-muted mb-3" style="font-size: 13px; font-weight: bold;">Tenor: ${tenorPel} Kali (${tipePel})</div>
+          <div class="text-muted mb-3" style="font-size: 13px; font-weight: bold;"><i class="fas fa-history mr-1"></i> Tenor: ${tenorPel} Kali (${tipePel})</div>
           
           <div class="d-flex flex-wrap m-n1">
-            <button onclick="bayar(${row})" class="btn btn-success btn-sm-custom shadow-sm"><i class="fas fa-money-bill-wave d-block mb-1"></i> Bayar</button>
-            <button onclick="cetakLokal(${row})" class="btn btn-primary btn-sm-custom shadow-sm"><i class="fas fa-print d-block mb-1"></i> Cetak</button>
+            <button onclick="bayar(${row})" class="btn btn-success btn-sm-custom shadow-sm"><i class="fas fa-money-bill-wave d-block mb-1"></i> Angsur</button>
+            <button onclick="cetakLokal(${row})" class="btn btn-primary btn-sm-custom shadow-sm"><i class="fas fa-print d-block mb-1"></i> Struk</button>
             <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-sm-custom shadow-sm"><i class="fas fa-edit d-block mb-1"></i> Edit</button>
             <button onclick="hapus(${row})" class="btn btn-danger btn-sm-custom shadow-sm"><i class="fas fa-trash d-block mb-1"></i> Hapus</button>
           </div>
@@ -338,16 +417,16 @@
     document.getElementById('tenor').value = p.tenor;
     document.getElementById('tipeTenor').value = p.tipe;
     document.getElementById('sisaUtang').value = p.sisa;
-    document.getElementById('formTitle').innerText = "Ubah Data Pelanggan: " + p.nama.toUpperCase();
-    document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit mr-2'></i>Ubah Data: " + p.nama.toUpperCase();
+    document.getElementById('btnSimpan').innerText = "PERBARUI DATA TRANSAKSI";
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   function resetForm() {
     document.getElementById('editRowNum').value = "";
     document.querySelectorAll('input').forEach(i => i.value = "");
-    document.getElementById('formTitle').innerText = "Registrasi Pelanggan Baru";
-    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-2'></i>Registrasi Pelanggan Baru";
+    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI KE SERVER";
   }
 
   function filterTabel() {
