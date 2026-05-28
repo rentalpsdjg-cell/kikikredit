@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - Premium</title>
+  <title>Kiki Kredit Solution - Square 6x6</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
@@ -26,11 +26,11 @@
       padding: 20px;
     }
     .header-card { 
-      background: linear-gradient(135deg, #1e3c72, #2a5298); 
+      background: linear-gradient(135deg, #11698e, #1f4068); 
       color: white; 
       border-radius: 16px; 
       padding: 24px; 
-      box-shadow: 0 6px 20px rgba(30, 60, 114, 0.15);
+      box-shadow: 0 6px 20px rgba(31, 64, 104, 0.15);
     }
     .form-control-lg {
       border-radius: 12px;
@@ -40,15 +40,15 @@
       height: auto;
     }
     .form-control-lg:focus {
-      border-color: #1e3c72;
-      box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+      border-color: #11698e;
+      box-shadow: 0 0 0 3px rgba(17, 105, 142, 0.1);
     }
     .btn-lg-custom {
       border-radius: 12px;
       font-size: 16px;
       font-weight: bold;
       padding: 14px;
-      background: #1e3c72;
+      background: #11698e;
       border: none;
       color: white;
     }
@@ -74,108 +74,110 @@
       flex-direction: column; 
     }
     
-    /* Sembunyikan cetakan struk dari layar HP biar rapi */
+    /* Sembunyikan cetakan struk dari layar HP */
     #strukCetak { display: none; }
 
     /* ============================================================
-       2. KUNCI MATI SISTEM PRINTER THERMAL A8 (52mm)
+       2. ARSITEKTUR KUNCI MATI UKURAN KOTAK 6x6 CM (60mm x 60mm)
        ============================================================ */
     @media print {
-      /* Hilangkan total semua tombol dan form di web saat ngeprint */
+      /* Hilangkan semua elemen web kasir saat mode print */
       body * { display: none !important; }
       
-      /* Setelan paksa ukuran kertas thermal tanpa margin sampah */
+      /* Paksa ukuran kertas browser dipotong kotak 60mm x 60mm */
       @page { 
-        size: 52mm auto !important; 
+        size: 60mm 60mm !important; 
         margin: 0mm !important; 
       }
       
-      /* Hidupkan area struk saja */
+      /* Aktifkan struk saja */
       #strukCetak, #strukCetak * { display: block !important; }
       
       #strukCetak { 
         display: block !important; 
-        width: 52mm !important; 
+        width: 60mm !important; 
+        height: 60mm !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #ffffff !important;
+        overflow: hidden !important; /* Mencegah over-page */
       }
       
       .nota-container {
-        width: 52mm !important;
-        max-width: 52mm !important;
-        padding: 5mm 3mm !important;
+        width: 60mm !important;
+        max-width: 60mm !important;
+        height: 60mm !important;
+        max-height: 60mm !important;
+        padding: 3mm 4mm !important;
         box-sizing: border-box !important;
         background: #ffffff !important;
         color: #000000 !important;
         font-family: 'Courier New', Courier, monospace !important; 
         font-size: 3.2mm !important; 
         font-weight: bold !important;
-        line-height: 1.4 !important;
+        line-height: 1.3 !important;
       }
       
       .nota-header { 
         text-align: center !important; 
         font-weight: 900 !important; 
-        font-size: 4.5mm !important; 
+        font-size: 4.2mm !important; 
         line-height: 1.2 !important; 
-        margin-bottom: 3mm !important; 
+        margin-bottom: 1.5mm !important; 
       }
       
-      /* Pembatas garis kasir murni */
+      /* Garis Pemisah Karakter Mini */
       .nota-garis { 
         text-align: center !important;
         white-space: nowrap !important;
         overflow: hidden !important;
-        margin: 2mm 0 !important; 
-        font-size: 3mm !important;
+        margin: 1.5mm 0 !important; 
+        font-size: 2.8mm !important;
       }
       .nota-garis::after {
-        content: "--------------------------------" !important; 
+        content: "----------------================--" !important; 
         display: block !important;
       }
       
-      /* Flex spacing: Memaksa teks kiri dan kanan menempel di ujung kertas */
+      /* Penataan Flex Kiri-Kanan Menempel Sempurna ke Dinding Kertas */
       .nota-item-row {
         display: flex !important;
         justify-content: space-between !important;
         align-items: flex-start !important;
         width: 100% !important;
-        margin-bottom: 1.5mm !important;
+        margin-bottom: 1mm !important;
       }
       
       .nota-label {
         text-align: left !important;
-        padding-right: 1mm !important;
         white-space: nowrap !important;
       }
       
       .nota-value {
         text-align: right !important;
         font-weight: 900 !important;
-        word-break: break-all !important;
       }
       
-      /* Ukuran font nominal pembayaran (dibuat lebih mencolok) */
+      /* Sesi Total Uang Lebih Besar */
       .nota-total-row {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
         width: 100% !important;
-        margin-bottom: 1.5mm !important;
-        font-size: 3.6mm !important;
+        margin-bottom: 1mm !important;
+        font-size: 3.5mm !important;
       }
       
       .nota-total-row .nota-value {
-        font-size: 4.2mm !important;
+        font-size: 4mm !important;
         font-weight: 900 !important;
       }
       
       .nota-footer {
         text-align: center !important;
-        font-size: 2.8mm !important;
-        margin-top: 5mm !important;
-        line-height: 1.4 !important;
+        font-size: 2.5mm !important;
+        margin-top: 2.5mm !important;
+        line-height: 1.2 !important;
       }
     }
   </style>
@@ -189,7 +191,7 @@
 
   <div id="strukCetak">
     <div class="nota-container">
-      <div class="nota-header">SLIP PEMBAYARAN<br>KIKI KREDIT</div>
+      <div class="nota-header">KIKI KREDIT<br>SLIP NOTA</div>
       
       <div class="nota-garis"></div>
       
@@ -202,7 +204,7 @@
         <div class="nota-value" id="pNama">-</div>
       </div>
       <div class="nota-item-row">
-        <div class="nota-label">Barang:</div>
+        <div class="nota-label">Brg:</div>
         <div class="nota-value" id="pBrg">-</div>
       </div>
       
@@ -220,7 +222,6 @@
       <div class="nota-garis"></div>
       
       <div class="nota-footer">
-        *** TERIMA KASIH ***<br>
         KIKI KREDIT SOLUTION
       </div>
     </div>
@@ -290,7 +291,6 @@
   </div>
 
 <script>
-  // LINK SUDAH TER-UPDATE DENGAN WEB APP URL TERBARU ANDA
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrL3ITJ4yHhqblHlEjxQlRv0bQGTk_TYmmqlkBbS6Dk323XE78_jwkB920a4-aB4hb/exec";
   let dataStorage = [];
 
