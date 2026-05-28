@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
-    /* TAMPILAN UTAMA DI LAYAR HP Kasir */
+    /* UTAMA - TAMPILAN DI LAYAR HP */
     body { background: #f4f7f6; padding: 12px; font-size: 16px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     .card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 15px; background: #fff; }
     .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 22px; }
@@ -25,89 +25,92 @@
     
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* SEMBUNYIKAN STRUK SAAT DI LAYAR HP */
+    /* SEMBUNYIKAN STRUK DARI LAYAR HP KASIR */
     #strukCetak { display: none; }
 
     /* ============================================================
-       PENGATURAN CETAK PRINTER THERMAL KERTAS A8 + RATA TENGAH (CENTER)
+       SISTEM RESET PRINTER: UNTUK KERTAS THERMAL 58MM
        ============================================================ */
     @media print {
+      /* Sembunyikan elemen aplikasi */
       body * { display: none !important; }
       
+      /* Paksa setelan halaman bersih tanpa margin kosong browser */
       @page { 
-        size: A8 portrait; 
-        margin: 0mm !important; /* Hilangkan margin kertas agar tidak geser */
+        size: auto; 
+        margin: 0mm !important; 
       }
       
+      /* Munculkan struk secara mutlak */
       #strukCetak, #strukCetak * { display: block !important; }
       #strukCetak { 
         display: block !important; 
         width: 100% !important; 
-        margin: 0 !important;
+        margin: 0 !important; 
         padding: 0 !important;
       }
       
+      /* Kontainer Utama Kasir Pas dengan Gulungan Kertas */
       .nota-container {
         width: 100% !important;
-        max-width: 52mm !important; /* Presisi lebar kertas A8 */
-        margin: 0 auto !important;
-        padding: 3mm 2mm !important;
+        padding: 4mm 2mm !important;
         background: #fff !important;
         color: #000 !important;
         font-family: 'Courier New', Courier, monospace !important;
-        font-size: 13pt !important; /* Ukuran huruf besar, jelas, anti sakit mata */
+        font-size: 12pt !important; /* Ukuran pas huruf mesin kasir */
         font-weight: bold !important;
         line-height: 1.4 !important;
-        text-align: center !important; /* SEMUA TEKS PAKSA RATA TENGAH */
       }
       
       .nota-header { 
         text-align: center !important; 
         font-weight: 900 !important; 
-        font-size: 15pt !important; 
-        line-height: 1.3 !important; 
-        margin-bottom: 6px !important; 
+        font-size: 14pt !important; 
+        line-height: 1.2 !important; 
+        margin-bottom: 8px !important; 
       }
       
       .nota-garis { 
-        border-top: 3px dashed #000 !important; /* Garis pembatas tebal jelas */
-        margin: 8px 0 !important; 
+        border-top: 2px dashed #000 !important; 
+        margin: 6px 0 !important; 
         height: 0 !important;
         width: 100% !important;
       }
       
-      /* Mengubah item data menjadi rata tengah terstruktur */
-      .nota-item { 
-        display: block !important; 
-        text-align: center !important; 
-        margin-bottom: 8px !important; 
+      /* Format Tabel Kiri-Kanan Stabil */
+      .nota-table {
+        width: 100% !important;
+        display: table !important;
+        margin-bottom: 4px !important;
       }
-      
-      .nota-item span { 
-        font-weight: normal !important;
-        display: inline-block !important;
+      .nota-row {
+        display: table-row !important;
       }
-      
-      /* Mengatur nilai data/angka berada di bawah labelnya agar rapi di posisi center */
-      .nota-item val {
-        display: block !important;
-        font-weight: bold !important;
-        font-size: 14pt !important;
+      .nota-cell-left {
+        display: table-cell !important;
+        text-align: left !important;
+        width: 45% !important;
+        padding: 2px 0 !important;
       }
-      
-      /* Nominal angka BAYAR & SISA dibuat paling besar & mencolok di tengah */
-      .nota-item b { 
-        display: block !important;
-        font-size: 18pt !important; 
+      .nota-cell-right {
+        display: table-cell !important;
+        text-align: right !important;
+        width: 55% !important;
         font-weight: 900 !important;
-        margin-top: 2px !important;
+        padding: 2px 0 !important;
+      }
+      
+      /* Desain Highlight Besar untuk Nominal Utama */
+      .nota-total-row {
+        display: table-row !important;
+        font-size: 13pt !important;
       }
       
       .nota-footer {
         text-align: center !important;
-        font-size: 11pt !important;
+        font-size: 10pt !important;
         font-weight: bold !important;
-        margin-top: 10px !important;
+        margin-top: 12px !important;
         line-height: 1.3 !important;
       }
     }
@@ -125,14 +128,33 @@
       <div class="nota-header">SLIP PEMBAYARAN<br>KIKI KREDIT</div>
       <div class="nota-garis"></div>
       
-      <div class="nota-item"><span>Tanggal</span><val id="pTgl">-</val></div>
-      <div class="nota-item"><span>Nama Pelanggan</span><val id="pNama">-</val></div>
-      <div class="nota-item"><span>Nama Barang</span><val id="pBrg">-</val></div>
+      <div class="nota-table">
+        <div class="nota-row">
+          <div class="nota-cell-left">Tanggal:</div>
+          <div class="nota-cell-right" id="pTgl">-</div>
+        </div>
+        <div class="nota-row">
+          <div class="nota-cell-left">Nama:</div>
+          <div class="nota-cell-right" id="pNama">-</div>
+        </div>
+        <div class="nota-row">
+          <div class="nota-cell-left">Barang:</div>
+          <div class="nota-cell-right" id="pBrg">-</div>
+        </div>
+      </div>
       
       <div class="nota-garis"></div>
       
-      <div class="nota-item"><span>JUMLAH BAYAR</span><b id="pBayar">Rp 0</b></div>
-      <div class="nota-item"><span>SISA UTANG</span><b id="pSisa">Rp 0</b></div>
+      <div class="nota-table">
+        <div class="nota-total-row">
+          <div class="nota-cell-left">BAYAR:</div>
+          <div class="nota-cell-right" style="font-size: 14pt;" id="pBayar">Rp 0</div>
+        </div>
+        <div class="nota-total-row">
+          <div class="nota-cell-left">SISA UTANG:</div>
+          <div class="nota-cell-right" style="font-size: 14pt; color:#000 !important;" id="pSisa">Rp 0</div>
+        </div>
+      </div>
       
       <div class="nota-garis"></div>
       <div class="nota-footer">*** TERIMA KASIH ***<br>KIKI KREDIT SOLUTION</div>
