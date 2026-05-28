@@ -123,7 +123,7 @@
       z-index: 9999; display: none; 
     }
 
-    /* REKAYASA TOTAL CETAK PRINTER THERMAL PORTABEL */
+    /* FIX CETAK ULTRA RINGKAS, HEMAT KERTAS & EXTRA TEBAL */
     #areaStruk { display: none; }
     @media print {
       body * { display: none !important; }
@@ -133,15 +133,15 @@
         left: 0; 
         top: 0; 
         width: 100% !important;
-        padding: 0px 5px !important; 
+        padding: 0px 2px !important; 
         margin: 0 !important; 
         background: #ffffff !important; 
         color: #000000 !important;
         font-family: "Courier New", Courier, monospace !important; 
-        font-size: 12pt !important; 
-        font-weight: 900 !important; /* Ketebalan Huruf Maksimal */
-        white-space: pre !important; /* Menjaga spasi karakter tetap utuh */
-        line-height: 1.2;
+        font-size: 11pt !important; 
+        font-weight: 900 !important; /* Huruf Dibuat Paling Tebal */
+        white-space: pre !important; 
+        line-height: 1.1 !important; /* Spasi Baris Super Rapat & Padat */
       }
       @page { 
         size: auto; 
@@ -447,9 +447,9 @@
       }
     }
 
-    /* ENGINE PENGHITUNG SPASI STRUK OTOMATIS (32 Karakter Standar Meja Kasir) */
+    /* ENGINE PENGHITUNG SPASI STRUK ULTRA MINIMALIS (28 Karakter Maksimal) */
     function buatBarisStruk(label, value) {
-      const LEBAR_MAKSIMAL = 32; 
+      const LEBAR_MAKSIMAL = 28; 
       const sisaSpasi = LEBAR_MAKSIMAL - (label.length + value.length);
       if (sisaSpasi > 0) {
         return label + " ".repeat(sisaSpasi) + value + "\n";
@@ -461,20 +461,20 @@
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
       const strukDiv = document.getElementById('areaStruk');
       
-      // Susun data murni berbasis baris text terukur
+      // Menggunakan 28 karakter pas agar teks padat, hemat kertas, dan rata kanan sempurna
       let isiTeksText = "";
-      isiTeksText += "      SLIP PEMBAYARAN SAH      \n";
-      isiTeksText += "     KIKI KREDIT SOLUTION      \n";
-      isiTeksText += "================================\n"; // Garis pembatas murni teks Khas Kasir
-      isiTeksText += buatBarisStruk("Tanggal:", tgl);
+      isiTeksText += "    SLIP PEMBAYARAN SAH    \n";
+      isiTeksText += "   KIKI KREDIT SOLUTION    \n";
+      isiTeksText += "============================\n"; 
+      isiTeksText += buatBarisStruk("Tgl:", tgl);
       isiTeksText += buatBarisStruk("Nama:", nama);
-      isiTeksText += buatBarisStruk("Barang:", barang);
-      isiTeksText += "--------------------------------\n";
-      isiTeksText += buatBarisStruk("DIBAYAR:", _nominalDisplay);
-      isiTeksText += buatBarisStruk("SISA UTANG:", formatRupiah(sisa));
-      isiTeksText += "--------------------------------\n";
-      isiTeksText += "        * TERIMA KASIH * \n";
-      isiTeksText += "   SIMPAN SEBAGAI BUKTI BAYAR   ";
+      isiTeksText += buatBarisStruk("Brg:", barang);
+      isiTeksText += "----------------------------\n";
+      isiTeksText += buatBarisStruk("BAYAR:", _nominalDisplay);
+      isiTeksText += buatBarisStruk("SISA :", formatRupiah(sisa));
+      isiTeksText += "----------------------------\n";
+      isiTeksText += "      * TERIMA KASIH * \n";
+      isiTeksText += " BUKTI TRANSAKSI YANG VALID \n\n\n"; // 3 Baris kosong di akhir untuk jarak potong manual kertas roll
 
       strukDiv.innerText = isiTeksText;
       window.print();
