@@ -61,7 +61,7 @@
       font-size: 1rem; 
     }
 
-    /* KARTU PELANGGAN ELITE & PREMIUM (ANTI GESER LAYAR HP) */
+    /* KARTU PELANGGAN (ANTI GESER LAYAR HP) */
     .loan-card { 
       background: #ffffff; 
       border-radius: var(--card-radius); 
@@ -123,7 +123,7 @@
       z-index: 9999; display: none; 
     }
 
-    /* FIX AUTO-THERMAL PRINTING MANAGEMENT SYSTEM (58mm - 80mm) */
+    /* SPECIFIC AUTO-THERMAL PRINTING: PURE TEXT ONLY & BOLD */
     #areaStruk { display: none; }
     @media print {
       body * { display: none !important; }
@@ -134,13 +134,14 @@
         top: 0; 
         width: 100% !important; 
         max-width: 100% !important;
-        padding: 2mm 3mm !important; 
+        padding: 1mm 2mm !important; 
         margin: 0 !important; 
-        background: #fff; 
-        color: #000;
+        background: #ffffff !important; 
+        color: #000000 !important;
         font-family: "Courier New", Courier, monospace !important; 
-        font-size: 10pt !important; 
-        line-height: 1.4;
+        font-size: 11pt !important; 
+        font-weight: bold !important; /* Membuat semua tulisan otomatis tebal */
+        line-height: 1.3;
       }
       @page { 
         size: auto; 
@@ -148,10 +149,10 @@
       }
     }
     .text-center { text-align: center !important; }
-    .line-double { border-top: 2px double #000 !important; margin: 3mm 0 !important; width: 100%; }
-    .line-dash { border-top: 1px dashed #000 !important; margin: 3mm 0 !important; width: 100%; }
-    .struk-row { display: flex !important; justify-content: space-between !important; margin-bottom: 1.5mm !important; width: 100%; }
-    .struk-val { font-weight: bold !important; text-align: right !important; }
+    .line-double { border-top: 2px double #000000 !important; margin: 2mm 0 !important; width: 100%; }
+    .line-dash { border-top: 1px dashed #000000 !important; margin: 2mm 0 !important; width: 100%; }
+    .struk-row { display: flex !important; justify-content: space-between !important; margin-bottom: 1mm !important; width: 100%; }
+    .struk-val { text-align: right !important; }
   </style>
 </head>
 <body>
@@ -451,13 +452,14 @@
       }
     }
 
+    /* RANCANGAN BARU: MURNI TEKS & SEMUA TEBAL (TANPA IKON / GRAFIK PENYEBAB BLUR) */
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
-      const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- (Cetak Ulang Berkas)";
+      const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- (Cetak Ulang)";
       const strukDiv = document.getElementById('areaStruk');
       strukDiv.innerHTML = `
         <div class="text-center">
-          <b style="font-size:11pt;">SLIP PEMBAYARAN</b><br>
-          <b style="font-size:12pt;">KIKI KREDIT SOLUTION</b>
+          SLIP PEMBAYARAN SAH<br>
+          KIKI KREDIT SOLUTION
           <div class="line-double"></div>
         </div>
         <div class="struk-row"><span>Tanggal:</span><span class="struk-val">${tgl}</span></div>
@@ -465,10 +467,11 @@
         <div class="struk-row"><span>Barang:</span><span class="struk-val">${barang}</span></div>
         <div class="line-dash"></div>
         <div class="struk-row"><span>DIBAYAR:</span><span class="struk-val">${_nominalDisplay}</span></div>
-        <div class="struk-row"><span>SISA UTANG:</span><span class="struk-val" style="font-size:11pt;">${formatRupiah(sisa)}</span></div>
+        <div class="struk-row"><span>SISA UTANG:</span><span class="struk-val">${formatRupiah(sisa)}</span></div>
         <div class="line-dash"></div>
-        <div class="text-center" style="margin-top: 5mm; font-size: 9pt; font-style: italic;">
-          *** Terima Kasih ***<br>Bukti Pembayaran yang Sah & Valid.
+        <div class="text-center" style="margin-top: 4mm;">
+          * Terima Kasih *<br>
+          Simpan Sebagai Bukti Sah
         </div>
       `;
       window.print();
