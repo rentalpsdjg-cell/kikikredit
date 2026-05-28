@@ -3,64 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution</title>
+  <title>Kiki Kredit Solution Premium</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
-    body { background: #f4f7f6; padding: 10px; font-size: 14px; }
-    .card { border-radius: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; }
-    .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 20px; }
-    .btn-sm-custom { font-size: 13px; padding: 8px 16px; margin: 3px; font-weight: bold; border-radius: 8px; }
-    #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
+    body { background: #f1f5f9; padding: 12px; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .card { border-radius: 16px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 16px; background: #ffffff; }
+    .header-card { background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2); }
+    .btn-sm-custom { font-size: 13px; padding: 8px 14px; margin: 3px; font-weight: 700; border-radius: 8px; transition: all 0.2s; }
+    .btn-sm-custom:active { transform: scale(0.95); }
+    #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* TAMPILAN NOTA DI LAYAR HP (DIBUAT PREVIEW KOTAK) */
-    .nota-box {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 15px;
-      background: #fff;
-      font-family: 'Courier New', Courier, monospace;
-      border: 1px dashed #ccc;
-    }
-    
-    /* STYLE UTAMA STRUK (UNTUK LAYAR & PRINT) */
+    /* AREA PREVIEW STRUK LAYAR HP */
     .nota-container {
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
       font-family: 'Courier New', Courier, monospace;
       color: #000;
       line-height: 1.4;
       background: #fff;
     }
-    .nota-header { text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 5px; }
+    .nota-header { text-align: center; font-weight: bold; font-size: 18px; line-height: 1.2; margin-bottom: 4px; }
     .nota-garis { border-top: 2px dashed #000; margin: 8px 0; }
-    .nota-item { display: flex !important; justify-content: space-between; margin-bottom: 5px; }
-    .nota-item span { font-weight: bold; }
-    .nota-item b { font-size: 16px; font-weight: bold; }
+    .nota-item { display: flex !important; justify-content: space-between; margin-bottom: 4px; font-weight: bold; }
+    .nota-item b { font-size: 18px; font-weight: bold; }
 
-    /* LAYOUT KHUSUS PRINTER THERMAL (ANTI-MENCUT / JELAS & BESAR) */
+    /* LAYOUT KHUSUS PRINTER THERMAL (ANTI-MENCIUT / FULL WIDTH & TEBAL) */
     #strukCetak { display: none; }
     @media print {
+      /* Sembunyikan mutlak seluruh interface aplikasi */
       body * { display: none !important; }
-      html, body { background: #fff; margin: 0 !important; padding: 0 !important; width: 100% !important; }
-      #strukCetak, #strukCetak * { display: block !important; }
+      html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
       
-      /* Menggunakan full width dan font besar agar printer thermal membaca skala 100% */
+      /* Tampilkan hanya area struk dengan lebar penuh tanpa margin */
+      #strukCetak, #strukCetak * { display: block !important; }
+      #strukCetak { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+      
+      /* Paksa printer membaca teks skala besar (145%) dan sangat tebal */
       .nota-container {
         width: 100% !important;
         padding: 0px !important;
-        font-size: 140% !important; /* Diperbesar 1.4x lipat dari aslinya */
-        font-weight: 900 !important; /* Super Tebal */
+        font-size: 145% !important; 
+        font-weight: 900 !important; 
       }
-      .nota-header { font-size: 160% !important; font-weight: 900 !important; text-align: center; }
-      .nota-item b { font-size: 150% !important; font-weight: 900 !important; }
-      .nota-garis { border-top: 3px dashed #000 !important; margin: 10px 0 !important; }
+      .nota-header { font-size: 165% !important; font-weight: 900 !important; text-align: center; }
+      .nota-item b { font-size: 155% !important; font-weight: 900 !important; }
+      .nota-garis { border-top: 3px dashed #000 !important; margin: 8px 0 !important; }
     }
   </style>
 </head>
 <body>
 
   <div id="overlay">
-    <div class="spinner-border text-primary" role="status"></div>
-    <b class="mt-2 text-primary">Sinkronisasi Database...</b>
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+    <b class="mt-3 text-primary h5">Menghubungkan ke Server...</b>
   </div>
 
   <div id="strukCetak">
@@ -74,52 +71,57 @@
       <div class="nota-item"><span>Bayar:</span><b id="pBayar">Rp 0</b></div>
       <div class="nota-item"><span>Sisa:</span><b id="pSisa">Rp 0</b></div>
       <div class="nota-garis"></div>
-      <div style="text-align:center; font-size:100%; font-weight:bold; margin-top:5px;">*** TERIMA KASIH ***<br>Bukti Pembayaran Sah.</div>
-      <br><br><br> </div>
+      <div style="text-align:center; font-size:105%; font-weight:bold; margin-top:6px;">*** TERIMA KASIH ***<br>Bukti Pembayaran Sah.</div>
+      <br><br><br><br> </div>
   </div>
 
   <div class="header-card text-center mb-3">
-    <h4 class="font-weight-bold">USAHA KIKI KREDIT</h4>
-    <div class="row mt-3">
-      <div class="col-6 border-right"><small>TOTAL PIUTANG</small><h5 id="statPiutang" class="font-weight-bold">Rp 0</h5></div>
-      <div class="col-6"><small>PELANGGAN AKTIF</small><h5 id="statAktif" class="font-weight-bold">0</h5></div>
+    <h4 class="font-weight-bold letter-spacing-1">KIKI KREDIT SOLUTION</h4>
+    <div class="row mt-4">
+      <div class="col-6 border-right border-light-50"><small class="text-light d-block mb-1">TOTAL PIUTANG</small><h4 id="statPiutang" class="font-weight-bold">Rp 0</h4></div>
+      <div class="col-6"><small class="text-light d-block mb-1">PELANGGAN AKTIF</small><h4 id="statAktif" class="font-weight-bold">0</h4></div>
     </div>
   </div>
 
   <div class="card p-3">
-    <b id="formTitle" class="text-primary mb-3">Registrasi Pelanggan Baru</b>
+    <div class="d-flex align-items-center mb-3 text-primary">
+      <i class="fas fa-user-plus mr-2"></i><b id="formTitle" class="h6 mb-0 font-weight-bold">Registrasi Pelanggan Baru</b>
+    </div>
     <input type="hidden" id="editRowNum">
-    <input type="text" id="nama" class="form-control form-control-sm mb-2" placeholder="Nama Pelanggan">
-    <input type="text" id="alamat" class="form-control form-control-sm mb-2" placeholder="Alamat">
-    <input type="text" id="barang" class="form-control form-control-sm mb-2" placeholder="Nama Barang Kredit">
+    <input type="text" id="nama" class="form-control mb-2 form-control-lg" style="font-size:15px;" placeholder="Nama Lengkap Pelanggan">
+    <input type="text" id="alamat" class="form-control mb-2" placeholder="Alamat Tinggal">
+    <input type="text" id="barang" class="form-control mb-2" placeholder="Nama Barang Kredit">
     <div class="form-row mb-2">
-      <div class="col-7"><input type="number" id="harga" class="form-control form-control-sm" placeholder="Harga Total (Rp)"></div>
-      <div class="col-5"><input type="number" id="tenor" class="form-control form-control-sm" placeholder="Tenor (Kali)"></div>
+      <div class="col-7"><input type="number" id="harga" class="form-control" placeholder="Harga Total (Rp)" oninput="autoIsiSisa()"></div>
+      <div class="col-5"><input type="number" id="tenor" class="form-control" placeholder="Tenor (Kali)"></div>
     </div>
     <div class="form-row mb-2">
       <div class="col-7">
-        <small class="text-muted d-block mb-1">Sisa Utang (Bisa manual):</small>
-        <input type="number" id="sisaUtang" class="form-control form-control-sm" placeholder="Rp 0">
+        <small class="text-muted d-block mb-1 font-weight-bold">Sisa Utang Sekarang:</small>
+        <input type="number" id="sisaUtang" class="form-control bg-light font-weight-bold text-danger" placeholder="Rp 0">
       </div>
       <div class="col-5">
-        <small class="text-muted d-block mb-1">Tipe Tenor:</small>
-        <select id="tipeTenor" class="form-control form-control-sm">
-          <option value="Bulanan">Tenor Bulanan</option>
-          <option value="Mingguan">Tenor Mingguan</option>
+        <small class="text-muted d-block mb-1 font-weight-bold">Tipe Tenor:</small>
+        <select id="tipeTenor" class="form-control">
+          <option value="Bulanan">Bulanan</option>
+          <option value="Mingguan">Mingguan</option>
         </select>
       </div>
     </div>
-    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-sm btn-block font-weight-bold py-2 mt-2">SIMPAN TRANSAKSI</button>
-    <button onclick="resetForm()" class="btn btn-light btn-sm btn-block mt-1">Batal</button>
+    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-block font-weight-bold py-2.5 mt-3 shadow-sm">SIMPAN TRANSAKSI</button>
+    <button onclick="resetForm()" class="btn btn-link btn-block btn-sm text-muted mt-1">Batal / Reset</button>
   </div>
 
-  <div class="card p-2 mb-2">
-    <input type="text" id="cariInput" class="form-control form-control-sm" placeholder="🔍 Cari nama pelanggan..." onkeyup="filterTabel()">
+  <div class="card p-2 mb-3">
+    <div class="input-group">
+      <div class="input-group-prepend"><span class="input-group-text bg-white border-right-0 text-muted"><i class="fas fa-search"></i></span></div>
+      <input type="text" id="cariInput" class="form-control border-left-0 pl-0" placeholder="Cari nama pelanggan..." onkeyup="filterTabel()">
+    </div>
   </div>
   
   <div class="card p-2">
     <div class="table-responsive">
-      <table class="table table-sm" style="width: 100%;">
+      <table class="table table-hover mb-0" style="width: 100%;">
         <tbody id="tabelBody">
           </tbody>
       </table>
@@ -128,8 +130,15 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwVC24h3ax58HSK6DS4NSY5O7w-R_9mn8kUQ9ZokV0vvQZXNJF8p8Gh_JQal5JLNP0r/exec";
-
   let dataStorage = [];
+
+  function autoIsiSisa() {
+    let harga = document.getElementById('harga').value;
+    let editRow = document.getElementById('editRowNum').value;
+    if(!editRow) {
+      document.getElementById('sisaUtang').value = harga;
+    }
+  }
 
   function muatData() {
     document.getElementById('overlay').style.display = 'flex';
@@ -156,40 +165,42 @@
 
         html += `<tr class="border-bottom">
           <td class="py-3 px-2">
-            <span class="font-weight-bold text-dark h5 d-inline-block mb-1">${namaPel.toUpperCase()}</span> 
-            <span class="badge ${statusPel==='LUNAS'?'badge-success':'badge-danger'}">${statusPel}</span><br>
-            <div class="text-dark mb-1" style="font-size:14px; font-weight:500;">${barangPel} | Sisa: <b class="text-danger">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b></div>
-            <div class="text-muted mb-2" style="font-size:13px;">Tenor: ${tenorPel} (${tipePel})</div>
-            <div class="d-flex flex-wrap mt-1">
-              <button onclick="bayar(${row})" class="btn btn-success btn-sm btn-sm-custom"><i class="fas fa-money-bill-wave"></i> Bayar</button>
-              <button onclick="cetakLokal(${row})" class="btn btn-primary btn-sm btn-sm-custom"><i class="fas fa-print"></i> Cetak</button>
-              <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-sm btn-sm-custom"><i class="fas fa-edit"></i> Edit</button>
-              <button onclick="hapus(${row})" class="btn btn-danger btn-sm btn-sm-custom"><i class="fas fa-trash"></i> Hapus</button>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="font-weight-bold text-dark h5 mb-0">${namaPel.toUpperCase()}</span>
+              <span class="badge px-2 py-1 ${statusPel==='LUNAS'?'badge-success':'badge-danger'}">${statusPel}</span>
+            </div>
+            <div class="text-dark mb-1" style="font-size:14px; font-weight:500;">${barangPel}</div>
+            <div class="text-muted mb-2" style="font-size:13px;">
+              Tenor: <span class="text-dark font-weight-bold">${tenorPel}x (${tipePel})</span> | Sisa: <b class="text-danger h6 font-weight-bold">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b>
+            </div>
+            <div class="d-flex flex-wrap mt-2">
+              <button onclick="bayar(${row})" class="btn btn-success btn-sm btn-sm-custom shadow-sm"><i class="fas fa-money-bill-wave mr-1"></i> Bayar</button>
+              <button onclick="cetakLokal(${row})" class="btn btn-primary btn-sm btn-sm-custom shadow-sm"><i class="fas fa-print mr-1"></i> Cetak</button>
+              <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-sm btn-sm-custom shadow-sm"><i class="fas fa-edit mr-1"></i> Edit</button>
+              <button onclick="hapus(${row})" class="btn btn-danger btn-sm btn-sm-custom shadow-sm"><i class="fas fa-trash mr-1"></i> Hapus</button>
             </div>
           </td>
         </tr>`;
       });
-      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center py-3'>Belum ada data</td></tr>";
+      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center py-4 text-muted'>Belum ada data pelanggan</td></tr>";
       document.getElementById('overlay').style.display = 'none';
     }).catch((err) => { 
       console.error(err);
-      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger'>Terjadi kesalahan koneksi database</td></tr>";
+      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger font-weight-bold'>⚠️ Gagal sinkronisasi. Sila cek internet Anda.</td></tr>";
       document.getElementById('overlay').style.display = 'none'; 
     });
   }
 
   function simpan() {
-    let hargaInput = document.getElementById('harga').value;
-    let sisaInput = document.getElementById('sisaUtang').value;
     let data = {
       rowNum: document.getElementById('editRowNum').value,
       nama: document.getElementById('nama').value,
       alamat: document.getElementById('alamat').value,
       barang: document.getElementById('barang').value,
-      totalHarga: hargaInput,
+      totalHarga: document.getElementById('harga').value,
       tipeTenor: document.getElementById('tipeTenor').value,
       tenor: document.getElementById('tenor').value,
-      sisaUtang: sisaInput ? sisaInput : hargaInput
+      sisaUtang: document.getElementById('sisaUtang').value
     };
     if(!data.nama || !data.totalHarga) return alert("Nama dan Harga wajib diisi!");
     document.getElementById('overlay').style.display = 'flex';
@@ -198,7 +209,7 @@
   }
 
   function bayar(rowNum) {
-    let nominal = prompt("Masukkan jumlah bayar (Rp):");
+    let nominal = prompt("Masukkan jumlah pembayaran tunai (Rp):");
     if(!nominal) return;
     document.getElementById('overlay').style.display = 'flex';
     fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "bayar", rowNum: rowNum, nominal: nominal }) })
@@ -209,7 +220,7 @@
       document.getElementById('pBayar').innerText = "Rp " + Number(res.nominal).toLocaleString('id-ID');
       document.getElementById('pSisa').innerText = "Rp " + Number(res.sisa).toLocaleString('id-ID');
       muatData();
-      setTimeout(() => { window.print(); }, 500);
+      setTimeout(() => { window.print(); }, 400);
     });
   }
 
@@ -220,11 +231,10 @@
   function cetakLokal(rowNum) {
     let p = findPelanggan(rowNum);
     if (!p) return;
-
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
     document.getElementById('pNama').innerText = p.nama;
     document.getElementById('pBrg').innerText = p.barang;
-    document.getElementById('pBayar').innerText = "Cek Sisa";
+    document.getElementById('pBayar').innerText = "CEK UTANG";
     document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
     window.print();
   }
@@ -232,7 +242,6 @@
   function pindahKeEdit(rowNum) {
     let p = findPelanggan(rowNum);
     if (!p) return;
-    
     document.getElementById('editRowNum').value = p.rowNum;
     document.getElementById('nama').value = p.nama;
     document.getElementById('alamat').value = p.alamat;
@@ -241,8 +250,9 @@
     document.getElementById('tenor').value = p.tenor;
     document.getElementById('tipeTenor').value = p.tipe;
     document.getElementById('sisaUtang').value = p.sisa;
-    document.getElementById('formTitle').innerText = "Ubah Data: " + p.nama;
-    document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
+    document.getElementById('formTitle').innerText = "Ubah Data Pelanggan";
+    document.getElementById('btnSimpan').innerText = "PERBARUI DATA SINKRON";
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   function resetForm() {
@@ -262,7 +272,7 @@
   }
 
   function hapus(rowNum) {
-    if(confirm("Hapus permanen?")) {
+    if(confirm("Apakah Anda yakin ingin menghapus data pelanggan ini dari cloud Sheets?")) {
       document.getElementById('overlay').style.display = 'flex';
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
       .then(res => res.json()).then(() => muatData());
