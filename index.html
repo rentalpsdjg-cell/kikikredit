@@ -260,16 +260,17 @@
       
       let html = "";
       dataStorage.forEach(p => {
-        let namaPel = p.nama || "-";
-        let barangPel = p.barang || "-";
-        let sisaPel = p.sisa || 0;
-        let statusPel = p.status || "AKTIF";
-        let tenorPel = p.tenor || "0";
-        let tipePel = p.tipe || "Bulanan";
-        let row = p.rowNum;
+        // PERBAIKAN: Memastikan membaca properti huruf besar/kecil dari Apps Script secara aman
+        let namaPel = p.nama || p.NAMA || "-";
+        let barangPel = p.barang || p.BARANG || "-";
+        let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
+        let statusPel = p.status || p.STATUS || "AKTIF";
+        let tenorPel = p.tenor || p.TENOR || "0";
+        let tipePel = p.tipe || p.TIPE || "Bulanan";
+        let row = p.rowNum || p.ROWNUM;
 
         html += `<tr style="border-bottom: 1px solid #334155 !important;"><td class="py-3 px-2">
-          <span class="font-weight-bold h6 d-inline-block mb-1" style="color: #38bdf8;">${namaPel.toUpperCase()}</span> 
+          <span class="font-weight-bold h6 d-inline-block mb-1 nama-pelanggan-text" style="color: #38bdf8;">${namaPel.toUpperCase()}</span> 
           <span class="badge ${statusPel==='LUNAS'?'badge-success':'badge-danger'} p-1">${statusPel}</span><br>
           <div class="text-muted mb-1" style="font-size:13px;">${barangPel} | Sisa: <b class="text-warning">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b></div>
           <div class="text-muted mb-2" style="font-size:12px;">Tenor: ${tenorPel} (${tipePel})</div>
@@ -330,7 +331,7 @@
   }
 
   function findPelanggan(rowNum) {
-    return dataStorage.find(item => item.rowNum === rowNum);
+    return dataStorage.find(item => (item.rowNum === rowNum || item.ROWNUM === rowNum));
   }
 
   function cetakLokal(rowNum) {
@@ -338,11 +339,15 @@
     if (!p) return;
 
     let opsi = { year: '2-digit', month: 'numeric', day: 'numeric' };
+    let namaPel = p.nama || p.NAMA || "-";
+    let barangPel = p.barang || p.BARANG || "-";
+    let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
+
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID', opsi);
-    document.getElementById('pNama').innerText = p.nama.toUpperCase();
-    document.getElementById('pBrg').innerText = p.barang.toUpperCase();
+    document.getElementById('pNama').innerText = namaPel.toUpperCase();
+    document.getElementById('pBrg').innerText = barangPel.toUpperCase();
     document.getElementById('pBayar').innerText = "CEK SISA";
-    document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
+    document.getElementById('pSisa').innerText = "Rp " + Number(sisaPel).toLocaleString('id-ID');
     
     setTimeout(() => { window.print(); }, 200);
   }
@@ -352,27 +357,28 @@
     if (!p) return;
     
     let opsiTgl = { year: '2-digit', month: 'numeric', day: 'numeric' };
+    let namaPel = p.nama || p.NAMA || "-";
+    let barangPel = p.barang || p.BARANG || "-";
+    let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
+
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID', opsiTgl);
-    document.getElementById('pNama').innerText = p.nama.toUpperCase();
-    document.getElementById('pBrg').innerText = p.barang.toUpperCase();
+    document.getElementById('pNama').innerText = namaPel.toUpperCase();
+    document.getElementById('pBrg').innerText = barangPel.toUpperCase();
     document.getElementById('pBayar').innerText = "CEK BERKALA";
-    document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
+    document.getElementById('pSisa').innerText = "Rp " + Number(sisaPel).toLocaleString('id-ID');
     
     let element = document.getElementById('notaPdfArea');
-    
-    // Set style kontainer menjadi bersih putih khusus saat render PDF WA
     element.className = "nota-pdf-wa";
     
     let opsi = {
       margin:       2,
-      filename:     'Slip_' + p.nama.replace(/\s+/g, '_') + '.pdf',
+      filename:     'Slip_' + namaPel.replace(/\s+/g, '_') + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, background: '#fff' },
       jsPDF:        { unit: 'mm', format: [58, 90], orientation: 'portrait' }
     };
     
     html2pdf().set(opsi).from(element).save().then(() => {
-      // Kembalikan ke style print utama setelah render selesai
       element.className = "nota-container";
     });
   }
@@ -381,15 +387,24 @@
     let p = findPelanggan(rowNum);
     if (!p) return;
     
-    document.getElementById('editRowNum').value = p.rowNum;
-    document.getElementById('nama').value = p.nama;
-    document.getElementById('alamat').value = p.alamat;
-    document.getElementById('barang').value = p.barang;
-    document.getElementById('harga').value = p.total;
-    document.getElementById('tenor').value = p.tenor;
-    document.getElementById('tipeTenor').value = p.tipe;
-    document.getElementById('sisaUtang').value = p.sisa;
-    document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit mr-2'></i>Ubah Data: " + p.nama.toUpperCase();
+    let namaPel = p.nama || p.NAMA || "";
+    let alamatPel = p.alamat || p.ALAMAT || "";
+    let barangPel = p.barang || p.BARANG || "";
+    let totalHarga = p.total || p.TOTAL || 0;
+    let tenorPel = p.tenor || p.TENOR || 0;
+    let tipePel = p.tipe || p.TIPE || "Bulanan";
+    let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
+    let row = p.rowNum || p.ROWNUM;
+
+    document.getElementById('editRowNum').value = row;
+    document.getElementById('nama').value = namaPel;
+    document.getElementById('alamat').value = alamatPel;
+    document.getElementById('barang').value = barangPel;
+    document.getElementById('harga').value = totalHarga;
+    document.getElementById('tenor').value = tenorPel;
+    document.getElementById('tipeTenor').value = tipePel;
+    document.getElementById('sisaUtang').value = sisaPel;
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit mr-2'></i>Ubah Data: " + namaPel.toUpperCase();
     document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
@@ -405,7 +420,7 @@
     let input = document.getElementById("cariInput").value.toUpperCase();
     let tr = document.getElementById("tabelBody").getElementsByTagName("tr");
     for (let i = 0; i < tr.length; i++) {
-      let td = tr[i].getElementsByTagName("span")[0];
+      let td = tr[i].getElementsByClassName("nama-pelanggan-text")[0];
       if(td) { tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none"; }
     }
   }
