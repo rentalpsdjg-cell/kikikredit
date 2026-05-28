@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
-    /* LAYOUT APLIKASI DI LAYAR HP (TETAP BESAR DAN JELAS) */
+    /* LAYOUT UTAMA DI LAYAR HP */
     body { background: #f4f7f6; padding: 12px; font-size: 16px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     .card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 15px; background: #fff; }
     .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 22px; }
@@ -25,23 +25,23 @@
     
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* SEMBUNYIKAN STRUK SAAT DI LAYAR HP */
+    /* SEMBUNYIKAN STRUK DARI LAYAR HP AGAR TIDAK MENGGANGGU */
     #strukCetak { display: none; }
 
     /* ============================================================
-       PENGATURAN CETAK UTAMA: PAKSA UKURAN KERTAS FISIK KE A8
+       PENGATURAN CETAK ULTRA-SERIUS: PAKSA UKURAN FISIK KERTAS A9
        ============================================================ */
     @media print {
-      /* Sembunyikan semua elemen aplikasi web */
+      /* Sembunyikan seluruh elemen aplikasi web kasir */
       body * { display: none !important; }
       
-      /* Setel ukuran halaman browser ke standar A8 Internasional */
+      /* Paksa ukuran halaman browser ke standar Internasional A9 */
       @page { 
-        size: A8 portrait; 
+        size: A9 portrait; 
         margin: 0mm !important; 
       }
       
-      /* Tampilkan hanya area struk */
+      /* Tampilkan hanya area struk kasir */
       #strukCetak, #strukCetak * { display: block !important; }
       #strukCetak { 
         display: block !important; 
@@ -50,31 +50,32 @@
         padding: 0 !important;
       }
       
-      /* Kontainer Struk diatur pas dengan lebar fisik A8 */
+      /* Kontainer Struk dioptimalkan penuh untuk area cetak mikro A9 */
       .nota-container {
         width: 100% !important;
-        max-width: 52mm !important; /* Batas lebar fisik kertas A8 */
-        padding: 2mm !important;
+        max-width: 37mm !important; /* Batas fisik lebar kertas A9 */
+        padding: 1mm !important;
         background: #fff !important;
         color: #000 !important;
         font-family: 'Courier New', Courier, monospace !important;
-        /* Huruf dibuat besar dan tebal mutlak, tidak akan mengecil lagi */
-        font-size: 14pt !important; 
-        font-weight: bold !important;
-        line-height: 1.4 !important;
+        
+        /* HURUF DISETEL RAKSASA SECARA ABSOLUT (PT) UNTUK SKALA MIKRO */
+        font-size: 18pt !important; 
+        font-weight: 900 !important; /* Hitam pekat maksimal */
+        line-height: 1.3 !important;
       }
       
       .nota-header { 
         text-align: center !important; 
-        font-weight: bold !important; 
-        font-size: 16pt !important; 
+        font-weight: 900 !important; 
+        font-size: 20pt !important; 
         line-height: 1.2 !important; 
-        margin-bottom: 8px !important; 
+        margin-bottom: 10px !important; 
       }
       
       .nota-garis { 
-        border-top: 2px dashed #000 !important; 
-        margin: 8px 0 !important; 
+        border-top: 4px dashed #000 !important; /* Garis putus dipertebal */
+        margin: 10px 0 !important; 
         height: 0 !important;
         width: 100% !important;
       }
@@ -82,24 +83,24 @@
       .nota-item { 
         display: flex !important; 
         justify-content: space-between !important; 
-        margin-bottom: 6px !important; 
+        margin-bottom: 8px !important; 
       }
       
       .nota-item span { 
-        font-weight: bold !important; 
+        font-weight: 900 !important; 
       }
       
-      /* Angka Bayar dan Sisa dibuat lebih besar menonjol */
+      /* Nominal angka pembayaran dibuat paling raksasa */
       .nota-item b { 
-        font-size: 16pt !important; 
-        font-weight: bold !important; 
+        font-size: 22pt !important; 
+        font-weight: 900 !important; 
       }
       
       .nota-footer {
         text-align: center !important;
-        font-size: 12pt !important;
-        font-weight: bold !important;
-        margin-top: 12px !important;
+        font-size: 14pt !important;
+        font-weight: 900 !important;
+        margin-top: 15px !important;
         line-height: 1.3 !important;
       }
     }
@@ -301,39 +302,4 @@
     document.getElementById('alamat').value = p.alamat;
     document.getElementById('barang').value = p.barang;
     document.getElementById('harga').value = p.total;
-    document.getElementById('tenor').value = p.tenor;
-    document.getElementById('tipeTenor').value = p.tipe;
-    document.getElementById('sisaUtang').value = p.sisa;
-    document.getElementById('formTitle').innerText = "Ubah Data Pelanggan: " + p.nama.toUpperCase();
-    document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-
-  function resetForm() {
-    document.getElementById('editRowNum').value = "";
-    document.querySelectorAll('input').forEach(i => i.value = "");
-    document.getElementById('formTitle').innerText = "Registrasi Pelanggan Baru";
-    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
-  }
-
-  function filterTabel() {
-    let input = document.getElementById("cariInput").value.toUpperCase();
-    let tr = document.getElementById("tabelBody").getElementsByTagName("tr");
-    for (let i = 0; i < tr.length; i++) {
-      let td = tr[i].getElementsByTagName("span")[0];
-      if(td) { tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none"; }
-    }
-  }
-
-  function hapus(rowNum) {
-    if(confirm("Hapus data pelanggan ini secara permanen dari server database?")) {
-      document.getElementById('overlay').style.display = 'flex';
-      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
-      .then(res => res.text()).then(() => muatData());
-    }
-  }
-
-  window.onload = muatData;
-</script>
-</body>
-</html>
+    document
