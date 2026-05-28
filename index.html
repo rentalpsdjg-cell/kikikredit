@@ -123,25 +123,25 @@
       z-index: 9999; display: none; 
     }
 
-    /* FIX CETAK ULTRA RINGKAS, HEMAT KERTAS & EXTRA TEBAL */
+    /* MATRIKS DOUMEN CETAK: 100% TEKS POLOS MONOSPACE TEBAL */
     #areaStruk { display: none; }
     @media print {
       body * { display: none !important; }
-      #areaStruk, #areaStruk * { display: block !important; }
       #areaStruk { 
+        display: block !important;
         position: absolute; 
         left: 0; 
         top: 0; 
-        width: 100% !important;
-        padding: 0px 2px !important; 
+        width: 100% !important; 
         margin: 0 !important; 
+        padding: 0mm 1mm !important;
         background: #ffffff !important; 
         color: #000000 !important;
         font-family: "Courier New", Courier, monospace !important; 
-        font-size: 11pt !important; 
-        font-weight: 900 !important; /* Huruf Dibuat Paling Tebal */
-        white-space: pre !important; 
-        line-height: 1.1 !important; /* Spasi Baris Super Rapat & Padat */
+        font-size: 12pt !important; 
+        font-weight: 900 !important; /* Paksa Head Thermal Membakar Sangat Tebal */
+        white-space: pre-wrap !important; /* Bungkus otomatis jika melebihi kertas */
+        line-height: 1.1 !important;
       }
       @page { 
         size: auto; 
@@ -257,7 +257,7 @@
     </div>
   </div>
 
-  <div id="areaStruk"></div>
+  <pre id="areaStruk"></pre>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -447,36 +447,36 @@
       }
     }
 
-    /* ENGINE PENGHITUNG SPASI STRUK ULTRA MINIMALIS (28 Karakter Maksimal) */
+    /* ENGINE MATRIX TEXT 26 KARAKTER (PAS UNTUK PRINTER BLUETOOTH MINI) */
     function buatBarisStruk(label, value) {
-      const LEBAR_MAKSIMAL = 28; 
-      const sisaSpasi = LEBAR_MAKSIMAL - (label.length + value.length);
+      const LEBAR_KERTAS = 26; 
+      const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
       if (sisaSpasi > 0) {
         return label + " ".repeat(sisaSpasi) + value + "\n";
       }
-      return label + "\n" + " ".repeat(LEBAR_MAKSIMAL - value.length) + value + "\n";
+      return label + "\n" + " ".repeat(LEBAR_KERTAS - value.length) + value + "\n";
     }
 
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
-      const strukDiv = document.getElementById('areaStruk');
+      const strukPre = document.getElementById('areaStruk');
       
-      // Menggunakan 28 karakter pas agar teks padat, hemat kertas, dan rata kanan sempurna
-      let isiTeksText = "";
-      isiTeksText += "    SLIP PEMBAYARAN SAH    \n";
-      isiTeksText += "   KIKI KREDIT SOLUTION    \n";
-      isiTeksText += "============================\n"; 
-      isiTeksText += buatBarisStruk("Tgl:", tgl);
-      isiTeksText += buatBarisStruk("Nama:", nama);
-      isiTeksText += buatBarisStruk("Brg:", barang);
-      isiTeksText += "----------------------------\n";
-      isiTeksText += buatBarisStruk("BAYAR:", _nominalDisplay);
-      isiTeksText += buatBarisStruk("SISA :", formatRupiah(sisa));
-      isiTeksText += "----------------------------\n";
-      isiTeksText += "      * TERIMA KASIH * \n";
-      isiTeksText += " BUKTI TRANSAKSI YANG VALID \n\n\n"; // 3 Baris kosong di akhir untuk jarak potong manual kertas roll
+      // Mengalirkan teks string murni ke tag <pre> tanpa bumbu tag HTML/CSS modern
+      let streamTeks = "";
+      streamTeks += "   SLIP PEMBAYARAN SAH    \n";
+      streamTeks += "  KIKI KREDIT SOLUTION    \n";
+      streamTeks += "==========================\n"; 
+      streamTeks += buatBarisStruk("Tgl:", tgl);
+      streamTeks += buatBarisStruk("Nama:", nama);
+      streamTeks += buatBarisStruk("Brg:", barang);
+      streamTeks += "--------------------------\n";
+      streamTeks += buatBarisStruk("BAYAR:", _nominalDisplay);
+      streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
+      streamTeks += "--------------------------\n";
+      streamTeks += "     * TERIMA KASIH * \n";
+      streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n"; 
 
-      strukDiv.innerText = isiTeksText;
+      strukPre.textContent = streamTeks;
       window.print();
     }
 
