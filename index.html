@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution Premium Fix</title>
+  <title>Kiki Kredit Solution Premium System</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
@@ -14,7 +14,7 @@
     .btn-sm-custom:active { transform: scale(0.96); }
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.96); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* PREVIEW STRUK KASIR MODERN */
+    /* STRUK THERMAL MP58 FORMATTING BERSIH */
     .nota-container { width: 100%; font-family: 'Courier New', Courier, monospace; color: #000; line-height: 1.3; background: #fff; }
     .nota-header { text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 4px; letter-spacing: 1px; }
     .nota-sub-header { text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
@@ -26,7 +26,6 @@
 
     #strukCetak { display: none; }
     
-    /* ENGINE PRINTER THERMAL MP58-LITE */
     @page { size: auto; margin: 0mm; }
     @media print {
       body * { display: none !important; }
@@ -44,7 +43,7 @@
 
   <div id="overlay">
     <div class="spinner-border text-primary" style="width: 2.5rem; height: 2.5rem;" role="status"></div>
-    <b class="mt-3 text-dark font-weight-bold">Menghubungkan Server Cloud...</b>
+    <b class="mt-3 text-dark font-weight-bold">Menghubungkan ke Server Cloud...</b>
   </div>
 
   <div id="strukCetak">
@@ -78,26 +77,26 @@
     </div>
     <input type="hidden" id="editRowNum">
     <input type="text" id="nama" class="form-control mb-2 form-control-lg" style="font-size:14px; border-radius:10px;" placeholder="Nama Lengkap Pelanggan">
-    <input type="text" id="alamat" class="form-control mb-2" style="border-radius:10px;" placeholder="Alamat Lengkap">
+    <input type="text" id="alamat" class="form-control mb-2" style="border-radius:10px;" placeholder="Alamat">
     <input type="text" id="barang" class="form-control mb-2" style="border-radius:10px;" placeholder="Nama Barang Kredit">
     <div class="form-row mb-2">
       <div class="col-7"><input type="number" id="harga" class="form-control" style="border-radius:10px;" placeholder="Harga Total (Rp)" oninput="autoIsiSisa()"></div>
-      <div class="col-5"><input type="number" id="tenor" class="form-control" style="border-radius:10px;" placeholder="Tenor (x)"></div>
+      <div class="col-5"><input type="number" id="tenor" class="form-control" style="border-radius:10px;" placeholder="Tenor (Kali)"></div>
     </div>
     <div class="form-row mb-2">
       <div class="col-7">
-        <small class="text-muted d-block mb-1 font-weight-bold">Sisa Utang Kredit:</small>
+        <small class="text-muted d-block mb-1 font-weight-bold">Sisa Utang (Bisa manual):</small>
         <input type="number" id="sisaUtang" class="form-control bg-light font-weight-bold text-danger" style="border-radius:10px;" placeholder="Rp 0">
       </div>
       <div class="col-5">
         <small class="text-muted d-block mb-1 font-weight-bold">Tipe Tenor:</small>
         <select id="tipeTenor" class="form-control" style="border-radius:10px;">
-          <option value="Bulanan">Bulanan</option>
-          <option value="Mingguan">Mingguan</option>
+          <option value="Bulanan">Tenor Bulanan</option>
+          <option value="Mingguan">Tenor Mingguan</option>
         </select>
       </div>
     </div>
-    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-block font-weight-bold py-2.5 mt-3 shadow-sm" style="border-radius:10px;">SIMPAN DATA TRANSAKSI</button>
+    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-block font-weight-bold py-2.5 mt-3 shadow-sm" style="border-radius:10px;">SIMPAN TRANSAKSI</button>
     <button onclick="resetForm()" class="btn btn-light btn-block btn-sm text-muted mt-2" style="border-radius:10px;">Batal</button>
   </div>
 
@@ -112,14 +111,15 @@
     <div class="table-responsive">
       <table class="table table-sm mb-0" style="width: 100%;">
         <tbody id="tabelBody">
-          </tbody>
+          <tr><td class="text-center py-4 text-muted">Sinkronisasi data database cloud...</td></tr>
+        </tbody>
       </table>
     </div>
   </div>
 
 <script>
-  // URL WEB APP BARU SUDAH TERPASANG DI SINI BOSQ
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwO6aPuSBMVslrg_uiRh5X_kumUMhjghpGgTjTJjwlJWdsCoT9pKnAnPRwkihHAh4NU/exec";
+  // KUNCI URL WEB APP TERBARU BOSQ
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcimrQMWhSXhB-gtt3Znx-I6HBEhNHkh7NjXYSXUJ193xSiK83UH9hHDUe2jMzL9aW/exec";
   let dataStorage = [];
 
   function autoIsiSisa() {
@@ -131,10 +131,17 @@
   function muatData() {
     document.getElementById('overlay').style.display = 'flex';
     fetch(SCRIPT_URL + "?aksi=ambilData")
-    .then(res => res.json())
-    .then(data => {
-      dataStorage = data.pelanggan || [];
+    .then(res => res.text())
+    .then(textData => {
+      let data = JSON.parse(textData);
       
+      if(data.error) {
+        document.getElementById('tabelBody').innerHTML = `<tr><td class='text-center py-3 text-danger font-weight-bold'>⚠️ Info Server: ${data.error}</td></tr>`;
+        document.getElementById('overlay').style.display = 'none';
+        return;
+      }
+
+      dataStorage = data.pelanggan || [];
       let totalPiutang = data.stats && data.stats.totalPiutang ? data.stats.totalPiutang : 0;
       let aktif = data.stats && data.stats.aktif ? data.stats.aktif : 0;
       
@@ -157,9 +164,9 @@
               <span class="font-weight-bold text-dark h5 mb-0">${namaPel.toUpperCase()}</span>
               <span class="badge px-2 py-1 ${statusPel==='LUNAS'?'badge-success':'badge-danger'}" style="border-radius:6px;">${statusPel}</span>
             </div>
-            <div class="text-dark mb-1" style="font-size:14px; font-weight:500;"><i class="fas fa-box-open text-muted mr-1"></i> ${barangPel}</div>
+            <div class="text-dark mb-1" style="font-size:14px; font-weight:500;"><i class="fas fa-box-open text-muted mr-1"></i> ${barangPel} | Sisa: <b class="text-danger font-weight-bold">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b></div>
             <div class="text-muted mb-2" style="font-size:13px;">
-              Tenor: <span class="text-dark font-weight-bold">${tenorPel}x (${tipePel})</span> | Sisa: <b class="text-danger h6 font-weight-bold">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b>
+              Tenor: ${tenorPel} Kali (${tipePel === "Bulanan" ? "Tenor Bulanan" : "Tenor Mingguan"})
             </div>
             <div class="d-flex flex-wrap mt-2">
               <button onclick="bayar(${row})" class="btn btn-success btn-sm btn-sm-custom shadow-sm"><i class="fas fa-money-bill-wave mr-1"></i> Bayar</button>
@@ -174,7 +181,7 @@
       document.getElementById('overlay').style.display = 'none';
     }).catch((err) => { 
       console.error(err);
-      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger font-weight-bold'>⚠️ Gagal Sinkronisasi Database. Cek Koneksi Internet.</td></tr>";
+      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger font-weight-bold'>⚠️ Gagal Sinkronisasi Database Cloud Server.</td></tr>";
       document.getElementById('overlay').style.display = 'none'; 
     });
   }
@@ -193,7 +200,7 @@
     if(!data.nama || !data.totalHarga) return alert("Nama dan Harga wajib diisi!");
     document.getElementById('overlay').style.display = 'flex';
     fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "simpan", data: data }) })
-    .then(res => res.json()).then(res => { alert(res); resetForm(); muatData(); });
+    .then(res => res.text()).then(res => { alert(JSON.parse(res)); resetForm(); muatData(); });
   }
 
   function bayar(rowNum) {
@@ -201,7 +208,8 @@
     if(!nominal) return;
     document.getElementById('overlay').style.display = 'flex';
     fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "bayar", rowNum: rowNum, nominal: nominal }) })
-    .then(res => res.json()).then(res => {
+    .then(res => res.text()).then(textData => {
+      let res = JSON.parse(textData);
       document.getElementById('pTgl').innerText = res.tgl;
       document.getElementById('pNama').innerText = res.nama;
       document.getElementById('pBrg').innerText = res.barang;
@@ -239,7 +247,7 @@
     document.getElementById('tipeTenor').value = p.tipe;
     document.getElementById('sisaUtang').value = p.sisa;
     document.getElementById('formTitle').innerText = "Ubah Informasi Pelanggan";
-    document.getElementById('btnSimpan').innerText = "PERBARUI SINKRONISASI DATA";
+    document.getElementById('btnSimpan').innerText = "PERBARUI TRANSAKSI";
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
@@ -247,7 +255,7 @@
     document.getElementById('editRowNum').value = "";
     document.querySelectorAll('input').forEach(i => i.value = "");
     document.getElementById('formTitle').innerText = "Registrasi Pelanggan Baru";
-    document.getElementById('btnSimpan').innerText = "SIMPAN DATA TRANSAKSI";
+    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
   }
 
   function filterTabel() {
@@ -263,7 +271,7 @@
     if(confirm("Apakah Anda yakin ingin menghapus pelanggan ini selamanya?")) {
       document.getElementById('overlay').style.display = 'flex';
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
-      .then(res => res.json()).then(() => muatData());
+      .then(res => res.text()).then(() => muatData());
     }
   }
 
