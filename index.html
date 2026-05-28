@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
-    /* UTAMA - LAYAR HP */
+    /* LAYOUT APLIKASI DI LAYAR HP (TETAP BESAR DAN JELAS) */
     body { background: #f4f7f6; padding: 12px; font-size: 16px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     .card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 15px; background: #fff; }
     .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 22px; }
@@ -25,67 +25,56 @@
     
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* STRUK TERSEMBUNYI SAAT DI LAYAR HP */
+    /* SEMBUNYIKAN STRUK SAAT DI LAYAR HP */
     #strukCetak { display: none; }
 
     /* ============================================================
-       TRIK "HACKER CSS" FORCE OVERRIDE UNTUK PRINTER THERMAL 58MM
+       PENGATURAN CETAK UTAMA: PAKSA UKURAN KERTAS FISIK KE A8
        ============================================================ */
     @media print {
-      /* Sembunyikan elemen web bawaan */
+      /* Sembunyikan semua elemen aplikasi web */
       body * { display: none !important; }
       
-      /* Paksa Canvas Body Mengikuti Standar Lebar Printer Kasir Mini */
-      html, body { 
-        background: #fff !important; 
-        color: #000 !important; 
-        margin: 0 !important; 
-        padding: 0 !important; 
-        width: 380px !important; /* Paksa lebar pixel absolut kasir */
-      }
-      
-      /* Munculkan Area Struk secara paksa */
-      #strukCetak, #strukCetak * { display: block !important; }
-      #strukCetak { 
-        display: block !important; 
-        width: 380px !important; 
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-      
+      /* Setel ukuran halaman browser ke standar A8 Internasional */
       @page { 
-        size: auto; 
+        size: A8 portrait; 
         margin: 0mm !important; 
       }
       
-      /* KONTANER NOTA: ZOOM DITINGKATKAN DAN HURUF DIPAKSA RAKSASA & TEBAL */
+      /* Tampilkan hanya area struk */
+      #strukCetak, #strukCetak * { display: block !important; }
+      #strukCetak { 
+        display: block !important; 
+        width: 100% !important; 
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      
+      /* Kontainer Struk diatur pas dengan lebar fisik A8 */
       .nota-container {
-        width: 360px !important;
-        padding: 5px !important;
+        width: 100% !important;
+        max-width: 52mm !important; /* Batas lebar fisik kertas A8 */
+        padding: 2mm !important;
         background: #fff !important;
         color: #000 !important;
         font-family: 'Courier New', Courier, monospace !important;
-        
-        /* TRICK HACK: Besarkan teks 2x lipat bawaan sistem printer */
-        font-size: 24px !important; 
-        font-weight: 900 !important; /* Ketebalan Maksimal */
-        line-height: 1.5 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        /* Huruf dibuat besar dan tebal mutlak, tidak akan mengecil lagi */
+        font-size: 14pt !important; 
+        font-weight: bold !important;
+        line-height: 1.4 !important;
       }
       
       .nota-header { 
         text-align: center !important; 
-        font-weight: 900 !important; 
-        font-size: 28px !important; /* Judul Struk Raksasa */
-        line-height: 1.3 !important; 
-        margin-bottom: 12px !important; 
+        font-weight: bold !important; 
+        font-size: 16pt !important; 
+        line-height: 1.2 !important; 
+        margin-bottom: 8px !important; 
       }
       
-      /* Garis putus-putus dipertebal agar terlihat jelas di kertas murah */
       .nota-garis { 
-        border-top: 5px dashed #000 !important; 
-        margin: 12px 0 !important; 
+        border-top: 2px dashed #000 !important; 
+        margin: 8px 0 !important; 
         height: 0 !important;
         width: 100% !important;
       }
@@ -93,25 +82,25 @@
       .nota-item { 
         display: flex !important; 
         justify-content: space-between !important; 
-        margin-bottom: 10px !important; 
+        margin-bottom: 6px !important; 
       }
       
       .nota-item span { 
-        font-weight: 900 !important; 
+        font-weight: bold !important; 
       }
       
-      /* Nominal angka (Bayar & Sisa) dibuat paling besar */
+      /* Angka Bayar dan Sisa dibuat lebih besar menonjol */
       .nota-item b { 
-        font-size: 28px !important; 
-        font-weight: 900 !important; 
+        font-size: 16pt !important; 
+        font-weight: bold !important; 
       }
       
       .nota-footer {
         text-align: center !important;
-        font-size: 20px !important;
-        font-weight: 900 !important;
-        margin-top: 15px !important;
-        line-height: 1.4 !important;
+        font-size: 12pt !important;
+        font-weight: bold !important;
+        margin-top: 12px !important;
+        line-height: 1.3 !important;
       }
     }
   </style>
