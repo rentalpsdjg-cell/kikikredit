@@ -3,68 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - Pure Print Engine</title>
+  <title>Kiki Kredit Solution - Simpel & Oke</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     /* ============================================================
-       1. INTERFACE LAYAR HP KASIR (FOKUS DATA - TANPA PREVIEW STRUK)
+       1. TAMPILAN LAYAR HP KASIR (SIMPEL & NYAMAN DI MATA)
        ============================================================ */
     body { 
       background: #0f172a; 
       color: #f1f5f9;
-      padding: 10px; 
+      padding: 12px; 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     
-    /* MODIFIKASI TOTAL: Menyembunyikan struk sepenuhnya di layar HP kasir */
+    /* Struk disembunyikan penuh di layar HP agar rapi */
     .thermal-pure-text {
       display: none !important;
     }
 
     .app-card {
       background: #1e293b; 
-      border-radius: 16px;
+      border-radius: 12px;
       max-width: 450px;
-      margin: 0 auto 15px auto;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      margin: 0 auto 12px auto;
+      padding: 16px;
       border: 1px solid #334155;
     }
 
     .form-control-custom {
       background: #0f172a !important;
       color: #ffffff !important;
-      border-radius: 10px;
-      font-size: 16px;
+      border-radius: 8px;
+      font-size: 15px;
       border: 2px solid #475569;
-      padding: 14px;
+      padding: 10px 12px;
       height: auto;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       font-weight: bold;
-    }
-    .form-control-custom:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
     }
 
     .btn-action {
       font-size: 13px;
-      font-weight: 900;
-      padding: 12px 8px;
-      border-radius: 8px;
-      margin: 3px;
+      font-weight: bold;
+      padding: 10px 6px;
+      border-radius: 6px;
+      margin: 2px;
       flex: 1;
       text-align: center;
       border: none;
-      text-transform: uppercase;
     }
 
     #overlay { 
       display: none; 
       position: fixed; 
       top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(15, 23, 42, 0.95); 
+      background: rgba(15, 23, 42, 0.9); 
       z-index: 9999; 
       justify-content: center; 
       align-items: center; 
@@ -72,18 +66,16 @@
     }
 
     /* ============================================================
-       2. ARSITEKTUR STRUK VERTIKAL MODERN (HANYA AKTIF SAAT DIPRINT)
+       2. STRUKTUR CETAK FISIK (TEBAL, JELAS, HEMAT KERTAS V-LINE)
        ============================================================ */
     @media print {
-      /* Munculkan kembali struk murni teks hanya pada saat printer mengeksekusi perintah */
+      /* Munculkan struk murni teks saat tombol cetak ditekan */
       .thermal-pure-text {
         display: block !important;
-        box-shadow: none !important;
         background: transparent !important;
         margin: 0 !important;
-        padding: 4mm 1mm !important;
+        padding: 2mm 1mm !important;
         width: 100% !important;
-        max-width: 100% !important;
       }
 
       .nota-container {
@@ -93,24 +85,20 @@
         font-size: 22px !important; 
         font-weight: 900 !important; 
         line-height: 1.2;
-        background: transparent !important;
       }
       
       .nota-header { 
         text-align: center; 
         font-size: 25px !important; 
         font-weight: 900 !important;
-        line-height: 1.1; 
-        margin-bottom: 8px; 
+        margin-bottom: 6px; 
         text-transform: uppercase;
-        letter-spacing: 1px;
       }
       
       .nota-garis { 
         text-align: center;
-        white-space: nowrap;
         overflow: hidden;
-        margin: 3px 0; 
+        margin: 2px 0; 
         font-size: 22px !important;
         font-weight: 900 !important;
       }
@@ -120,17 +108,10 @@
       }
       
       .nota-item-group {
-        margin-bottom: 5px;
-        word-break: break-all;
+        margin-bottom: 4px;
       }
       
-      .nota-label {
-        font-weight: 900 !important;
-        text-transform: uppercase;
-        display: inline;
-      }
-      
-      .nota-value {
+      .nota-label, .nota-value {
         font-weight: 900 !important;
         display: inline;
       }
@@ -138,12 +119,11 @@
       .nota-footer {
         text-align: center;
         font-size: 18px !important; 
-        margin-top: 12px;
-        line-height: 1.2;
+        margin-top: 10px;
         font-weight: 900 !important;
       }
 
-      /* Sembunyikan semua interface kasir dari gulungan kertas printer */
+      /* Sembunyikan seluruh aplikasi kasir dari kertas thermal */
       body { 
         background: #ffffff !important; 
         color: #000000 !important;
@@ -162,13 +142,13 @@
 <body>
 
   <div id="overlay">
-    <div class="spinner-border text-info" role="status" style="width: 3.5rem; height: 3.5rem;"></div>
-    <b class="mt-4 h5 text-info" style="letter-spacing: 1px;">SINKRONISASI SERVER...</b>
+    <div class="spinner-border text-info" role="status"></div>
+    <b class="mt-3 small text-info">MEMPROSES DATA...</b>
   </div>
 
-  <div class="app-card border-0 py-4 text-center shadow no-print" style="background: linear-gradient(135deg, #0284c7, #0369a1) !important;">
-    <h3 class="font-weight-bold mb-1 text-white">KIKI KREDIT OS</h3>
-    <span class="badge badge-warning font-weight-bold px-3 py-2 mt-2" id="statInfo" style="font-size: 13px;">Menghubungkan ke Cloud...</span>
+  <div class="app-card border-0 py-3 text-center no-print" style="background: #0284c7 !important;">
+    <h4 class="font-weight-bold mb-1 text-white">KIKI KREDIT OS</h4>
+    <small class="text-white font-weight-bold" id="statInfo">Loading cloud database...</small>
   </div>
 
   <div class="thermal-pure-text">
@@ -196,10 +176,10 @@
   </div>
 
   <div class="app-card no-print">
-    <h5 id="formTitle" class="text-info font-weight-bold mb-4"><i class="fas fa-user-plus mr-2"></i>Registrasi Pelanggan</h5>
+    <h6 id="formTitle" class="text-info font-weight-bold mb-3"><i class="fas fa-user-plus mr-2"></i>Data Pelanggan Baru</h6>
     <input type="hidden" id="editRowNum">
     <input type="text" id="nama" class="form-control form-control-custom" placeholder="Nama Pelanggan">
-    <input type="text" id="alamat" class="form-control form-control-custom" placeholder="Alamat Rumah">
+    <input type="text" id="alamat" class="form-control form-control-custom" placeholder="Alamat">
     <input type="text" id="barang" class="form-control form-control-custom" placeholder="Nama Barang">
     
     <div class="form-row">
@@ -217,20 +197,17 @@
       </div>
     </div>
     
-    <button id="btnSimpan" onclick="simpan()" class="btn btn-info btn-block font-weight-bold py-3 shadow" style="border-radius:12px; background: #0284c7; border:none; font-size: 16px; letter-spacing: 1px;">SIMPAN DATA TRANSAKSI</button>
-    <button onclick="resetForm()" class="btn btn-outline-secondary btn-block btn-sm mt-3 text-muted" style="border-radius:8px; padding: 10px; font-weight: bold;">BATAL / CLEAN FORM</button>
+    <button id="btnSimpan" onclick="simpan()" class="btn btn-info btn-block font-weight-bold py-2 shadow" style="border-radius:8px; background: #0284c7; border:none; font-size: 15px;">SIMPAN TRANSAKSI</button>
+    <button onclick="resetForm()" class="btn btn-link btn-sm text-muted btn-block mt-2" style="font-weight: bold; text-decoration: none;">Reset Form</button>
   </div>
 
   <div class="app-card no-print">
-    <div class="input-group mb-3">
-      <div class="input-group-prepend"><span class="input-group-text bg-transparent border-right-0" style="border-color:#475569;"><i class="fas fa-search text-muted"></i></span></div>
-      <input type="text" id="cariInput" class="form-control border-left-0 form-control-custom mb-0" placeholder="Ketik nama untuk mencari..." onkeyup="filterTabel()">
-    </div>
+    <input type="text" id="cariInput" class="form-control form-control-custom" placeholder="Cari nama pelanggan..." onkeyup="filterTabel()">
     
-    <div style="max-height: 380px; overflow-y: auto;">
+    <div style="max-height: 350px; overflow-y: auto;">
       <table class="table table-sm table-dark table-hover mb-0" style="background: transparent;">
         <tbody id="tabelBody">
-          <tr><td class="text-center py-4 text-muted">Menarik data cloud database...</td></tr>
+          <tr><td class="text-center py-3 text-muted small">Menghubungkan cloud server...</td></tr>
         </tbody>
       </table>
     </div>
@@ -256,7 +233,7 @@
       
       let totalPiutang = data.stats && data.stats.totalPiutang ? data.stats.totalPiutang : 0;
       let aktif = data.stats && data.stats.aktif ? data.stats.aktif : 0;
-      document.getElementById('statInfo').innerText = "Total Piutang: Rp " + totalPiutang.toLocaleString('id-ID') + " | Aktif: " + aktif;
+      document.getElementById('statInfo').innerText = "Piutang: Rp " + totalPiutang.toLocaleString('id-ID') + " | Aktif: " + aktif;
       
       let html = "";
       dataStorage.forEach(p => {
@@ -268,20 +245,20 @@
         html += `<tr class="border-bottom" style="border-color: #334155 !important;">
           <td class="py-3">
             <div class="d-flex justify-content-between mb-1">
-              <span class="text-white font-weight-bold" style="font-size:16px; letter-spacing:0.5px;">${namaPel.toUpperCase()}</span>
-              <span class="text-warning font-weight-bold" style="font-size:15px;">Rp ${Number(sisaPel).toLocaleString('id-ID')}</span>
+              <span class="text-white font-weight-bold" style="font-size:15px;">${namaPel.toUpperCase()}</span>
+              <span class="text-warning font-weight-bold" style="font-size:14px;">Rp ${Number(sisaPel).toLocaleString('id-ID')}</span>
             </div>
-            <small class="text-muted d-block mb-3" style="font-size:13px;">Barang: ${barangPel} | Tenor: ${p.tenor}x (${p.tipe})</small>
+            <small class="text-muted d-block mb-3">Barang: ${barangPel} | Tenor: ${p.tenor}x (${p.tipe})</small>
             <div class="d-flex">
-              <button onclick="bayar(${row})" class="btn-action btn-success"><i class="fas fa-money-bill-wave mr-1"></i> Angsur</button>
-              <button onclick="eksekusiCetakLangsung(${row})" class="btn-action btn-info" style="background-color: #0284c7;"><i class="fas fa-print mr-1"></i> CETAK</button>
-              <button onclick="pindahKeEdit(${row})" class="btn-action btn-warning text-dark"><i class="fas fa-edit mr-1"></i> Edit</button>
-              <button onclick="hapus(${row})" class="btn-action btn-danger"><i class="fas fa-trash"></i></button>
+              <button onclick="bayar(${row})" class="btn-action btn-success">Angsur</button>
+              <button onclick="eksekusiCetakLangsung(${row})" class="btn-action btn-info" style="background-color: #0284c7;">CETAK</button>
+              <button onclick="pindahKeEdit(${row})" class="btn-action btn-warning text-dark">Edit</button>
+              <button onclick="hapus(${row})" class="btn-action btn-danger">Hapus</button>
             </div>
           </td>
         </tr>`;
       });
-      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center text-muted py-3'>Tidak ada data</td></tr>";
+      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center text-muted py-3 small'>Tidak ada data</td></tr>";
       document.getElementById('overlay').style.display = 'none';
     }).catch(() => { document.getElementById('overlay').style.display = 'none'; });
   }
@@ -322,7 +299,6 @@
       document.getElementById('pBayar').innerText = "Rp " + Number(res.nominal).toLocaleString('id-ID');
       document.getElementById('pSisa').innerText = "Rp " + Number(res.sisa).toLocaleString('id-ID');
       muatData();
-      
       setTimeout(() => { window.print(); }, 400);
     });
   }
@@ -330,13 +306,11 @@
   function eksekusiCetakLangsung(rowNum) {
     let p = dataStorage.find(item => item.rowNum === rowNum);
     if (!p) return;
-    
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
     document.getElementById('pNama').innerText = p.nama.toUpperCase();
     document.getElementById('pBrg').innerText = p.barang.toUpperCase();
     document.getElementById('pBayar').innerText = "CEK SISA";
     document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
-    
     setTimeout(() => { window.print(); }, 300);
   }
 
@@ -358,8 +332,8 @@
   function resetForm() {
     document.getElementById('editRowNum').value = "";
     document.querySelectorAll('input').forEach(i => i.value = "");
-    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-2'></i>Registrasi Pelanggan";
-    document.getElementById('btnSimpan').innerText = "SIMPAN DATA TRANSAKSI";
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-2'></i>Data Pelanggan Baru";
+    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
   }
 
   function filterTabel() {
