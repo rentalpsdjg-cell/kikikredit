@@ -14,7 +14,7 @@
     .btn-sm-custom { font-size: 12px; padding: 6px 12px; margin: 2px; font-weight: bold; border-radius: 6px; }
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* STYLE STRUK NOTA (TAMPILAN & PDF WA) */
+    /* STYLE STRUK NOTA (TAMPILAN & DOWNLOAD PDF WA) */
     .nota-container {
       width: 54mm;
       padding: 2mm 1mm;
@@ -30,7 +30,7 @@
     .nota-item span { font-weight: bold; }
     .nota-item b { font-size: 15px; }
 
-    /* LAYOUT KHUSUS SAAT DI-PRINT KE PRINTER THERMAL BIAR HURUFNYA TEBAL & BESAR */
+    /* LAYOUT PRINTER THERMAL (OTOMATIS HURUF BESAR & TEBAL) */
     #strukCetak { display: none; }
     @media print {
       body * { display: none !important; }
@@ -53,7 +53,7 @@
 
   <div id="overlay">
     <div class="spinner-border text-primary" role="status"></div>
-    <b class="mt-2 text-primary">Menghubungkan ke Google Sheets...</b>
+    <b class="mt-2 text-primary">Sinkronisasi Database...</b>
   </div>
 
   <div id="strukCetak">
@@ -91,7 +91,7 @@
     </div>
     <div class="form-row mb-2">
       <div class="col-7">
-        <small class="text-muted d-block mb-1">Sisa Utang (Bisa diisi manual):</small>
+        <small class="text-muted d-block mb-1">Sisa Utang (Bisa manual):</small>
         <input type="number" id="sisaUtang" class="form-control form-control-sm" placeholder="Rp 0">
       </div>
       <div class="col-5">
@@ -113,8 +113,8 @@
   <div class="card p-2"><div class="table-responsive"><table class="table table-sm"><tbody id="tabelBody"></tbody></table></div></div>
 
 <script>
-  // Link Web App valid milik Bosq
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC-ppo7i-aHhs-05IFGvkE-NLJWtyYo3MfykI1XP1nnNX_tk3ZvucQNwEdJDpw4YSH/exec";
+  // URL BARU YANG BARUSAN BOSQ KIRIM SUDAH REKAT DI SINI!
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwVC24h3ax58HSK6DS4NSY5O7w-R_9mn8kUQ9ZokV0vvQZXNJF8p8Gh_JQal5JLNP0r/exec";
 
   let dataStorage = [];
 
@@ -133,13 +133,13 @@
       
       let html = "";
       dataStorage.forEach(p => {
-        let namaPel = p.Nama || p.nama || "-";
-        let barangPel = p.Barang || p.barang || "-";
-        let sisaPel = p["Sisa Utang"] || p.sisa || 0;
-        let statusPel = p.Status || p.status || "AKTIF";
-        let tenorPel = p.Tenor || p.tenor || "0";
-        let tipePel = p.Tipe || p.tipe || "Bulanan";
-        let row = p.rowNum || p.row;
+        let namaPel = p.nama || "-";
+        let barangPel = p.barang || "-";
+        let sisaPel = p.sisa || 0;
+        let statusPel = p.status || "AKTIF";
+        let tenorPel = p.tenor || "0";
+        let tipePel = p.tipe || "Bulanan";
+        let row = p.rowNum;
 
         html += `<tr class="border-bottom"><td class="py-3 px-2">
           <span class="font-weight-bold text-dark h6 d-inline-block mb-1">${namaPel.toUpperCase()}</span> 
@@ -155,7 +155,7 @@
           </div>
         </td></tr>`;
       });
-      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center py-3'>Belum ada data</td></tr>";
+      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center py-3'>Belum ada data / Sheets Kosong</td></tr>";
       document.getElementById('overlay').style.display = 'none';
     }).catch((err) => { 
       console.error(err);
@@ -200,63 +200,55 @@
   }
 
   function findPelanggan(rowNum) {
-    return dataStorage.find(item => (item.rowNum === rowNum || item.row === rowNum));
+    return dataStorage.find(item => item.rowNum === rowNum);
   }
 
   function cetakLokal(rowNum) {
     let p = findPelanggan(rowNum);
     if (!p) return;
-    let namaPel = p.Nama || p.nama || "-";
-    let barangPel = p.Barang || p.barang || "-";
-    let sisaPel = p["Sisa Utang"] || p.sisa || 0;
 
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
-    document.getElementById('pNama').innerText = namaPel;
-    document.getElementById('pBrg').innerText = barangPel;
+    document.getElementById('pNama').innerText = p.nama;
+    document.getElementById('pBrg').innerText = p.barang;
     document.getElementById('pBayar').innerText = "Cek Sisa";
-    document.getElementById('pSisa').innerText = "Rp " + Number(sisaPel).toLocaleString('id-ID');
+    document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
     window.print();
   }
 
   function unduhPdfLokal(rowNum) {
     let p = findPelanggan(rowNum);
     if (!p) return;
-    let namaPel = p.Nama || p.nama || "-";
-    let barangPel = p.Barang || p.barang || "-";
-    let sisaPel = p["Sisa Utang"] || p.sisa || 0;
     
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
-    document.getElementById('pNama').innerText = namaPel;
-    document.getElementById('pBrg').innerText = barangPel;
+    document.getElementById('pNama').innerText = p.nama;
+    document.getElementById('pBrg').innerText = p.barang;
     document.getElementById('pBayar').innerText = "Cek Berkala";
-    document.getElementById('pSisa').innerText = "Rp " + Number(sisaPel).toLocaleString('id-ID');
+    document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
     
     let element = document.getElementById('notaPdfArea');
     let opsi = {
       margin:       4,
-      filename:     'Struk_' + namaPel.replace(/\s+/g, '_') + '.pdf',
+      filename:     'Struk_' + p.nama.replace(/\s+/g, '_') + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2 },
       jsPDF:        { unit: 'mm', format: [62, 100], orientation: 'portrait' }
     };
-    
     html2pdf().set(opsi).from(element).save();
   }
 
   function pindahKeEdit(rowNum) {
     let p = findPelanggan(rowNum);
     if (!p) return;
-    let row = p.rowNum || p.row;
     
-    document.getElementById('editRowNum').value = row;
-    document.getElementById('nama').value = p.Nama || p.nama || "";
-    document.getElementById('alamat').value = p.Alamat || p.alamat || "";
-    document.getElementById('barang').value = p.Barang || p.barang || "";
-    document.getElementById('harga').value = p["Total Harga"] || p.total || "";
-    document.getElementById('tenor').value = p.Tenor || p.tenor || "";
-    document.getElementById('tipeTenor').value = p.Tipe || p.tipe || "Bulanan";
-    document.getElementById('sisaUtang').value = p["Sisa Utang"] || p.sisa || "";
-    document.getElementById('formTitle').innerText = "Ubah Data: " + (p.Nama || p.nama);
+    document.getElementById('editRowNum').value = p.rowNum;
+    document.getElementById('nama').value = p.nama;
+    document.getElementById('alamat').value = p.alamat;
+    document.getElementById('barang').value = p.barang;
+    document.getElementById('harga').value = p.total;
+    document.getElementById('tenor').value = p.tenor;
+    document.getElementById('tipeTenor').value = p.tipe;
+    document.getElementById('sisaUtang').value = p.sisa;
+    document.getElementById('formTitle').innerText = "Ubah Data: " + p.nama;
     document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
   }
 
