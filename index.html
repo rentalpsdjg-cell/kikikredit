@@ -123,7 +123,7 @@
       z-index: 9999; display: none; 
     }
 
-    /* MATRIKS DOUMEN CETAK: 100% TEKS POLOS MONOSPACE TEBAL */
+    /* FORMAT AREA CETAK STRUK MINI - SUPER TEBAL & AMAN KERTAS KECIL */
     #areaStruk { display: none; }
     @media print {
       body * { display: none !important; }
@@ -134,13 +134,14 @@
         top: 0; 
         width: 100% !important; 
         margin: 0 !important; 
-        padding: 0mm 1mm !important;
+        padding: 0px 0px !important;
         background: #ffffff !important; 
         color: #000000 !important;
         font-family: "Courier New", Courier, monospace !important; 
         font-size: 12pt !important; 
-        font-weight: 900 !important; /* Paksa Head Thermal Membakar Sangat Tebal */
-        white-space: pre-wrap !important; /* Bungkus otomatis jika melebihi kertas */
+        font-weight: bold !important;
+        -webkit-text-stroke: 0.5px #000000; /* Trik agar tulisan di kertas thermal jauh lebih hitam pekat */
+        white-space: pre !important; 
         line-height: 1.1 !important;
       }
       @page { 
@@ -447,9 +448,9 @@
       }
     }
 
-    /* ENGINE MATRIX TEXT 26 KARAKTER (PAS UNTUK PRINTER BLUETOOTH MINI) */
+    /* ENGINE STRUK MATRIX: UKURAN MAKSIMAL DIKECILKAN JADI 24 KARAKTER KANAN KIRI GA AKAN KEPOTONG */
     function buatBarisStruk(label, value) {
-      const LEBAR_KERTAS = 26; 
+      const LEBAR_KERTAS = 24; 
       const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
       if (sisaSpasi > 0) {
         return label + " ".repeat(sisaSpasi) + value + "\n";
@@ -461,20 +462,20 @@
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
       const strukPre = document.getElementById('areaStruk');
       
-      // Mengalirkan teks string murni ke tag <pre> tanpa bumbu tag HTML/CSS modern
+      // Teks mengalir murni dengan lebar super kecil (24 karakter) jaminan muat di printer mana pun
       let streamTeks = "";
-      streamTeks += "   SLIP PEMBAYARAN SAH    \n";
-      streamTeks += "  KIKI KREDIT SOLUTION    \n";
-      streamTeks += "==========================\n"; 
+      streamTeks += "  SLIP PEMBAYARAN SAH   \n";
+      streamTeks += "  KIKI KREDIT SOLUTION  \n";
+      streamTeks += "========================\n"; 
       streamTeks += buatBarisStruk("Tgl:", tgl);
       streamTeks += buatBarisStruk("Nama:", nama);
       streamTeks += buatBarisStruk("Brg:", barang);
-      streamTeks += "--------------------------\n";
+      streamTeks += "------------------------\n";
       streamTeks += buatBarisStruk("BAYAR:", _nominalDisplay);
       streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
-      streamTeks += "--------------------------\n";
-      streamTeks += "     * TERIMA KASIH * \n";
-      streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n"; 
+      streamTeks += "------------------------\n";
+      streamTeks += "    * TERIMA KASIH * \n";
+      streamTeks += "SIMPAN SEBAGAI BUKTI SAH\n\n\n"; 
 
       strukPre.textContent = streamTeks;
       window.print();
