@@ -3,31 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - Ultra Modern Bold</title>
+  <title>Kiki Kredit Solution - Pure Print Engine</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     /* ============================================================
-       1. INTERFACE LAYAR HP KASIR (SUPER MODERN PREMIUM DARK)
+       1. INTERFACE LAYAR HP KASIR (FOKUS DATA - TANPA PREVIEW STRUK)
        ============================================================ */
     body { 
-      background: #0f172a; /* Latar belakang gelap premium murni */
+      background: #0f172a; 
       color: #f1f5f9;
       padding: 10px; 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     
-    /* Area struk dibuat transparan, teks hitam pekat murni */
+    /* MODIFIKASI TOTAL: Menyembunyikan struk sepenuhnya di layar HP kasir */
     .thermal-pure-text {
-      background: transparent;
-      max-width: 360px;
-      margin: 15px auto;
-      padding: 5px;
-      box-sizing: border-box;
+      display: none !important;
     }
 
     .app-card {
-      background: #1e293b; /* Kartu gelap modern */
+      background: #1e293b; 
       border-radius: 16px;
       max-width: 450px;
       margin: 0 auto 15px auto;
@@ -76,86 +72,12 @@
     }
 
     /* ============================================================
-       2. ARSITEKTUR STRUK INLINE VERTICAL (MODERN, TEBAL, IRIT KERTAS)
-       ============================================================ */
-    .nota-container {
-      width: 100%;
-      color: #000000 !important; /* Wajib hitam pekat untuk cetak thermal */
-      font-family: 'Courier New', Courier, monospace; 
-      font-size: 23px; /* Ukuran font raksasa anti sakit mata */
-      font-weight: 900; /* Ketebalan maksimal */
-      line-height: 1.2;
-      background: transparent !important;
-    }
-    
-    .nota-header { 
-      text-align: center; 
-      font-size: 26px; 
-      font-weight: 900;
-      line-height: 1.1; 
-      margin-bottom: 8px; 
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .nota-garis { 
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      margin: 3px 0; 
-      font-size: 23px;
-      font-weight: 900;
-    }
-    .nota-garis::after {
-      content: "----------------------"; 
-      display: block;
-    }
-    
-    /* Format baru: Label dan isi mengalir rapat ke atas, tidak boros spasi baris */
-    .nota-item-group {
-      margin-bottom: 5px;
-      word-break: break-all;
-    }
-    
-    /* Teks tebal sejajar */
-    .nota-label {
-      font-weight: 900;
-      text-transform: uppercase;
-      display: inline;
-    }
-    
-    .nota-value {
-      font-weight: 900;
-      display: inline;
-    }
-    
-    .nota-footer {
-      text-align: center;
-      font-size: 19px; 
-      margin-top: 12px;
-      line-height: 1.2;
-      font-weight: 900;
-    }
-
-    /* ============================================================
-       3. HARDWARE TUNING ENGINE FOR MP58-LITE
+       2. ARSITEKTUR STRUK VERTIKAL MODERN (HANYA AKTIF SAAT DIPRINT)
        ============================================================ */
     @media print {
-      body { 
-        background: #ffffff !important; 
-        color: #000000 !important;
-        padding: 0 !important; 
-      }
-      .app-card, #overlay, .no-print { 
-        display: none !important; 
-      }
-      
-      @page { 
-        size: auto; 
-        margin: 0mm !important; 
-      }
-      
+      /* Munculkan kembali struk murni teks hanya pada saat printer mengeksekusi perintah */
       .thermal-pure-text {
+        display: block !important;
         box-shadow: none !important;
         background: transparent !important;
         margin: 0 !important;
@@ -165,14 +87,74 @@
       }
 
       .nota-container {
-        font-size: 22px !important; /* Mengunci ketebalan font saat print fisik */
+        width: 100%;
+        color: #000000 !important; 
+        font-family: 'Courier New', Courier, monospace; 
+        font-size: 22px !important; 
+        font-weight: 900 !important; 
+        line-height: 1.2;
         background: transparent !important;
       }
-      .nota-header {
-        font-size: 25px !important;
+      
+      .nota-header { 
+        text-align: center; 
+        font-size: 25px !important; 
+        font-weight: 900 !important;
+        line-height: 1.1; 
+        margin-bottom: 8px; 
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
+      
+      .nota-garis { 
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        margin: 3px 0; 
+        font-size: 22px !important;
+        font-weight: 900 !important;
+      }
+      .nota-garis::after {
+        content: "----------------------"; 
+        display: block;
+      }
+      
+      .nota-item-group {
+        margin-bottom: 5px;
+        word-break: break-all;
+      }
+      
+      .nota-label {
+        font-weight: 900 !important;
+        text-transform: uppercase;
+        display: inline;
+      }
+      
+      .nota-value {
+        font-weight: 900 !important;
+        display: inline;
+      }
+      
       .nota-footer {
-        font-size: 18px !important;
+        text-align: center;
+        font-size: 18px !important; 
+        margin-top: 12px;
+        line-height: 1.2;
+        font-weight: 900 !important;
+      }
+
+      /* Sembunyikan semua interface kasir dari gulungan kertas printer */
+      body { 
+        background: #ffffff !important; 
+        color: #000000 !important;
+        padding: 0 !important; 
+      }
+      .app-card, #overlay, .no-print { 
+        display: none !important; 
+      }
+      @page { 
+        size: auto; 
+        margin: 0mm !important; 
       }
     }
   </style>
