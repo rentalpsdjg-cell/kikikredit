@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    body { background: #f4f7f6; padding: 10px; font-size: 14px; }
-    .card { border-radius: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; }
+    body { background: #f4f7f6; padding: 10px; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+    .card { border-radius: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; background: #fff; }
     .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 20px; }
     .btn-sm-custom { font-size: 12px; padding: 6px 12px; margin: 2px; font-weight: bold; border-radius: 6px; }
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
@@ -86,7 +86,7 @@
     <input type="text" id="alamat" class="form-control form-control-sm mb-2" placeholder="Alamat">
     <input type="text" id="barang" class="form-control form-control-sm mb-2" placeholder="Nama Barang Kredit">
     <div class="form-row mb-2">
-      <div class="col-7"><input type="number" id="harga" class="form-control form-control-sm" placeholder="Harga Total (Rp)"></div>
+      <div class="col-7"><input type="number" id="harga" class="form-control form-control-sm" placeholder="Harga Total (Rp)" oninput="autoIsiSisa()"></div>
       <div class="col-5"><input type="number" id="tenor" class="form-control form-control-sm" placeholder="Tenor (Kali)"></div>
     </div>
     <div class="form-row mb-2">
@@ -110,19 +110,33 @@
     <input type="text" id="cariInput" class="form-control form-control-sm" placeholder="🔍 Cari nama pelanggan..." onkeyup="filterTabel()">
   </div>
   
-  <div class="card p-2"><div class="table-responsive"><table class="table table-sm"><tbody id="tabelBody"></tbody></table></div></div>
+  <div class="card p-2">
+    <div class="table-responsive">
+      <table class="table table-sm">
+        <tbody id="tabelBody">
+          <tr><td class="text-center py-3 text-muted">Menghubungkan data cloud...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 <script>
-  // URL BARU YANG BARUSAN BOSQ KIRIM SUDAH REKAT DI SINI!
+  // FIX URL TERKUNCI AMAN
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrL3ITJ4yHhqblHlEjxQlRv0bQGTk_TYmmqlkBbS6Dk323XE78_jwkB920a4-aB4hb/exec";
-
   let dataStorage = [];
+
+  function autoIsiSisa() {
+    let harga = document.getElementById('harga').value;
+    let editRow = document.getElementById('editRowNum').value;
+    if(!editRow) { document.getElementById('sisaUtang').value = harga; }
+  }
 
   function muatData() {
     document.getElementById('overlay').style.display = 'flex';
     fetch(SCRIPT_URL + "?aksi=ambilData")
-    .then(res => res.json())
-    .then(data => {
+    .then(res => res.text()) // FIX: Menggunakan teks menghindari bentrokan CORS
+    .then(textData => {
+      let data = JSON.parse(textData);
       dataStorage = data.pelanggan || [];
       
       let totalPiutang = data.stats && data.stats.totalPiutang ? data.stats.totalPiutang : 0;
@@ -159,7 +173,7 @@
       document.getElementById('overlay').style.display = 'none';
     }).catch((err) => { 
       console.error(err);
-      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger'>Terjadi kesalahan koneksi database</td></tr>";
+      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger'>Terjadi kesalahan koneksi database cloud</td></tr>";
       document.getElementById('overlay').style.display = 'none'; 
     });
   }
@@ -180,7 +194,11 @@
     if(!data.nama || !data.totalHarga) return alert("Nama dan Harga wajib diisi!");
     document.getElementById('overlay').style.display = 'flex';
     fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "simpan", data: data }) })
-    .then(res => res.json()).then(res => { alert(res); resetForm(); muatData(); });
+    .then(res => res.text()).then(textData => { 
+      alert(JSON.parse(textData)); 
+      resetForm(); 
+      muatData(); 
+    });
   }
 
   function bayar(rowNum) {
@@ -188,7 +206,8 @@
     if(!nominal) return;
     document.getElementById('overlay').style.display = 'flex';
     fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "bayar", rowNum: rowNum, nominal: nominal }) })
-    .then(res => res.json()).then(res => {
+    .then(res => res.text()).then(textData => {
+      let res = JSON.parse(textData);
       document.getElementById('pTgl').innerText = res.tgl;
       document.getElementById('pNama').innerText = res.nama;
       document.getElementById('pBrg').innerText = res.barang;
@@ -250,6 +269,7 @@
     document.getElementById('sisaUtang').value = p.sisa;
     document.getElementById('formTitle').innerText = "Ubah Data: " + p.nama;
     document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   function resetForm() {
@@ -272,7 +292,7 @@
     if(confirm("Hapus permanen?")) {
       document.getElementById('overlay').style.display = 'flex';
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
-      .then(res => res.json()).then(() => muatData());
+      .then(res => res.text()).then(() => muatData());
     }
   }
 
