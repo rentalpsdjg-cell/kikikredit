@@ -10,32 +10,41 @@
     body { background: #f4f7f6; padding: 10px; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     .card { border-radius: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; background: #fff; }
     .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 20px; }
-    .btn-sm-custom { font-size: 12px; padding: 6px 14px; margin: 3px; font-weight: bold; border-radius: 8px; transition: all 0.2s; }
+    .btn-sm-custom { font-size: 13px; padding: 8px 14px; margin: 3px; font-weight: bold; border-radius: 8px; transition: all 0.2s; }
     .btn-sm-custom:active { transform: scale(0.95); }
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* STYLE STRUK NOTA KERTAS THERMAL 58mm */
-    .nota-container {
-      width: 54mm;
-      padding: 2mm 1mm;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
-      color: #000;
-      line-height: 1.4;
-      background: #fff;
+    /* PREVIEW STRUK DI LAYAR HP (DIBUAT BESAR & JELAS, TIDAK BIKIN SAKIT MATA) */
+    .nota-box-preview {
+      display: none;
+      background: #1e293b;
+      color: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
     }
-    .nota-header { text-align: center; font-weight: bold; font-size: 16px; line-height: 1.3; margin-bottom: 5px; }
-    .nota-garis { border-top: 2px dashed #000; margin: 6px 0; }
-    .nota-item { display: flex !important; justify-content: space-between; margin-bottom: 4px; }
+    .nota-container {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 16px; /* Huruf di layar diperbesar */
+      line-height: 1.5;
+    }
+    .nota-header { text-align: center; font-weight: bold; font-size: 18px; line-height: 1.3; margin-bottom: 5px; color: #38bdf8; }
+    .nota-garis { border-top: 2px dashed #94a3b8; margin: 8px 0; }
+    .nota-item { display: flex !important; justify-content: space-between; margin-bottom: 6px; }
     .nota-item span { font-weight: bold; }
-    .nota-item b { font-size: 15px; font-weight: bold; }
+    .nota-item b { font-size: 18px; font-weight: bold; color: #f43f5e; }
+    .nota-footer { text-align: center; font-size: 13px; font-weight: bold; margin-top: 8px; color: #cbd5e1; }
 
-    /* LAYOUT PRINTER THERMAL SAAT DI-PRINT (OTOMATIS BESAR & TEBAL) */
-    #strukCetak { display: none; }
+    /* KHUSUS SAAT DICETAK KE PRINTER THERMAL (OTOMATIS MENYESUAIKAN KERTAS 58MM) */
     @media print {
       body * { display: none !important; }
-      html, body { background: #fff; margin: 0; padding: 0; width: 58mm; }
+      html, body { background: #fff !important; color: #000 !important; margin: 0 !important; padding: 0 !important; width: 58mm !important; }
       #strukCetak, #strukCetak * { display: block !important; }
+      #strukCetak { display: block !important; width: 58mm !important; }
       @page { size: 58mm auto; margin: 0mm; }
       
       .nota-container {
@@ -43,10 +52,12 @@
         padding: 0mm !important;
         font-size: 16px !important;
         font-weight: 900 !important;
+        color: #000 !important;
       }
-      .nota-header { font-size: 18px !important; font-weight: 900 !important; }
-      .nota-item b { font-size: 17px !important; font-weight: 900 !important; }
+      .nota-header { font-size: 18px !important; font-weight: 900 !important; color: #000 !important; }
+      .nota-item b { font-size: 17px !important; font-weight: 900 !important; color: #000 !important; }
       .nota-garis { border-top: 3px dashed #000 !important; margin: 8px 0 !important; }
+      .nota-footer { color: #000 !important; }
     }
   </style>
 </head>
@@ -57,7 +68,8 @@
     <b class="mt-2 text-primary">Sinkronisasi Database Cloud...</b>
   </div>
 
-  <div id="strukCetak">
+  <div id="strukCetak" class="nota-box-preview">
+    <div class="text-center mb-2"><span class="badge badge-info">Pratinjau Nota Transaksi</span></div>
     <div class="nota-container">
       <div class="nota-header">SLIP PEMBAYARAN<br>KIKI KREDIT SOLUTION</div>
       <div class="nota-garis"></div>
@@ -68,8 +80,9 @@
       <div class="nota-item"><span>Bayar:</span><b id="pBayar">Rp 0</b></div>
       <div class="nota-item"><span>Sisa:</span><b id="pSisa">Rp 0</b></div>
       <div class="nota-garis"></div>
-      <div style="text-align:center; font-size:12px; font-weight:bold; margin-top:6px;">*** TERIMA KASIH ***<br>Bukti Pembayaran Sah.</div>
+      <div class="nota-footer">*** TERIMA KASIH ***<br>Bukti Pembayaran Sah.</div>
     </div>
+    <button onclick="window.print()" class="btn btn-light btn-block btn-sm font-weight-bold mt-3"><i class="fas fa-print"></i> TEKAN UNTUK MULAI CETAK</button>
   </div>
 
   <div class="header-card text-center mb-3">
@@ -122,7 +135,7 @@
   </div>
 
 <script>
-  // URL WEB APP TERBARU SINKRON 100%
+  // TAUTAN REKAT AMAN KIKI KREDIT
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOeWJfWt50FgSYKkreUQo9vX1ShjDW3LmY1nXvN8REibwEpgbxfad4i9XXuNkBzWat/exec";
   let dataStorage = [];
 
@@ -158,10 +171,10 @@
 
         html += `<tr class="border-bottom"><td class="py-3 px-2">
           <div class="d-flex justify-content-between align-items-center mb-1">
-            <span class="font-weight-bold text-dark h6 mb-0">${namaPel.toUpperCase()}</span> 
-            <span class="badge ${statusPel==='LUNAS'?'badge-success':'badge-danger'}">${statusPel}</span>
+            <span class="font-weight-bold text-dark h5 mb-0">${namaPel.toUpperCase()}</span> 
+            <span class="badge px-2 py-1 ${statusPel==='LUNAS'?'badge-success':'badge-danger'}">${statusPel}</span>
           </div>
-          <div class="text-dark mb-1" style="font-size:13px; font-weight:500;">${barangPel} | Sisa: <b class="text-danger">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b></div>
+          <div class="text-dark mb-1" style="font-size:14px; font-weight:500;">${barangPel} | Sisa: <b class="text-danger">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b></div>
           <div class="text-muted mb-2" style="font-size:12px;">Tenor: ${tenorPel} Kali (${tipePel})</div>
           <div class="d-flex flex-wrap">
             <button onclick="bayar(${row})" class="btn btn-success btn-sm btn-sm-custom shadow-sm"><i class="fas fa-money-bill-wave mr-1"></i> Bayar</button>
@@ -215,8 +228,15 @@
       document.getElementById('pBrg').innerText = res.barang;
       document.getElementById('pBayar').innerText = "Rp " + Number(res.nominal).toLocaleString('id-ID');
       document.getElementById('pSisa').innerText = "Rp " + Number(res.sisa).toLocaleString('id-ID');
+      
+      // Munculkan kotak pratinjau besar di layar
+      document.getElementById('strukCetak').style.display = 'block';
       muatData();
-      setTimeout(() => { window.print(); }, 400);
+      
+      setTimeout(() => { 
+        window.print(); 
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      }, 500);
     });
   }
 
@@ -233,7 +253,10 @@
     document.getElementById('pBrg').innerText = p.barang;
     document.getElementById('pBayar').innerText = "CEK SISA";
     document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
-    window.print();
+    
+    // Tampilkan kotak besar di HP
+    document.getElementById('strukCetak').style.display = 'block';
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   function pindahKeEdit(rowNum) {
@@ -258,6 +281,7 @@
     document.querySelectorAll('input').forEach(i => i.value = "");
     document.getElementById('formTitle').innerText = "Registrasi Pelanggan Baru";
     document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
+    document.getElementById('strukCetak').style.display = 'none';
   }
 
   function filterTabel() {
