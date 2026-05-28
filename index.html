@@ -15,6 +15,24 @@
     .badge-aktif { background-color: #e3f2fd; color: #0d6efd; }
     .badge-lunas { background-color: #e8f5e9; color: #2e7d32; }
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
+    
+    /* STRUK AREA UNTUK PRINTER THERMAL */
+    #areaStruk { display: none; }
+    @media print {
+      body * { display: none; }
+      #areaStruk, #areaStruk * { display: block; }
+      #areaStruk { 
+        position: absolute; left: 0; top: 0; width: 100%; max-width: 58mm; 
+        padding: 0; margin: 0; background: #fff; color: #000;
+        font-family: "Courier New", Courier, monospace; font-size: 9pt; line-height: 1.2;
+      }
+      @page { size: auto; margin: 0mm; }
+    }
+    .text-center { text-align: center; }
+    .line-double { border-top: 2px double #000; margin: 2mm 0; }
+    .line-dash { border-top: 1px dashed #000; margin: 2mm 0; }
+    .struk-row { display: flex; justify-content: space-between; margin-bottom: 1mm; }
+    .struk-val { font-weight: bold; text-align: right; }
   </style>
 </head>
 <body>
@@ -126,11 +144,12 @@
     </div>
   </div>
 
+  <div id="areaStruk"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    // URL API Google Apps Script milik Anda
     const API_URL = "https://script.google.com/macros/s/AKfycbzeWIBiIVGYMmLNi-OLD2TkhbX1ab1LDpY4uMTjEGEojHRjtiu1ElqO72bnZWYHoug/exec";
 
     let listPelanggan = [];
@@ -231,12 +250,30 @@
         .then(res => {
           if(res.error) { tunjukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
           tunjukkanLoading(false);
-          Swal.fire("Sukses", "Pembayaran tercatat. Unduhan slip dimulai.", "success");
           
-          const a = document.createElement("a");
-          a.href = "data:application/pdf;base64," + res.pdf;
-          a.download = "Slip_" + res.hasilBayar.nama.replace(/\s+/g, '_') + ".pdf";
-          a.click();
+          // BANGUN STRUK STRUK KASIR OTOMATIS DI HTML
+          const strukDiv = document.getElementById('areaStruk');
+          strukDiv.innerHTML = `
+            <div class="text-center">
+              <b>SLIP PEMBAYARAN</b><br>
+              <b>KIKI KREDIT SOLUTION</b>
+              <div class="line-double"></div>
+            </div>
+            <div class="struk-row"><span>Tgl:</span><span class="struk-val">${res.hasilBayar.tgl}</span></div>
+            <div class="struk-row"><span>Nama:</span><span class="struk-val">${res.hasilBayar.nama}</span></div>
+            <div class="struk-row"><span>Barang:</span><span class="struk-val">${res.hasilBayar.barang}</span></div>
+            <div class="line-dash"></div>
+            <div class="struk-row"><span>BAYAR:</span><span class="struk-val">${formatRupiah(res.hasilBayar.nominal)}</span></div>
+            <div class="struk-row"><span>SISA UTANG:</span><span class="struk-val">${formatRupiah(res.hasilBayar.sisa)}</span></div>
+            <div class="line-dash"></div>
+            <div class="text-center" style="margin-top: 3mm; font-size: 8pt; font-style: italic;">
+              *** Terima Kasih ***<br>Bukti Pembayaran Sah.
+            </div>
+          `;
+          
+          // PICU PRINT POP-UP BAWAHAN HP/LAPTOP AUTO KERTAS THERMAL 
+          window.print();
+          
           muatDataDashboard();
         }).catch(() => { tunjukkanLoading(false); Swal.fire("Error", "Gagal memproses transaksi.", "error"); });
     }
