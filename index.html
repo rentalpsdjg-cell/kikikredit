@@ -7,12 +7,11 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
-    /* UTAMA - UKURAN NYAMAN DI MATA KASIR */
+    /* UTAMA - LAYAR HP */
     body { background: #f4f7f6; padding: 12px; font-size: 16px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     .card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 15px; background: #fff; }
     .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 22px; }
     
-    /* DESAIN TOMBOL DAFTAR PELANGGAN - BESAR & MUDAH DIPENCET JARI */
     .btn-sm-custom { 
       font-size: 14px !important; 
       padding: 10px 16px !important; 
@@ -26,41 +25,94 @@
     
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* GAYA STRUK KERTAS KASIR (TERSEMBUNYI DI LAYAR HP) */
+    /* STRUK TERSEMBUNYI SAAT DI LAYAR HP */
     #strukCetak { display: none; }
-    .nota-container {
-      width: 54mm;
-      padding: 2mm 1mm;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
-      color: #000;
-      line-height: 1.4;
-      background: #fff;
-    }
-    .nota-header { text-align: center; font-weight: bold; font-size: 16px; line-height: 1.3; margin-bottom: 5px; }
-    .nota-garis { border-top: 2px dashed #000; margin: 6px 0; }
-    .nota-item { display: flex !important; justify-content: space-between; margin-bottom: 4px; }
-    .nota-item span { font-weight: bold; }
-    .nota-item b { font-size: 15px; font-weight: bold; }
 
-    /* FORMAT OTOMATIS SAAT TOMBOL PRINT AKTIF (UNTUK PRINTER THERMAL 58MM) */
+    /* ============================================================
+       TRIK "HACKER CSS" FORCE OVERRIDE UNTUK PRINTER THERMAL 58MM
+       ============================================================ */
     @media print {
+      /* Sembunyikan elemen web bawaan */
       body * { display: none !important; }
-      html, body { background: #fff !important; color: #000 !important; margin: 0 !important; padding: 0 !important; width: 58mm !important; }
-      #strukCetak, #strukCetak * { display: block !important; }
-      #strukCetak { display: block !important; width: 58mm !important; }
-      @page { size: 58mm auto; margin: 0mm; }
       
-      .nota-container {
-        width: 56mm !important;
-        padding: 0mm !important;
-        font-size: 16px !important;
-        font-weight: 900 !important;
-        color: #000 !important;
+      /* Paksa Canvas Body Mengikuti Standar Lebar Printer Kasir Mini */
+      html, body { 
+        background: #fff !important; 
+        color: #000 !important; 
+        margin: 0 !important; 
+        padding: 0 !important; 
+        width: 380px !important; /* Paksa lebar pixel absolut kasir */
       }
-      .nota-header { font-size: 18px !important; font-weight: 900 !important; }
-      .nota-item b { font-size: 17px !important; font-weight: 900 !important; }
-      .nota-garis { border-top: 3px dashed #000 !important; margin: 8px 0 !important; }
+      
+      /* Munculkan Area Struk secara paksa */
+      #strukCetak, #strukCetak * { display: block !important; }
+      #strukCetak { 
+        display: block !important; 
+        width: 380px !important; 
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      
+      @page { 
+        size: auto; 
+        margin: 0mm !important; 
+      }
+      
+      /* KONTANER NOTA: ZOOM DITINGKATKAN DAN HURUF DIPAKSA RAKSASA & TEBAL */
+      .nota-container {
+        width: 360px !important;
+        padding: 5px !important;
+        background: #fff !important;
+        color: #000 !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        
+        /* TRICK HACK: Besarkan teks 2x lipat bawaan sistem printer */
+        font-size: 24px !important; 
+        font-weight: 900 !important; /* Ketebalan Maksimal */
+        line-height: 1.5 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .nota-header { 
+        text-align: center !important; 
+        font-weight: 900 !important; 
+        font-size: 28px !important; /* Judul Struk Raksasa */
+        line-height: 1.3 !important; 
+        margin-bottom: 12px !important; 
+      }
+      
+      /* Garis putus-putus dipertebal agar terlihat jelas di kertas murah */
+      .nota-garis { 
+        border-top: 5px dashed #000 !important; 
+        margin: 12px 0 !important; 
+        height: 0 !important;
+        width: 100% !important;
+      }
+      
+      .nota-item { 
+        display: flex !important; 
+        justify-content: space-between !important; 
+        margin-bottom: 10px !important; 
+      }
+      
+      .nota-item span { 
+        font-weight: 900 !important; 
+      }
+      
+      /* Nominal angka (Bayar & Sisa) dibuat paling besar */
+      .nota-item b { 
+        font-size: 28px !important; 
+        font-weight: 900 !important; 
+      }
+      
+      .nota-footer {
+        text-align: center !important;
+        font-size: 20px !important;
+        font-weight: 900 !important;
+        margin-top: 15px !important;
+        line-height: 1.4 !important;
+      }
     }
   </style>
 </head>
@@ -73,7 +125,7 @@
 
   <div id="strukCetak">
     <div class="nota-container">
-      <div class="nota-header">SLIP PEMBAYARAN<br>KIKI KREDIT SOLUTION</div>
+      <div class="nota-header">SLIP PEMBAYARAN<br>KIKI KREDIT</div>
       <div class="nota-garis"></div>
       <div class="nota-item"><span>Tgl:</span><span id="pTgl">-</span></div>
       <div class="nota-item"><span>Nama:</span><span id="pNama">-</span></div>
@@ -82,7 +134,7 @@
       <div class="nota-item"><span>Bayar:</span><b id="pBayar">Rp 0</b></div>
       <div class="nota-item"><span>Sisa:</span><b id="pSisa">Rp 0</b></div>
       <div class="nota-garis"></div>
-      <div style="text-align:center; font-size:12px; font-weight:bold; margin-top:6px;">*** TERIMA KASIH ***<br>Bukti Pembayaran Sah.</div>
+      <div class="nota-footer">*** TERIMA KASIH ***<br>KIKI KREDIT SOLUTION</div>
     </div>
   </div>
 
@@ -137,7 +189,6 @@
   </div>
 
 <script>
-  // KUNCI SINKRONISASI AKURAT URL WEB APP
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOeWJfWt50FgSYKkreUQo9vX1ShjDW3LmY1nXvN8REibwEpgbxfad4i9XXuNkBzWat/exec";
   let dataStorage = [];
 
@@ -173,10 +224,9 @@
 
         html += `<tr class="border-bottom"><td class="py-4 px-1" style="border-top: none;">
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="text-dark font-weight-bold" style="font-size: 19px; tracking: -0.5px;">${namaPel.toUpperCase()}</span> 
+            <span class="text-dark font-weight-bold" style="font-size: 19px;">${namaPel.toUpperCase()}</span> 
             <span class="badge px-3 py-2 font-weight-bold" style="font-size: 12px; border-radius: 6px; ${statusPel==='LUNAS'?'background-color: #d4edda; color: #155724;':'background-color: #f8d7da; color: #721c24;'}">${statusPel}</span>
           </div>
-          
           <div class="text-dark mb-1" style="font-size: 15px; font-weight: 600;">📦 ${barangPel}</div>
           <div class="text-dark mb-2" style="font-size: 16px; font-weight: 500;">Sisa Utang: <span class="text-danger font-weight-bold" style="font-size: 17px;">Rp ${Number(sisaPel).toLocaleString('id-ID')}</span></div>
           <div class="text-muted mb-3" style="font-size: 13px; font-weight: bold;">Tenor: ${tenorPel} Kali (${tipePel})</div>
@@ -193,7 +243,6 @@
       document.getElementById('overlay').style.display = 'none';
     }).catch((err) => { 
       console.error(err);
-      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-4 text-danger font-weight-bold'>⚠️ Gagal Sinkronisasi Koneksi Cloud.</td></tr>";
       document.getElementById('overlay').style.display = 'none'; 
     });
   }
@@ -229,12 +278,12 @@
     .then(res => res.text()).then(textData => {
       let res = JSON.parse(textData);
       document.getElementById('pTgl').innerText = res.tgl;
-      document.getElementById('pNama').innerText = res.nama;
-      document.getElementById('pBrg').innerText = res.barang;
+      document.getElementById('pNama').innerText = res.nama.toUpperCase();
+      document.getElementById('pBrg').innerText = res.barang.toUpperCase();
       document.getElementById('pBayar').innerText = "Rp " + Number(res.nominal).toLocaleString('id-ID');
       document.getElementById('pSisa').innerText = "Rp " + Number(res.sisa).toLocaleString('id-ID');
       muatData();
-      setTimeout(() => { window.print(); }, 300);
+      setTimeout(() => { window.print(); }, 400);
     });
   }
 
@@ -247,11 +296,11 @@
     if (!p) return;
 
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
-    document.getElementById('pNama').innerText = p.nama;
-    document.getElementById('pBrg').innerText = p.barang;
+    document.getElementById('pNama').innerText = p.nama.toUpperCase();
+    document.getElementById('pBrg').innerText = p.barang.toUpperCase();
     document.getElementById('pBayar').innerText = "CEK SISA";
     document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
-    window.print();
+    setTimeout(() => { window.print(); }, 200);
   }
 
   function pindahKeEdit(rowNum) {
