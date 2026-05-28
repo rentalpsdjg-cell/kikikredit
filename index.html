@@ -113,7 +113,8 @@
   <div class="card p-2"><div class="table-responsive"><table class="table table-sm"><tbody id="tabelBody"></tbody></table></div></div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPwNUZ2RxLinAs28fKOV4aSD3Ga29xX7Ij1z1ICoHCF9TZH2k_wRMy4z0D2WgCLin2/exec";
+  // LINK BARU YANG BARUSAN BOSQ KIRIM SUDAH SAYA PASANG DI SINI!
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZTBAeyi_BYB5C2xna3MjUT_jtlPZSyoYGbSZJUzpclR6q_6KlNLJOmQD-Sx7Mo7A/exec";
 
   let dataStorage = [];
 
@@ -122,7 +123,6 @@
     fetch(SCRIPT_URL + "?aksi=ambilData")
     .then(res => res.json())
     .then(data => {
-      // Perbaikan pemetaan agar membaca objek array dengan aman
       dataStorage = data.pelanggan || [];
       
       let totalPiutang = data.stats && data.stats.totalPiutang ? data.stats.totalPiutang : 0;
@@ -133,7 +133,6 @@
       
       let html = "";
       dataStorage.forEach(p => {
-        // Ambil data dengan fallback jika kolom kosong/undefined
         let namaPel = p.Nama || p.nama || "-";
         let barangPel = p.Barang || p.barang || "-";
         let sisaPel = p["Sisa Utang"] || p.sisa || 0;
