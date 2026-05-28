@@ -11,15 +11,15 @@
     body { background: #f4f7f6; padding: 10px; font-size: 14px; }
     .card { border-radius: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; }
     .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 20px; }
-    .btn-sm-custom { font-size: 11px; padding: 5px 8px; margin: 2px; }
+    .btn-sm-custom { font-size: 12px; padding: 6px 12px; margin: 2px; font-weight: bold; border-radius: 6px; }
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* STYLE NOTA UTAMA (UNTUK PDF DAN TAMPILAN LAYAR) */
+    /* STYLE STRUK NOTA (TAMPILAN & PDF WA) */
     .nota-container {
       width: 54mm;
       padding: 2mm 1mm;
       font-family: 'Courier New', Courier, monospace;
-      font-size: 14px; /* Ukuran dasar huruf dinaikkan */
+      font-size: 14px;
       color: #000;
       line-height: 1.5;
       background: #fff;
@@ -30,7 +30,7 @@
     .nota-item span { font-weight: bold; }
     .nota-item b { font-size: 15px; }
 
-    /* LAYOUT KHUSUS SAAT DI-PRINT KE PRINTER THERMAL 58MM BIAR HURUFNYA BESAR DAN TEBAL */
+    /* LAYOUT KHUSUS SAAT DI-PRINT KE PRINTER THERMAL BIAR HURUFNYA TEBAL & BESAR */
     #strukCetak { display: none; }
     @media print {
       body * { display: none !important; }
@@ -41,8 +41,8 @@
       .nota-container {
         width: 56mm !important;
         padding: 0mm !important;
-        font-size: 16px !important; /* Huruf super besar khusus cetak thermal */
-        font-weight: bold !important; /* Otomatis cetak tebal biar jelas */
+        font-size: 16px !important;
+        font-weight: bold !important;
       }
       .nota-header { font-size: 18px !important; }
       .nota-item b { font-size: 17px !important; }
@@ -113,6 +113,7 @@
   <div class="card p-2"><div class="table-responsive"><table class="table table-sm"><tbody id="tabelBody"></tbody></table></div></div>
 
 <script>
+  // Link Web App valid milik Bosq
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC-ppo7i-aHhs-05IFGvkE-NLJWtyYo3MfykI1XP1nnNX_tk3ZvucQNwEdJDpw4YSH/exec";
 
   let dataStorage = [];
@@ -122,26 +123,45 @@
     fetch(SCRIPT_URL + "?aksi=ambilData")
     .then(res => res.json())
     .then(data => {
-      dataStorage = data.pelanggan;
-      document.getElementById('statPiutang').innerText = "Rp " + data.stats.totalPiutang.toLocaleString('id-ID');
-      document.getElementById('statAktif').innerText = data.stats.aktif;
+      dataStorage = data.pelanggan || [];
+      
+      let totalPiutang = data.stats && data.stats.totalPiutang ? data.stats.totalPiutang : 0;
+      let aktif = data.stats && data.stats.aktif ? data.stats.aktif : 0;
+      
+      document.getElementById('statPiutang').innerText = "Rp " + totalPiutang.toLocaleString('id-ID');
+      document.getElementById('statAktif').innerText = aktif;
+      
       let html = "";
-      data.pelanggan.forEach(p => {
-        html += `<tr class="border-bottom"><td class="py-2">
-          <b>${p.nama}</b> <span class="badge ${p.status==='LUNAS'?'badge-success':'badge-danger'}">${p.status}</span><br>
-          <small>${p.barang} | Sisa: <b class="text-danger">Rp ${p.sisa.toLocaleString('id-ID')}</b></small><br>
-          <div class="mt-2">
-            <button onclick="bayar(${p.rowNum})" class="btn btn-success btn-sm btn-sm-custom">💵 Bayar</button>
-            <button onclick="cetakLokal(${p.rowNum})" class="btn btn-primary btn-sm btn-sm-custom">🖨️ Cetak</button>
-            <button onclick="unduhPdfLokal(${p.rowNum})" class="btn btn-info btn-sm btn-sm-custom">📄 PDF</button>
-            <button onclick="pindahKeEdit(${p.rowNum})" class="btn btn-warning text-white btn-sm px-2"><i class="fas fa-edit"></i></button>
-            <button onclick="hapus(${p.rowNum})" class="btn btn-danger btn-sm px-2"><i class="fas fa-trash"></i></button>
+      dataStorage.forEach(p => {
+        let namaPel = p.Nama || p.nama || "-";
+        let barangPel = p.Barang || p.barang || "-";
+        let sisaPel = p["Sisa Utang"] || p.sisa || 0;
+        let statusPel = p.Status || p.status || "AKTIF";
+        let tenorPel = p.Tenor || p.tenor || "0";
+        let tipePel = p.Tipe || p.tipe || "Bulanan";
+        let row = p.rowNum || p.row;
+
+        html += `<tr class="border-bottom"><td class="py-3 px-2">
+          <span class="font-weight-bold text-dark h6 d-inline-block mb-1">${namaPel.toUpperCase()}</span> 
+          <span class="badge ${statusPel==='LUNAS'?'badge-success':'badge-danger'}">${statusPel}</span><br>
+          <div class="text-muted mb-1" style="font-size:13px;">${barangPel} | Sisa: <b class="text-danger">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b></div>
+          <div class="text-muted mb-2" style="font-size:12px;">Tenor: ${tenorPel} (${tipePel})</div>
+          <div class="d-flex flex-wrap">
+            <button onclick="bayar(${row})" class="btn btn-success btn-sm btn-sm-custom"><i class="fas fa-money-bill-wave"></i> Bayar</button>
+            <button onclick="cetakLokal(${row})" class="btn btn-primary btn-sm btn-sm-custom"><i class="fas fa-print"></i> Cetak</button>
+            <button onclick="unduhPdfLokal(${row})" class="btn btn-info btn-sm btn-sm-custom"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-sm btn-sm-custom"><i class="fas fa-edit"></i></button>
+            <button onclick="hapus(${row})" class="btn btn-danger btn-sm btn-sm-custom"><i class="fas fa-trash"></i></button>
           </div>
         </td></tr>`;
       });
-      document.getElementById('tabelBody').innerHTML = html || "<tr><td>Belum ada data</td></tr>";
+      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center py-3'>Belum ada data</td></tr>";
       document.getElementById('overlay').style.display = 'none';
-    }).catch(() => { document.getElementById('overlay').style.display = 'none'; });
+    }).catch((err) => { 
+      console.error(err);
+      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger'>Terjadi kesalahan koneksi database</td></tr>";
+      document.getElementById('overlay').style.display = 'none'; 
+    });
   }
 
   function simpan() {
@@ -179,31 +199,42 @@
     });
   }
 
+  function findPelanggan(rowNum) {
+    return dataStorage.find(item => (item.rowNum === rowNum || item.row === rowNum));
+  }
+
   function cetakLokal(rowNum) {
-    let p = dataStorage.find(item => item.rowNum === rowNum);
+    let p = findPelanggan(rowNum);
     if (!p) return;
+    let namaPel = p.Nama || p.nama || "-";
+    let barangPel = p.Barang || p.barang || "-";
+    let sisaPel = p["Sisa Utang"] || p.sisa || 0;
+
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
-    document.getElementById('pNama').innerText = p.nama;
-    document.getElementById('pBrg').innerText = p.barang;
+    document.getElementById('pNama').innerText = namaPel;
+    document.getElementById('pBrg').innerText = barangPel;
     document.getElementById('pBayar').innerText = "Cek Sisa";
-    document.getElementById('pSisa').innerText = "Rp " + p.sisa.toLocaleString('id-ID');
+    document.getElementById('pSisa').innerText = "Rp " + Number(sisaPel).toLocaleString('id-ID');
     window.print();
   }
 
   function unduhPdfLokal(rowNum) {
-    let p = dataStorage.find(item => item.rowNum === rowNum);
+    let p = findPelanggan(rowNum);
     if (!p) return;
+    let namaPel = p.Nama || p.nama || "-";
+    let barangPel = p.Barang || p.barang || "-";
+    let sisaPel = p["Sisa Utang"] || p.sisa || 0;
     
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
-    document.getElementById('pNama').innerText = p.nama;
-    document.getElementById('pBrg').innerText = p.barang;
+    document.getElementById('pNama').innerText = namaPel;
+    document.getElementById('pBrg').innerText = barangPel;
     document.getElementById('pBayar').innerText = "Cek Berkala";
-    document.getElementById('pSisa').innerText = "Rp " + p.sisa.toLocaleString('id-ID');
+    document.getElementById('pSisa').innerText = "Rp " + Number(sisaPel).toLocaleString('id-ID');
     
     let element = document.getElementById('notaPdfArea');
     let opsi = {
       margin:       4,
-      filename:     'Struk_' + p.nama.replace(/\s+/g, '_') + '.pdf',
+      filename:     'Struk_' + namaPel.replace(/\s+/g, '_') + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2 },
       jsPDF:        { unit: 'mm', format: [62, 100], orientation: 'portrait' }
@@ -213,16 +244,19 @@
   }
 
   function pindahKeEdit(rowNum) {
-    let p = dataStorage.find(item => item.rowNum === rowNum);
-    document.getElementById('editRowNum').value = rowNum;
-    document.getElementById('nama').value = p.nama;
-    document.getElementById('alamat').value = p.alamat;
-    document.getElementById('barang').value = p.barang;
-    document.getElementById('harga').value = p.total;
-    document.getElementById('tenor').value = p.tenor;
-    document.getElementById('tipeTenor').value = p.tipe;
-    document.getElementById('sisaUtang').value = p.sisa;
-    document.getElementById('formTitle').innerText = "Ubah Data: " + p.nama;
+    let p = findPelanggan(rowNum);
+    if (!p) return;
+    let row = p.rowNum || p.row;
+    
+    document.getElementById('editRowNum').value = row;
+    document.getElementById('nama').value = p.Nama || p.nama || "";
+    document.getElementById('alamat').value = p.Alamat || p.alamat || "";
+    document.getElementById('barang').value = p.Barang || p.barang || "";
+    document.getElementById('harga').value = p["Total Harga"] || p.total || "";
+    document.getElementById('tenor').value = p.Tenor || p.tenor || "";
+    document.getElementById('tipeTenor').value = p.Tipe || p.tipe || "Bulanan";
+    document.getElementById('sisaUtang').value = p["Sisa Utang"] || p.sisa || "";
+    document.getElementById('formTitle').innerText = "Ubah Data: " + (p.Nama || p.nama);
     document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
   }
 
@@ -237,7 +271,7 @@
     let input = document.getElementById("cariInput").value.toUpperCase();
     let tr = document.getElementById("tabelBody").getElementsByTagName("tr");
     for (let i = 0; i < tr.length; i++) {
-      let td = tr[i].getElementsByTagName("b")[0];
+      let td = tr[i].getElementsByTagName("span")[0];
       if(td) { tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none"; }
     }
   }
