@@ -298,8 +298,8 @@
   </div>
 
 <script>
-  // URL KUNCI UTAMA SINKRON KE GOOGLE SHEETS ANDA
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrL3ITJ4yHhqblHlEjxQlRv0bQGTk_TYmmqlkBbS6Dk323XE78_jwkB920a4-aB4hb/exec";
+  // URL WEB APP BARU YANG SUDAH DI-UPDATE
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwv4irSvK-MlTvDDU7F74-t7fam9R6KFF1xydcwfg7hhqTNY47SwPuE8Rxdw85_YXQ8/exec";
   let dataStorage = [];
 
   function autoIsiSisa() {
@@ -324,7 +324,6 @@
       
       let html = "";
       dataStorage.forEach(p => {
-        // Lapisan pendeteksi variabel agar aman dari perbedaan huruf kapital/kecil Google Sheets
         let namaPel = p.nama || p.NAMA || "-";
         let barangPel = p.barang || p.BARANG || "-";
         let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
@@ -355,7 +354,7 @@
       document.getElementById('overlay').style.display = 'none';
     }).catch((err) => { 
       console.error(err);
-      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-4 text-danger font-weight-bold'>Gagal tersambung dengan Google Sheets Server.</td></tr>";
+      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-4 text-danger font-weight-bold'>Gagal tersambung dengan Google Sheets Server. Pastikan deployment Apps Script sudah benar.</td></tr>";
       document.getElementById('overlay').style.display = 'none'; 
     });
   }
@@ -459,4 +458,48 @@
     let barangPel = p.barang || p.BARANG || "";
     let totalHarga = p.total || p.TOTAL || 0;
     let tenorPel = p.tenor || p.TENOR || 0;
-    let
+    let tipePel = p.tipe || p.TIPE || "Bulanan";
+    let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
+    let row = p.rowNum || p.ROWNUM;
+
+    document.getElementById('editRowNum').value = row;
+    document.getElementById('nama').value = namaPel;
+    document.getElementById('alamat').value = alamatPel;
+    document.getElementById('barang').value = barangPel;
+    document.getElementById('harga').value = totalHarga;
+    document.getElementById('tenor').value = tenorPel;
+    document.getElementById('tipeTenor').value = tipePel;
+    document.getElementById('sisaUtang').value = sisaPel;
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit mr-2'></i>Ubah Data: " + namaPel.toUpperCase();
+    document.getElementById('btnSimpan').innerText = "PERBARUI DATA TRANSAKSI";
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function resetForm() {
+    document.getElementById('editRowNum').value = "";
+    document.querySelectorAll('input').forEach(i => i.value = "");
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-2'></i>Registrasi Pelanggan Baru";
+    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI KE SERVER";
+  }
+
+  function filterTabel() {
+    let input = document.getElementById("cariInput").value.toUpperCase();
+    let tr = document.getElementById("tabelBody").getElementsByTagName("tr");
+    for (let i = 0; i < tr.length; i++) {
+      let td = tr[i].getElementsByClassName("nota-pel-text")[0] || tr[i].getElementsByTagName("span")[0];
+      if(td) { tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none"; }
+    }
+  }
+
+  function hapus(rowNum) {
+    if(confirm("Hapus data pelanggan ini secara permanen dari server database?")) {
+      document.getElementById('overlay').style.display = 'flex';
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
+      .then(res => res.text()).then(() => muatData());
+    }
+  }
+
+  window.onload = muatData;
+</script>
+</body>
+</html>
