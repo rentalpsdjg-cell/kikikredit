@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution Premium</title>
+  <title>Kiki Kredit Solution Premium v2</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
@@ -14,10 +14,9 @@
     .btn-sm-custom:active { transform: scale(0.95); }
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
-    /* AREA PREVIEW STRUK LAYAR HP */
+    /* PREVIEW STRUK DI LAYAR HP */
     .nota-container {
       width: 100%;
-      max-width: 100%;
       padding: 0;
       font-family: 'Courier New', Courier, monospace;
       color: #000;
@@ -29,27 +28,39 @@
     .nota-item { display: flex !important; justify-content: space-between; margin-bottom: 4px; font-weight: bold; }
     .nota-item b { font-size: 18px; font-weight: bold; }
 
-    /* LAYOUT KHUSUS PRINTER THERMAL (ANTI-MENCIUT / FULL WIDTH & TEBAL) */
+    /* LAYOUT REVOLUSIONER UTK PRINTER THERMAL HP (ANTI-MENCIUT) */
     #strukCetak { display: none; }
+    
+    @page {
+      size: auto;   /* Menghapus ukuran kertas standar dokumen (Letter/A4) */
+      margin: 0mm;  /* Menghilangkan margin bawaan browser/sistem Android */
+    }
+
     @media print {
-      /* Sembunyikan mutlak seluruh interface aplikasi */
+      /* Sembunyikan semua tombol, form, dashboard, dan navigasi HP */
       body * { display: none !important; }
-      html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
       
-      /* Tampilkan hanya area struk dengan lebar penuh tanpa margin */
+      /* Paksa body web menggunakan resolusi gulungan kertas penuh */
+      html, body { 
+        background: #fff !important; 
+        margin: 0 !important; 
+        padding: 4mm !important; /* Memberi jarak aman kiri-kanan kertas fisik */
+        width: 100vw !important; 
+      }
+      
+      /* Tampilkan area struk secara penuh */
       #strukCetak, #strukCetak * { display: block !important; }
       #strukCetak { width: 100% !important; margin: 0 !important; padding: 0 !important; }
       
-      /* Paksa printer membaca teks skala besar (145%) dan sangat tebal */
+      /* Font super besar dan ekstra tebal agar terbaca tajam pada printer 58mm */
       .nota-container {
         width: 100% !important;
-        padding: 0px !important;
-        font-size: 145% !important; 
+        font-size: 150% !important; 
         font-weight: 900 !important; 
       }
-      .nota-header { font-size: 165% !important; font-weight: 900 !important; text-align: center; }
-      .nota-item b { font-size: 155% !important; font-weight: 900 !important; }
-      .nota-garis { border-top: 3px dashed #000 !important; margin: 8px 0 !important; }
+      .nota-header { font-size: 170% !important; font-weight: 900 !important; text-align: center; }
+      .nota-item b { font-size: 160% !important; font-weight: 900 !important; }
+      .nota-garis { border-top: 4px dashed #000 !important; margin: 10px 0 !important; }
     }
   </style>
 </head>
@@ -71,12 +82,12 @@
       <div class="nota-item"><span>Bayar:</span><b id="pBayar">Rp 0</b></div>
       <div class="nota-item"><span>Sisa:</span><b id="pSisa">Rp 0</b></div>
       <div class="nota-garis"></div>
-      <div style="text-align:center; font-size:105%; font-weight:bold; margin-top:6px;">*** TERIMA KASIH ***<br>Bukti Pembayaran Sah.</div>
+      <div style="text-align:center; font-size:110%; font-weight:bold; margin-top:8px;">*** TERIMA KASIH ***<br>Bukti Pembayaran Sah.</div>
       <br><br><br><br> </div>
   </div>
 
   <div class="header-card text-center mb-3">
-    <h4 class="font-weight-bold letter-spacing-1">KIKI KREDIT SOLUTION</h4>
+    <h4 class="font-weight-bold">KIKI KREDIT SOLUTION</h4>
     <div class="row mt-4">
       <div class="col-6 border-right border-light-50"><small class="text-light d-block mb-1">TOTAL PIUTANG</small><h4 id="statPiutang" class="font-weight-bold">Rp 0</h4></div>
       <div class="col-6"><small class="text-light d-block mb-1">PELANGGAN AKTIF</small><h4 id="statAktif" class="font-weight-bold">0</h4></div>
@@ -135,9 +146,7 @@
   function autoIsiSisa() {
     let harga = document.getElementById('harga').value;
     let editRow = document.getElementById('editRowNum').value;
-    if(!editRow) {
-      document.getElementById('sisaUtang').value = harga;
-    }
+    if(!editRow) { document.getElementById('sisaUtang').value = harga; }
   }
 
   function muatData() {
@@ -186,7 +195,7 @@
       document.getElementById('overlay').style.display = 'none';
     }).catch((err) => { 
       console.error(err);
-      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger font-weight-bold'>⚠️ Gagal sinkronisasi. Sila cek internet Anda.</td></tr>";
+      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger font-weight-bold'>⚠️ Gagal sinkronisasi data.</td></tr>";
       document.getElementById('overlay').style.display = 'none'; 
     });
   }
