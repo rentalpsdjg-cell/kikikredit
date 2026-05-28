@@ -10,7 +10,7 @@
     body { background: #f4f7f6; padding: 10px; font-size: 14px; }
     .card { border-radius: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; }
     .header-card { background: linear-gradient(135deg, #0f4c75, #3282b8); color: white; border-radius: 15px; padding: 20px; }
-    .btn-sm-custom { font-size: 12px; padding: 6px 12px; margin: 2px; font-weight: bold; border-radius: 6px; }
+    .btn-sm-custom { font-size: 12px; padding: 6px 12px; margin: 3px; font-weight: bold; border-radius: 6px; }
     #overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
     
     /* STYLE STRUK NOTA UTAMA */
@@ -29,7 +29,7 @@
     .nota-item span { font-weight: bold; }
     .nota-item b { font-size: 15px; }
 
-    /* LAYOUT PRINTER THERMAL (OTOMATIS HURUF BESAR & TEBAL) */
+    /* LAYOUT KHUSUS PRINTER THERMAL (OTOMATIS HURUF BESAR & TEBAL) */
     #strukCetak { display: none; }
     @media print {
       body * { display: none !important; }
@@ -109,7 +109,14 @@
     <input type="text" id="cariInput" class="form-control form-control-sm" placeholder="🔍 Cari nama pelanggan..." onkeyup="filterTabel()">
   </div>
   
-  <div class="card p-2"><div class="table-responsive"><table class="table table-sm"><tbody id="tabelBody"></tbody></table></div></div>
+  <div class="card p-2">
+    <div class="table-responsive">
+      <table class="table table-sm" style="width: 100%;">
+        <tbody id="tabelBody">
+          </tbody>
+      </table>
+    </div>
+  </div>
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwVC24h3ax58HSK6DS4NSY5O7w-R_9mn8kUQ9ZokV0vvQZXNJF8p8Gh_JQal5JLNP0r/exec";
@@ -139,18 +146,20 @@
         let tipePel = p.tipe || "Bulanan";
         let row = p.rowNum;
 
-        html += `<tr class="border-bottom"><td class="py-3 px-2">
-          <span class="font-weight-bold text-dark h6 d-inline-block mb-1">${namaPel.toUpperCase()}</span> 
-          <span class="badge ${statusPel==='LUNAS'?'badge-success':'badge-danger'}">${statusPel}</span><br>
-          <div class="text-muted mb-1" style="font-size:13px;">${barangPel} | Sisa: <b class="text-danger">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b></div>
-          <div class="text-muted mb-2" style="font-size:12px;">Tenor: ${tenorPel} (${tipePel})</div>
-          <div class="d-flex flex-wrap">
-            <button onclick="bayar(${row})" class="btn btn-success btn-sm btn-sm-custom"><i class="fas fa-money-bill-wave"></i> Bayar</button>
-            <button onclick="cetakLokal(${row})" class="btn btn-primary btn-sm btn-sm-custom"><i class="fas fa-print"></i> Cetak</button>
-            <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-sm btn-sm-custom"><i class="fas fa-edit"></i></button>
-            <button onclick="hapus(${row})" class="btn btn-danger btn-sm btn-sm-custom"><i class="fas fa-trash"></i></button>
-          </div>
-        </td></tr>`;
+        html += `<tr class="border-bottom">
+          <td class="py-3 px-2">
+            <span class="font-weight-bold text-dark h6 d-inline-block mb-1">${namaPel.toUpperCase()}</span> 
+            <span class="badge ${statusPel==='LUNAS'?'badge-success':'badge-danger'}">${statusPel}</span><br>
+            <div class="text-muted mb-1" style="font-size:13px;">${barangPel} | Sisa: <b class="text-danger">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b></div>
+            <div class="text-muted mb-2" style="font-size:12px;">Tenor: ${tenorPel} (${tipePel})</div>
+            <div class="d-flex flex-wrap">
+              <button onclick="bayar(${row})" class="btn btn-success btn-sm btn-sm-custom"><i class="fas fa-money-bill-wave"></i> Bayar</button>
+              <button onclick="cetakLokal(${row})" class="btn btn-primary btn-sm btn-sm-custom"><i class="fas fa-print"></i> Cetak</button>
+              <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-sm btn-sm-custom"><i class="fas fa-edit"></i> Edit</button>
+              <button onclick="hapus(${row})" class="btn btn-danger btn-sm btn-sm-custom"><i class="fas fa-trash"></i> Hapus</button>
+            </div>
+          </td>
+        </tr>`;
       });
       document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center py-3'>Belum ada data</td></tr>";
       document.getElementById('overlay').style.display = 'none';
