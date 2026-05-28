@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - Direct Thermal Print</title>
+  <title>Kiki Kredit Solution - Anti Gagal Thermal</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     /* ============================================================
-       1. INTERFACE LAYAR HP KASIR (MINIMALIS & RINGAN)
+       1. INTERFACE LAYAR HP KASIR (MINIMALIS & RESPONSIF)
        ============================================================ */
     body { 
       background: #f4f6f9; 
@@ -16,7 +16,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     
-    /* Area preview struk di HP dibuat transparan murni, hanya teks hitam */
+    /* Area pratinjau struk di HP dibuat transparan murni (hanya teks saja) */
     .thermal-pure-text {
       background: transparent;
       max-width: 320px;
@@ -66,23 +66,23 @@
     }
 
     /* ============================================================
-       2. FORMAT DATA STRUK - TEKS MURNI (PAS UNTUK PRINTER 58MM)
+       2. LAYOUT STRUK TEXT-ONLY (DIKUNCI PAS UNTUK MP58-LITE)
        ============================================================ */
     .nota-container {
       width: 100%;
       color: #000000;
       font-family: 'Courier New', Courier, monospace; 
-      font-size: 15px; 
+      font-size: 14px; 
       font-weight: bold;
-      line-height: 1.4;
-      background: transparent;
+      line-height: 1.3;
+      background: transparent !important;
     }
     
     .nota-header { 
       text-align: center; 
-      font-size: 17px; 
+      font-size: 16px; 
       font-weight: 900;
-      line-height: 1.3; 
+      line-height: 1.2; 
       margin-bottom: 4px; 
       text-transform: uppercase;
     }
@@ -92,10 +92,11 @@
       white-space: nowrap;
       overflow: hidden;
       margin: 2px 0; 
-      font-size: 15px;
+      font-size: 14px;
       font-weight: bold;
     }
     .nota-garis::after {
+      /* Jumlah tanda minus disesuaikan pas dengan batas potong kertas 58mm */
       content: "--------------------------------"; 
       display: block;
     }
@@ -119,25 +120,27 @@
     
     .nota-footer {
       text-align: center;
-      font-size: 13px;
+      font-size: 12px;
       margin-top: 6px;
       line-height: 1.3;
     }
 
     /* ============================================================
-       3. ENGINE HARDWARE PRINT - HANYA MENCETAK TEKS STRUK
+       3. ENGINE PENGUSIR BOX/BACKGROUND (MURNI SEMBURAN TEKS)
        ============================================================ */
     @media print {
-      /* Sembunyikan seluruh elemen aplikasi kasir saat mencetak */
+      /* Hilangkan total background abu-abu/putih bawaan browser */
       body { 
         background: #ffffff !important; 
         padding: 0 !important; 
       }
+      
+      /* Sembunyikan panel input, tombol, tabel, dan loading saat cetak fisik */
       .app-card, #overlay, .no-print { 
         display: none !important; 
       }
       
-      /* Hilangkan margin paksa browser agar pas dengan kertas thermal */
+      /* Paksa browser melepas margin halaman bawaan */
       @page { 
         size: auto; 
         margin: 0mm !important; 
@@ -147,7 +150,7 @@
         box-shadow: none !important;
         background: transparent !important;
         margin: 0 !important;
-        padding: 4mm 2mm !important;
+        padding: 2mm 1mm !important;
         width: 100% !important;
         max-width: 100% !important;
       }
@@ -168,7 +171,7 @@
 
   <div class="app-card bg-primary text-white border-0 py-3 text-center shadow-sm no-print" style="background: linear-gradient(135deg, #11698e, #1f4068) !important;">
     <h5 class="font-weight-bold mb-1">KIKI KREDIT SYSTEM</h5>
-    <small class="text-white-50" id="statInfo">Sinkronisasi Server Cloud...</small>
+    <small class="text-white-50" id="statInfo">Menghubungkan database cloud...</small>
   </div>
 
   <div class="thermal-pure-text">
@@ -248,7 +251,7 @@
     <div style="max-height: 300px; overflow-y: auto;">
       <table class="table table-sm table-hover mb-0">
         <tbody id="tabelBody">
-          <tr><td class="text-center py-3 text-muted">Sinkronisasi cloud...</td></tr>
+          <tr><td class="text-center py-3 text-muted">Sinkronisasi data cloud...</td></tr>
         </tbody>
       </table>
     </div>
@@ -292,7 +295,7 @@
             <small class="text-muted d-block mb-1">Barang: ${barangPel} | Tenor: ${p.tenor}x (${p.tipe})</small>
             <div class="d-flex">
               <button onclick="bayar(${row})" class="btn btn-success btn-action"><i class="fas fa-money-bill-wave"></i> Angsur</button>
-              <button onclick="perintahCetakLangsung(${row})" class="btn btn-primary btn-action" style="background-color: #11698e; border:none;"><i class="fas fa-print"></i> CETAK</button>
+              <button onclick="eksekusiCetakLangsung(${row})" class="btn btn-primary btn-action" style="background-color: #11698e; border:none;"><i class="fas fa-print"></i> CETAK</button>
               <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-action"><i class="fas fa-edit"></i> Edit</button>
               <button onclick="hapus(${row})" class="btn btn-danger btn-action"><i class="fas fa-trash"></i></button>
             </div>
@@ -341,23 +344,23 @@
       document.getElementById('pSisa').innerText = "Rp " + Number(res.sisa).toLocaleString('id-ID');
       muatData();
       
-      // Jeda 500ms agar data teks masuk ke elemen cetak, lalu dorong perintah print perangkat keras
-      setTimeout(() => { window.print(); }, 500);
+      // Mengunci jeda waktu kirim data agar cetakan keluar lancar
+      setTimeout(() => { window.print(); }, 400);
     });
   }
 
-  function perintahCetakLangsung(rowNum) {
+  function eksekusiCetakLangsung(rowNum) {
     let p = dataStorage.find(item => item.rowNum === rowNum);
     if (!p) return;
     
-    // Inject data langsung ke elemen cetak
+    // Tarik data mentah ke wadah cetak teks
     document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
     document.getElementById('pNama').innerText = p.nama.toUpperCase();
     document.getElementById('pBrg').innerText = p.barang.toUpperCase();
     document.getElementById('pBayar').innerText = "CEK SISA";
     document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
     
-    // Jalankan perintah print fisik ke printer bluetooth thermal saat itu juga
+    // Perintah cetak langsung ke printer thermal bluetooth
     setTimeout(() => { window.print(); }, 300);
   }
 
