@@ -2,504 +2,260 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - Square 8x8</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kiki Kredit Solution</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <style>
-    /* ============================================================
-       1. TAMPILAN APLIKASI DI LAYAR HP (MEWAH & RESPONSIVE)
-       ============================================================ */
-    body { 
-      background: #f4f6f9; 
-      padding: 15px; 
-      font-size: 16px; 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      color: #2b2b2b;
-    }
-    .card { 
-      border-radius: 16px; 
-      border: none; 
-      box-shadow: 0 4px 16px rgba(0,0,0,0.04); 
-      margin-bottom: 20px; 
-      background: #ffffff; 
-      padding: 20px;
-    }
-    .header-card { 
-      background: linear-gradient(135deg, #11698e, #1f4068); 
-      color: white; 
-      border-radius: 16px; 
-      padding: 24px; 
-      box-shadow: 0 6px 20px rgba(31, 64, 104, 0.15);
-    }
-    .form-control-lg {
-      border-radius: 12px;
-      font-size: 16px;
-      border: 2px solid #e2e8f0;
-      padding: 12px 16px;
-      height: auto;
-    }
-    .form-control-lg:focus {
-      border-color: #11698e;
-      box-shadow: 0 0 0 3px rgba(17, 105, 142, 0.1);
-    }
-    .btn-lg-custom {
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: bold;
-      padding: 14px;
-      background: #11698e;
-      border: none;
-      color: white;
-    }
-    .btn-sm-custom { 
-      font-size: 13px !important; 
-      padding: 10px 12px !important; 
-      margin: 4px !important; 
-      font-weight: bold !important; 
-      border-radius: 8px !important; 
-      flex: 1;
-      min-width: 80px;
-      text-align: center;
-      border: none;
-    }
-    #overlay { 
-      display: none; 
-      position: fixed; 
-      top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(255, 255, 255, 0.9); 
-      z-index: 9999; 
-      justify-content: center; 
-      align-items: center; 
-      flex-direction: column; 
-    }
-    
-    /* Sembunyikan cetakan struk dari layar HP kasir */
-    #strukCetak { display: none; }
-
-    /* ============================================================
-       2. ARSITEKTUR KUNCI MATI UKURAN KOTAK 8x8 CM (80mm x 80mm)
-       ============================================================ */
-    @media print {
-      body * { display: none !important; }
-      
-      @page { 
-        size: 80mm 80mm !important; 
-        margin: 0mm !important; 
-      }
-      
-      #strukCetak, #strukCetak * { display: block !important; }
-      
-      #strukCetak { 
-        display: block !important; 
-        width: 80mm !important; 
-        height: 80mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #ffffff !important;
-        overflow: hidden !important;
-      }
-      
-      .nota-container {
-        width: 80mm !important;
-        max-width: 80mm !important;
-        height: 80mm !important;
-        max-height: 80mm !important;
-        padding: 5mm 6mm !important;
-        box-sizing: border-box !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        font-family: 'Courier New', Courier, monospace !important; 
-        font-size: 3.8mm !important;
-        font-weight: bold !important;
-        line-height: 1.4 !important;
-      }
-      
-      .nota-header { 
-        text-align: center !important; 
-        font-weight: 900 !important; 
-        font-size: 5.5mm !important;
-        line-height: 1.3 !important; 
-        margin-bottom: 2mm !important; 
-      }
-      
-      .nota-garis { 
-        text-align: center !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        margin: 2mm 0 !important; 
-        font-size: 3.5mm !important;
-      }
-      .nota-garis::after {
-        content: "====================================" !important; 
-        display: block !important;
-      }
-      
-      .nota-item-row {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: flex-start !important;
-        width: 100% !important;
-        margin-bottom: 1.5mm !important;
-      }
-      
-      .nota-label {
-        text-align: left !important;
-        white-space: nowrap !important;
-      }
-      
-      .nota-value {
-        text-align: right !important;
-        font-weight: 900 !important;
-      }
-      
-      .nota-total-row {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        width: 100% !important;
-        margin-bottom: 1.5mm !important;
-        font-size: 4.2mm !important;
-      }
-      
-      .nota-total-row .nota-value {
-        font-size: 5mm !important;
-        font-weight: 900 !important;
-      }
-      
-      .nota-footer {
-        text-align: center !important;
-        font-size: 3.2mm !important;
-        margin-top: 4.5mm !important;
-        line-height: 1.3 !important;
-      }
-    }
-
-    /* Style khusus render PDF WhatsApp */
-    .nota-pdf-wa {
-      width: 76mm !important;
-      padding: 5mm !important;
-      background: #ffffff !important;
-      color: #000000 !important;
-      font-family: 'Courier New', Courier, monospace !important;
-      font-size: 14px !important;
-      font-weight: bold !important;
-    }
+    body { background-color: #f4f6f9; font-family: system-ui, -apple-system, sans-serif; }
+    .navbar-custom { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; }
+    .card-stats { border: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .table-container { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .badge-aktif { background-color: #e3f2fd; color: #0d6efd; }
+    .badge-lunas { background-color: #e8f5e9; color: #2e7d32; }
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
   </style>
 </head>
 <body>
 
-  <div id="overlay">
-    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
-    <b class="mt-3 text-primary h5">Menghubungkan Database Cloud...</b>
-  </div>
-
-  <div id="strukCetak">
-    <div class="nota-container" id="notaPdfArea">
-      <div class="nota-header">KIKI KREDIT<br>SLIP NOTA RESMI</div>
-      
-      <div class="nota-garis"></div>
-      
-      <div class="nota-item-row">
-        <div class="nota-label">Tanggal :</div>
-        <div class="nota-value" id="pTgl">-</div>
-      </div>
-      <div class="nota-item-row">
-        <div class="nota-label">Nama    :</div>
-        <div class="nota-value" id="pNama">-</div>
-      </div>
-      <div class="nota-item-row">
-        <div class="nota-label">Barang  :</div>
-        <div class="nota-value" id="pBrg">-</div>
-      </div>
-      
-      <div class="nota-garis"></div>
-      
-      <div class="nota-total-row">
-        <div class="nota-label">TOTAL BAYAR :</div>
-        <div class="nota-value" id="pBayar">Rp 0</div>
-      </div>
-      <div class="nota-total-row">
-        <div class="nota-label">SISA UTANG  :</div>
-        <div class="nota-value" id="pSisa">Rp 0</div>
-      </div>
-      
-      <div class="nota-garis"></div>
-      
-      <div class="nota-footer">
-        *** TERIMA KASIH ***<br>
-        KIKI KREDIT SOLUTION
-      </div>
+  <div id="loading" class="loading-overlay">
+    <div class="text-center">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-2 fw-bold">Menghubungkan ke Server...</p>
     </div>
   </div>
 
-  <div class="header-card text-center mb-4">
-    <h3 class="font-weight-bold mb-1">USAHA KIKI KREDIT</h3>
-    <small class="d-block text-white-50">Sistem Kasir Cloud Pintar & Aman</small>
-    <div class="row mt-4">
-      <div class="col-6 border-right border-white-20">
-        <small class="text-uppercase text-white-50" style="font-size:11px; letter-spacing:1px;">TOTAL PIUTANG</small>
-        <h4 id="statPiutang" class="font-weight-bold mt-1 text-white">Rp 0</h4>
-      </div>
-      <div class="col-6">
-        <small class="text-uppercase text-white-50" style="font-size:11px; letter-spacing:1px;">PELANGGAN AKTIF</small>
-        <h4 id="statAktif" class="font-weight-bold mt-1 text-white">0</h4>
-      </div>
-    </div>
-  </div>
+  <nav class="navbar navbar-custom shadow-sm mb-4">
+    <div class="container"><span class="navbar-brand mb-0 h1 text-white"><i class="fa-solid fa-wallet me-2"></i> Kiki Kredit Solution</span></div>
+  </nav>
 
-  <div class="card">
-    <h5 id="formTitle" class="text-primary font-weight-bold mb-3"><i class="fas fa-user-plus mr-2"></i>Registrasi Pelanggan Baru</h5>
-    <input type="hidden" id="editRowNum">
-    
-    <div class="form-group mb-2"><input type="text" id="nama" class="form-control form-control-lg" placeholder="Nama Lengkap Pelanggan"></div>
-    <div class="form-group mb-2"><input type="text" id="alamat" class="form-control form-control-lg" placeholder="Alamat Tempat Tinggal"></div>
-    <div class="form-group mb-2"><input type="text" id="barang" class="form-control form-control-lg" placeholder="Nama Barang Kredit"></div>
-    
-    <div class="form-row mb-2">
-      <div class="col-7"><input type="number" id="harga" class="form-control form-control-lg" placeholder="Harga Total (Rp)" oninput="autoIsiSisa()"></div>
-      <div class="col-5"><input type="number" id="tenor" class="form-control form-control-lg" placeholder="Tenor / Kali"></div>
-    </div>
-    
-    <div class="form-row mb-3">
-      <div class="col-7">
-        <small class="text-muted font-weight-bold d-block mb-1">Sisa Utang Awal:</small>
-        <input type="number" id="sisaUtang" class="form-control form-control-lg" placeholder="Rp 0">
-      </div>
-      <div class="col-5">
-        <small class="text-muted font-weight-bold d-block mb-1">Tipe Tenor:</small>
-        <select id="tipeTenor" class="form-control form-control-lg" style="height: calc(1.5em + 1rem + 5px);">
-          <option value="Bulanan">Bulanan</option>
-          <option value="Mingguan">Mingguan</option>
-        </select>
-      </div>
-    </div>
-    
-    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-block btn-lg-custom shadow-sm">SIMPAN TRANSAKSI KE SERVER</button>
-    <button onclick="resetForm()" class="btn btn-light btn-block mt-2 text-muted font-weight-bold" style="border-radius:12px; padding:10px; font-size:14px;">Batal / Reset Form</button>
-  </div>
-
-  <div class="card p-2 mb-3" style="border-radius: 12px;">
-    <div class="input-group">
-      <div class="input-group-prepend"><span class="input-group-text border-0 bg-transparent text-muted"><i class="fas fa-search"></i></span></div>
-      <input type="text" id="cariInput" class="form-control form-control-lg border-0 pl-1" placeholder="Cari nama pelanggan di sini..." onkeyup="filterTabel()" style="background: transparent;">
-    </div>
-  </div>
-  
-  <div class="card p-2">
-    <div class="table-responsive" style="overflow-x: hidden;">
-      <table class="table table-hover mb-0">
-        <tbody id="tabelBody">
-          <tr><td class="text-center py-4 text-muted">Sedang sinkronisasi data cloud...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-<script>
-  // URL WEB APP BARU YANG SUDAH DI-UPDATE
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwv4irSvK-MlTvDDU7F74-t7fam9R6KFF1xydcwfg7hhqTNY47SwPuE8Rxdw85_YXQ8/exec";
-  let dataStorage = [];
-
-  function autoIsiSisa() {
-    let harga = document.getElementById('harga').value;
-    let editRow = document.getElementById('editRowNum').value;
-    if(!editRow) { document.getElementById('sisaUtang').value = harga; }
-  }
-
-  function muatData() {
-    document.getElementById('overlay').style.display = 'flex';
-    fetch(SCRIPT_URL + "?aksi=ambilData")
-    .then(res => res.text())
-    .then(textData => {
-      let data = JSON.parse(textData);
-      dataStorage = data.pelanggan || [];
-      
-      let totalPiutang = data.stats && data.stats.totalPiutang ? data.stats.totalPiutang : 0;
-      let aktif = data.stats && data.stats.aktif ? data.stats.aktif : 0;
-      
-      document.getElementById('statPiutang').innerText = "Rp " + totalPiutang.toLocaleString('id-ID');
-      document.getElementById('statAktif').innerText = aktif;
-      
-      let html = "";
-      dataStorage.forEach(p => {
-        let namaPel = p.nama || p.NAMA || "-";
-        let barangPel = p.barang || p.BARANG || "-";
-        let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
-        let statusPel = p.status || p.STATUS || "AKTIF";
-        let tenorPel = p.tenor || p.TENOR || "0";
-        let tipePel = p.tipe || p.TIPE || "Bulanan";
-        let row = p.rowNum || p.ROWNUM;
-
-        html += `<tr class="border-bottom"><td class="py-4 px-1" style="border-top: none;">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="text-dark font-weight-bold nama-pel-text" style="font-size: 19px;">${namaPel.toUpperCase()}</span> 
-            <span class="badge px-3 py-2 font-weight-bold" style="font-size: 12px; border-radius: 6px; ${statusPel==='LUNAS'?'background-color: #d4edda; color: #155724;':'background-color: #f8d7da; color: #721c24;'}">${statusPel}</span>
+  <div class="container mb-5">
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <div class="card card-stats bg-white p-4 d-flex flex-row align-items-center justify-content-between">
+          <div>
+            <h6 class="text-muted text-uppercase mb-1" style="font-size: 0.8rem;">Total Piutang Aktif</h6>
+            <h3 class="fw-bold text-primary mb-0" id="statTotalPiutang">Rp 0</h3>
           </div>
-          <div class="text-dark mb-1" style="font-size: 15px; font-weight: 600;"><i class="fas fa-box text-muted mr-1"></i> ${barangPel}</div>
-          <div class="text-dark mb-2" style="font-size: 16px; font-weight: 500;">Sisa Utang: <span class="text-danger font-weight-bold" style="font-size: 17px;">Rp ${Number(sisaPel).toLocaleString('id-ID')}</span></div>
-          <div class="text-muted mb-3" style="font-size: 13px; font-weight: bold;"><i class="fas fa-history mr-1"></i> Tenor: ${tenorPel} Kali (${tipePel})</div>
+          <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary"><i class="fa-solid fa-money-bill-wave fa-2xl"></i></div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="card card-stats bg-white p-4 d-flex flex-row align-items-center justify-content-between">
+          <div>
+            <h6 class="text-muted text-uppercase mb-1" style="font-size: 0.8rem;">Pelanggan Aktif</h6>
+            <h3 class="fw-bold text-success mb-0" id="statPelangganAktif">0 Orang</h3>
+          </div>
+          <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success"><i class="fa-solid fa-users fa-2xl"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold text-secondary mb-0"><i class="fa-solid fa-list me-2"></i> Manajer Kredit</h4>
+      <button class="btn btn-primary" onclick="bukaModalForm()"><i class="fa-solid fa-user-plus me-1"></i> Tambah Baru</button>
+    </div>
+
+    <div class="table-container">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Nama</th>
+              <th>Alamat</th>
+              <th>Barang</th>
+              <th>Total</th>
+              <th>Tenor</th>
+              <th>Cicilan</th>
+              <th>Sisa Utang</th>
+              <th>Status</th>
+              <th class="text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabelPelanggan"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="modalFormTitle">Form Pelanggan</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="formPelanggan" onsubmit="prosesSimpanData(event)">
+          <div class="modal-body">
+            <input type="hidden" id="formRowNum">
+            <div class="mb-3"><label class="form-label fw-semibold">Nama</label><input type="text" id="formNama" class="form-control" required></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Alamat</label><input type="text" id="formAlamat" class="form-control" required></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Barang</label><input type="text" id="formBarang" class="form-control" required></div>
+            <div class="row">
+              <div class="col-6 mb-3"><label class="form-label fw-semibold">Total Harga</label><input type="number" id="formTotalHarga" class="form-control" required oninput="sinkronSisaUtang()"></div>
+              <div class="col-6 mb-3"><label class="form-label fw-semibold">Sisa Utang</label><input type="number" id="formSisaUtang" class="form-control" required></div>
+            </div>
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label fw-semibold">Tipe</label>
+                <select id="formTipeTenor" class="form-select"><option value="Bulanan">Bulanan</option><option value="Mingguan">Mingguan</option><option value="Harian">Harian</option></select>
+              </div>
+              <div class="col-6 mb-3"><label class="form-label fw-semibold">Tenor (kali)</label><input type="number" id="formTenor" class="form-control" required></div>
+            </div>
+          </div>
+          <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-primary">Simpan</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalBayar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title fw-bold">Bayar</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <form id="formBayar" onsubmit="prosesBayarManual(event)">
+          <div class="modal-body">
+            <input type="hidden" id="bayarRowNum">
+            <div class="mb-2"><label class="form-label text-muted">Pelanggan</label><input type="text" id="bayarNama" class="form-control-plaintext fw-bold text-primary p-0" readonly></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Nominal Pembayaran (Rp)</label><input type="number" id="bayarNominal" class="form-control form-control-lg" required></div>
+          </div>
+          <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-success">Bayar</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    // URL API Google Apps Script milik Anda
+    const API_URL = "https://script.google.com/macros/s/AKfycbzeWIBiIVGYMmLNi-OLD2TkhbX1ab1LDpY4uMTjEGEojHRjtiu1ElqO72bnZWYHoug/exec";
+
+    let listPelanggan = [];
+    const bootstrapModalForm = new bootstrap.Modal(document.getElementById('modalForm'));
+    const bootstrapModalBayar = new bootstrap.Modal(document.getElementById('modalBayar'));
+
+    document.addEventListener("DOMContentLoaded", muatDataDashboard);
+
+    function tunjukkanLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
+    function formatRupiah(angka) { return "Rp " + Number(angka).toLocaleString('id-ID'); }
+    function sinkronSisaUtang() { if(!document.getElementById('formRowNum').value) document.getElementById('formSisaUtang').value = document.getElementById('formTotalHarga').value; }
+
+    function muatDataDashboard() {
+      tunjukkanLoading(true);
+      fetch(`${API_URL}?action=ambilData`)
+        .then(res => res.json())
+        .then(res => {
+          tunjukkanLoading(false);
+          if (res.error) return Swal.fire("Error", res.error, "error");
           
-          <div class="d-flex flex-wrap m-n1">
-            <button onclick="bayar(${row})" class="btn btn-success btn-sm-custom shadow-sm"><i class="fas fa-money-bill-wave d-block mb-1"></i> Angsur</button>
-            <button onclick="cetakLokal(${row})" class="btn btn-primary btn-sm-custom shadow-sm"><i class="fas fa-print d-block mb-1"></i> Struk</button>
-            <button onclick="unduhPdfLokal(${row})" class="btn btn-info btn-sm-custom shadow-sm"><i class="fas fa-file-pdf d-block mb-1"></i> PDF WA</button>
-            <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-sm-custom shadow-sm"><i class="fas fa-edit d-block mb-1"></i> Edit</button>
-            <button onclick="hapus(${row})" class="btn btn-danger btn-sm-custom shadow-sm"><i class="fas fa-trash d-block mb-1"></i> Hapus</button>
-          </div>
-        </td></tr>`;
+          listPelanggan = res.pelanggan;
+          document.getElementById('statTotalPiutang').innerText = formatRupiah(res.stats.totalPiutang);
+          document.getElementById('statPelangganAktif').innerText = res.stats.aktif + " Orang";
+          
+          const tbody = document.getElementById('tabelPelanggan');
+          tbody.innerHTML = listPelanggan.length === 0 ? '<tr><td colspan="9" class="text-center text-muted">Tidak ada data.</td></tr>' : '';
+          
+          listPelanggan.forEach(p => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td class="fw-bold">${p.nama}</td>
+              <td><small>${p.alamat}</small></td>
+              <td>${p.barang}</td>
+              <td>${formatRupiah(p.total)}</td>
+              <td><small>${p.tenor}x (${p.tipe})</small></td>
+              <td class="text-center">${p.cicilanKe}</td>
+              <td class="fw-bold text-danger">${formatRupiah(p.sisa)}</td>
+              <td><span class="badge ${p.status === 'AKTIF' ? 'badge-aktif' : 'badge-lunas'}">${p.status}</span></td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-success me-1" ${p.status !== 'AKTIF'?'disabled':''} onclick="bukaModalBayar(${p.rowNum}, '${p.nama}')"><i class="fa-solid fa-hand-holding-dollar"></i></button>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="bukaModalForm(${p.rowNum})"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick="prosesHapusData(${p.rowNum})"><i class="fa-solid fa-trash"></i></button>
+              </td>`;
+            tbody.appendChild(tr);
+          });
+        }).catch(err => { tunjukkanLoading(false); Swal.fire("Error", "Gagal load data. Pastikan API Apps Script Aktif.", "error"); });
+    }
+
+    function bukaModalForm(rowNum = null) {
+      document.getElementById('formPelanggan').reset();
+      document.getElementById('formRowNum').value = rowNum || '';
+      document.getElementById('modalFormTitle').innerText = rowNum ? "Edit Pelanggan" : "Tambah Pelanggan";
+      if(rowNum) {
+        const p = listPelanggan.find(i => i.rowNum === rowNum);
+        if(p) {
+          document.getElementById('formNama').value = p.nama; document.getElementById('formAlamat').value = p.alamat;
+          document.getElementById('formBarang').value = p.barang; document.getElementById('formTotalHarga').value = p.total;
+          document.getElementById('formSisaUtang').value = p.sisa; document.getElementById('formTipeTenor').value = p.tipe;
+          document.getElementById('formTenor').value = p.tenor;
+        }
+      }
+      bootstrapModalForm.show();
+    }
+
+    function prosesSimpanData(e) {
+      e.preventDefault();
+      const payload = {
+        action: "simpanData",
+        data: {
+          rowNum: document.getElementById('formRowNum').value, nama: document.getElementById('formNama').value,
+          alamat: document.getElementById('formAlamat').value, barang: document.getElementById('formBarang').value,
+          totalHarga: document.getElementById('formTotalHarga').value, sisaUtang: document.getElementById('formSisaUtang').value,
+          tipeTenor: document.getElementById('formTipeTenor').value, tenor: document.getElementById('formTenor').value
+        }
+      };
+      bootstrapModalForm.hide(); tunjukkanLoading(true);
+      irimKeApi(payload);
+    }
+
+    function bukaModalBayar(rowNum, nama) {
+      document.getElementById('formBayar').reset();
+      document.getElementById('bayarRowNum').value = rowNum;
+      document.getElementById('bayarNama').value = nama;
+      bootstrapModalBayar.show();
+    }
+
+    function prosesBayarManual(e) {
+      e.preventDefault();
+      const payload = {
+        action: "bayarManual",
+        rowNum: document.getElementById('bayarRowNum').value,
+        nominal: document.getElementById('bayarNominal').value
+      };
+      bootstrapModalBayar.hide(); tunjukkanLoading(true);
+      
+      fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(res => {
+          if(res.error) { tunjukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
+          tunjukkanLoading(false);
+          Swal.fire("Sukses", "Pembayaran tercatat. Unduhan slip dimulai.", "success");
+          
+          const a = document.createElement("a");
+          a.href = "data:application/pdf;base64," + res.pdf;
+          a.download = "Slip_" + res.hasilBayar.nama.replace(/\s+/g, '_') + ".pdf";
+          a.click();
+          muatDataDashboard();
+        }).catch(() => { tunjukkanLoading(false); Swal.fire("Error", "Gagal memproses transaksi.", "error"); });
+    }
+
+    function prosesHapusData(rowNum) {
+      Swal.fire({ title: "Hapus permanen?", text: "Data tidak bisa dikembalikan!", icon: "warning", showCancelButton: true, confirmButtonColor: "#d33", confirmButtonText: "Ya, Hapus!" }).then((result) => {
+        if (result.isConfirmed) {
+          tunjukkanLoading(true);
+          irimKeApi({ action: "hapusData", rowNum: rowNum });
+        }
       });
-      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center py-4 font-weight-bold text-muted'>Belum ada data pelanggan</td></tr>";
-      document.getElementById('overlay').style.display = 'none';
-    }).catch((err) => { 
-      console.error(err);
-      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-4 text-danger font-weight-bold'>Gagal tersambung dengan Google Sheets Server. Pastikan deployment Apps Script sudah benar.</td></tr>";
-      document.getElementById('overlay').style.display = 'none'; 
-    });
-  }
-
-  function simpan() {
-    let hargaInput = document.getElementById('harga').value;
-    let sisaInput = document.getElementById('sisaUtang').value;
-    let data = {
-      rowNum: document.getElementById('editRowNum').value,
-      nama: document.getElementById('nama').value,
-      alamat: document.getElementById('alamat').value,
-      barang: document.getElementById('barang').value,
-      totalHarga: hargaInput,
-      tipeTenor: document.getElementById('tipeTenor').value,
-      tenor: document.getElementById('tenor').value,
-      sisaUtang: sisaInput ? sisaInput : hargaInput
-    };
-    if(!data.nama || !data.totalHarga) return alert("Nama Pelanggan dan Harga wajib diisi!");
-    document.getElementById('overlay').style.display = 'flex';
-    fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "simpan", data: data }) })
-    .then(res => res.text()).then(textData => { 
-      alert(JSON.parse(textData)); 
-      resetForm(); 
-      muatData(); 
-    });
-  }
-
-  function bayar(rowNum) {
-    let nominal = prompt("Masukkan jumlah angsuran pembayaran (Rp):");
-    if(!nominal) return;
-    document.getElementById('overlay').style.display = 'flex';
-    fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "bayar", rowNum: rowNum, nominal: nominal }) })
-    .then(res => res.text()).then(textData => {
-      let resData = JSON.parse(textData);
-      document.getElementById('pTgl').innerText = resData.tgl;
-      document.getElementById('pNama').innerText = resData.nama.toUpperCase();
-      document.getElementById('pBrg').innerText = resData.barang.toUpperCase();
-      document.getElementById('pBayar').innerText = "Rp " + Number(resData.nominal).toLocaleString('id-ID');
-      document.getElementById('pSisa').innerText = "Rp " + Number(resData.sisa).toLocaleString('id-ID');
-      muatData();
-      setTimeout(() => { window.print(); }, 400);
-    });
-  }
-
-  function findPelanggan(rowNum) {
-    return dataStorage.find(item => (item.rowNum === rowNum || item.ROWNUM === rowNum));
-  }
-
-  function cetakLokal(rowNum) {
-    let p = findPelanggan(rowNum);
-    if (!p) return;
-
-    let namaPel = p.nama || p.NAMA || "-";
-    let barangPel = p.barang || p.BARANG || "-";
-    let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
-
-    document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
-    document.getElementById('pNama').innerText = namaPel.toUpperCase();
-    document.getElementById('pBrg').innerText = barangPel.toUpperCase();
-    document.getElementById('pBayar').innerText = "CEK SISA";
-    document.getElementById('pSisa').innerText = "Rp " + Number(sisaPel).toLocaleString('id-ID');
-    setTimeout(() => { window.print(); }, 200);
-  }
-
-  function unduhPdfLokal(rowNum) {
-    let p = findPelanggan(rowNum);
-    if (!p) return;
-    
-    let namaPel = p.nama || p.NAMA || "-";
-    let barangPel = p.barang || p.BARANG || "-";
-    let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
-
-    document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID');
-    document.getElementById('pNama').innerText = namaPel.toUpperCase();
-    document.getElementById('pBrg').innerText = barangPel.toUpperCase();
-    document.getElementById('pBayar').innerText = "CEK BERKALA";
-    document.getElementById('pSisa').innerText = "Rp " + Number(sisaPel).toLocaleString('id-ID');
-    
-    let element = document.getElementById('notaPdfArea');
-    element.className = "nota-pdf-wa";
-    
-    let opsi = {
-      margin:       2,
-      filename:     'Struk_' + namaPel.replace(/\s+/g, '_') + '.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, background: '#fff' },
-      jsPDF:        { unit: 'mm', format: [80, 80], orientation: 'portrait' }
-    };
-    
-    html2pdf().set(opsi).from(element).save().then(() => {
-      element.className = "nota-container";
-    });
-  }
-
-  function pindahKeEdit(rowNum) {
-    let p = findPelanggan(rowNum);
-    if (!p) return;
-    
-    let namaPel = p.nama || p.NAMA || "";
-    let alamatPel = p.alamat || p.ALAMAT || "";
-    let barangPel = p.barang || p.BARANG || "";
-    let totalHarga = p.total || p.TOTAL || 0;
-    let tenorPel = p.tenor || p.TENOR || 0;
-    let tipePel = p.tipe || p.TIPE || "Bulanan";
-    let sisaPel = p.sisa !== undefined ? p.sisa : (p.SISA || 0);
-    let row = p.rowNum || p.ROWNUM;
-
-    document.getElementById('editRowNum').value = row;
-    document.getElementById('nama').value = namaPel;
-    document.getElementById('alamat').value = alamatPel;
-    document.getElementById('barang').value = barangPel;
-    document.getElementById('harga').value = totalHarga;
-    document.getElementById('tenor').value = tenorPel;
-    document.getElementById('tipeTenor').value = tipePel;
-    document.getElementById('sisaUtang').value = sisaPel;
-    document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit mr-2'></i>Ubah Data: " + namaPel.toUpperCase();
-    document.getElementById('btnSimpan').innerText = "PERBARUI DATA TRANSAKSI";
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-
-  function resetForm() {
-    document.getElementById('editRowNum').value = "";
-    document.querySelectorAll('input').forEach(i => i.value = "");
-    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-2'></i>Registrasi Pelanggan Baru";
-    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI KE SERVER";
-  }
-
-  function filterTabel() {
-    let input = document.getElementById("cariInput").value.toUpperCase();
-    let tr = document.getElementById("tabelBody").getElementsByTagName("tr");
-    for (let i = 0; i < tr.length; i++) {
-      let td = tr[i].getElementsByClassName("nota-pel-text")[0] || tr[i].getElementsByTagName("span")[0];
-      if(td) { tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none"; }
     }
-  }
 
-  function hapus(rowNum) {
-    if(confirm("Hapus data pelanggan ini secara permanen dari server database?")) {
-      document.getElementById('overlay').style.display = 'flex';
-      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
-      .then(res => res.text()).then(() => muatData());
+    function irimKeApi(payload) {
+      fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(pesan => { tunjukkanLoading(false); Swal.fire("Berhasil", typeof pesan === 'string' ? pesan : "Selesai!", "success"); muatDataDashboard(); })
+        .catch(() => { tunjukkanLoading(false); Swal.fire("Error", "Gagal mengirim data ke server.", "error"); });
     }
-  }
-
-  window.onload = muatData;
-</script>
+  </script>
 </body>
 </html>
