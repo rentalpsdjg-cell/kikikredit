@@ -3,56 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - Full Page Thermal</title>
+  <title>Kiki Kredit Solution - Pure Text Style</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     /* ============================================================
-       1. INTERFACE LAYAR HP - DESAIN KHUSUS PREVIEW TERMAL
+       1. INTERFACE LAYAR HP KASIR (TRANSPARAN & MINIMALIS)
        ============================================================ */
     body { 
-      background: #555555; 
+      background: #f4f6f9; 
       padding: 10px; 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     
-    /* Kontainer utama menyerupai kertas struk gulungan asli */
-    .thermal-page {
-      background: #ffffff;
-      max-width: 400px;
-      margin: 0 auto 30px auto;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      padding: 20px 15px;
-      border-radius: 4px;
+    /* Area preview struk dibuat transparan murni, hanya teks */
+    .thermal-pure-text {
+      background: transparent;
+      max-width: 320px;
+      margin: 15px auto;
+      padding: 10px 5px;
+      box-sizing: border-box;
     }
 
     .app-card {
       background: #ffffff;
-      border: 1px solid #e0e0e0;
       border-radius: 12px;
-      max-width: 400px;
-      margin: 0 auto 20px auto;
+      max-width: 420px;
+      margin: 0 auto 15px auto;
       padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border: none;
     }
 
     .form-control-custom {
       border-radius: 8px;
       font-size: 14px;
-      border: 2px solid #ced4da;
+      border: 2px solid #e2e8f0;
       padding: 10px;
       height: auto;
       margin-bottom: 10px;
     }
-    
-    .form-control-custom:focus {
-      border-color: #11698e;
-      box-shadow: none;
-    }
 
     .btn-action {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
-      padding: 8px 10px;
+      padding: 8px;
       border-radius: 6px;
       margin: 2px;
       flex: 1;
@@ -63,20 +58,18 @@
       display: none; 
       position: fixed; 
       top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(0, 0, 0, 0.7); 
+      background: rgba(255, 255, 255, 0.9); 
       z-index: 9999; 
       justify-content: center; 
       align-items: center; 
       flex-direction: column; 
-      color: white;
     }
 
     /* ============================================================
-       2. GAYA STRUK KIKI KREDIT (PERSIS SEPERTI CONTOH FOTO SUKSES)
+       2. FORMAT STRUK MURNI TEKS (PAS 58MM - FONT COURIER TEBAL)
        ============================================================ */
     .nota-container {
       width: 100%;
-      background: #ffffff;
       color: #000000;
       font-family: 'Courier New', Courier, monospace; 
       font-size: 15px; 
@@ -87,7 +80,7 @@
     .nota-header { 
       text-align: center; 
       font-size: 17px; 
-      font-weight: bold;
+      font-weight: 900;
       line-height: 1.3; 
       margin-bottom: 4px; 
       text-transform: uppercase;
@@ -97,12 +90,12 @@
       text-align: center;
       white-space: nowrap;
       overflow: hidden;
-      margin: 3px 0; 
+      margin: 2px 0; 
       font-size: 15px;
       font-weight: bold;
     }
     .nota-garis::after {
-      content: "------------------------------------------"; 
+      content: "--------------------------------"; 
       display: block;
     }
     
@@ -125,44 +118,40 @@
     
     .nota-footer {
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
       margin-top: 6px;
       line-height: 1.3;
     }
 
     /* ============================================================
-       3. ARSITEKTUR ENGINE CETAK OTOMATIS (MURNI TERMAL)
+       3. ENGINE CETAK TANPA MENINGGALKAN BACKGROUND SAMA SEKALI
        ============================================================ */
     @media print {
-      /* Hilangkan semua panel kontrol kasir, tombol, dan background gelap */
       body { 
         background: #ffffff !important; 
         padding: 0 !important; 
       }
-      .app-card, #overlay, .no-print, .header-card { 
+      .app-card, #overlay, .no-print { 
         display: none !important; 
       }
       
-      /* Set halaman tanpa margin paksa */
       @page { 
         size: auto; 
         margin: 0mm !important; 
       }
       
-      .thermal-page {
+      .thermal-pure-text {
         box-shadow: none !important;
+        background: transparent !important;
         margin: 0 !important;
-        padding: 5mm 4mm !important; /* Pas untuk ruang cetak mini */
+        padding: 4mm 2mm !important;
         width: 100% !important;
         max-width: 100% !important;
-        border-radius: 0 !important;
       }
 
       .nota-container {
         font-size: 14px !important;
-      }
-      .nota-header {
-        font-size: 16px !important;
+        background: transparent !important;
       }
     }
   </style>
@@ -170,16 +159,16 @@
 <body>
 
   <div id="overlay">
-    <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;"></div>
-    <b class="mt-3 h5">Sinkronisasi Cloud...</b>
+    <div class="spinner-border text-primary" role="status" style="width: 2.5rem; height: 2.5rem;"></div>
+    <b class="mt-3 h6 text-primary">Sinkronisasi Cloud...</b>
   </div>
 
-  <div class="app-card text-center bg-dark text-white border-0 py-3 shadow">
-    <h5 class="font-weight-bold mb-0">KIKI KREDIT KASIR TERMAL</h5>
-    <small class="text-white-50" id="statInfo">Memuat info piutang...</small>
+  <div class="app-card bg-primary text-white border-0 py-3 text-center shadow-sm no-print" style="background: linear-gradient(135deg, #11698e, #1f4068) !important;">
+    <h5 class="font-weight-bold mb-1">KIKI KREDIT SYSTEM</h5>
+    <small class="text-white-50" id="statInfo">Menghubungkan ke server cloud...</small>
   </div>
 
-  <div class="thermal-page">
+  <div class="thermal-pure-text">
     <div class="nota-container">
       <div class="nota-header">KIKI KREDIT<br>SOLUTION</div>
       
@@ -187,12 +176,12 @@
       
       <div class="nota-item-group">
         <div class="nota-label">Tgl:</div>
-        <div class="nota-value" id="pTgl">28/5/2026</div>
+        <div class="nota-value" id="pTgl">-</div>
       </div>
       
       <div class="nota-item-group">
         <div class="nota-label">Nama:</div>
-        <div class="nota-value" id="pNama">PILIH PELANGGAN DI BAWAH</div>
+        <div class="nota-value" id="pNama">PILIH DATA DI TABEL BAWAH</div>
       </div>
       
       <div class="nota-item-group">
@@ -221,15 +210,15 @@
     </div>
   </div>
 
-  <div class="app-card shadow-sm no-print">
-    <h6 id="formTitle" class="text-primary font-weight-bold mb-2"><i class="fas fa-user-plus mr-1"></i>Pelanggan Baru</h6>
+  <div class="app-card no-print">
+    <h6 id="formTitle" class="text-primary font-weight-bold mb-3"><i class="fas fa-user-plus mr-1"></i>Registrasi Pelanggan Baru</h6>
     <input type="hidden" id="editRowNum">
     <input type="text" id="nama" class="form-control form-control-custom" placeholder="Nama Pelanggan">
-    <input type="text" id="alamat" class="form-control form-control-custom" placeholder="Alamat">
+    <input type="text" id="alamat" class="form-control form-control-custom" placeholder="Alamat Rumah">
     <input type="text" id="barang" class="form-control form-control-custom" placeholder="Nama Barang">
     
     <div class="form-row">
-      <div class="col-7"><input type="number" id="harga" class="form-control form-control-custom" placeholder="Harga (Rp)" oninput="autoIsiSisa()"></div>
+      <div class="col-7"><input type="number" id="harga" class="form-control form-control-custom" placeholder="Harga Total (Rp)" oninput="autoIsiSisa()"></div>
       <div class="col-5"><input type="number" id="tenor" class="form-control form-control-custom" placeholder="Tenor"></div>
     </div>
     
@@ -243,20 +232,20 @@
       </div>
     </div>
     
-    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-block font-weight-bold py-2 shadow-sm" style="border-radius:8px;">SIMPAN KE SERVER CLOUD</button>
-    <button onclick="resetForm()" class="btn btn-light btn-block btn-sm text-muted mt-2 border" style="border-radius:6px;">Reset Form</button>
+    <button id="btnSimpan" onclick="simpan()" class="btn btn-primary btn-block font-weight-bold py-2 shadow-sm" style="border-radius:8px; background: #11698e; border:none;">SIMPAN TRANSAKSI</button>
+    <button onclick="resetForm()" class="btn btn-light btn-block btn-sm text-muted mt-2 border" style="border-radius:6px;">Reset / Batal</button>
   </div>
 
-  <div class="app-card shadow-sm no-print">
+  <div class="app-card no-print">
     <div class="input-group mb-2">
       <div class="input-group-prepend"><span class="input-group-text bg-transparent border-right-0"><i class="fas fa-search text-muted"></i></span></div>
-      <input type="text" id="cariInput" class="form-control border-left-0" placeholder="Cari nama..." onkeyup="filterTabel()">
+      <input type="text" id="cariInput" class="form-control border-left-0" placeholder="Ketik nama untuk mencari..." onkeyup="filterTabel()">
     </div>
     
-    <div style="max-height: 350px; overflow-y: auto;">
+    <div style="max-height: 300px; overflow-y: auto;">
       <table class="table table-sm table-hover mb-0">
         <tbody id="tabelBody">
-          <tr><td class="text-center py-3 text-muted">Menghubungkan ke server...</td></tr>
+          <tr><td class="text-center py-3 text-muted">Sinkronisasi cloud...</td></tr>
         </tbody>
       </table>
     </div>
@@ -282,7 +271,7 @@
       
       let totalPiutang = data.stats && data.stats.totalPiutang ? data.stats.totalPiutang : 0;
       let aktif = data.stats && data.stats.aktif ? data.stats.aktif : 0;
-      document.getElementById('statInfo').innerText = "Piutang: Rp " + totalPiutang.toLocaleString('id-ID') + " | Aktif: " + aktif;
+      document.getElementById('statInfo').innerText = "Piutang: Rp " + totalPiutang.toLocaleString('id-ID') + " | Pelanggan Aktif: " + aktif;
       
       let html = "";
       dataStorage.forEach(p => {
@@ -294,13 +283,13 @@
         html += `<tr class="border-bottom">
           <td class="py-2">
             <div class="d-flex justify-content-between">
-              <span class="text-dark font-weight-bold" style="font-size:15px;">${namaPel.toUpperCase()}</span>
-              <span class="text-danger font-weight-bold" style="font-size:14px;">Rp ${Number(sisaPel).toLocaleString('id-ID')}</span>
+              <span class="text-dark font-weight-bold" style="font-size:14px;">${namaPel.toUpperCase()}</span>
+              <span class="text-danger font-weight-bold" style="font-size:13px;">Rp ${Number(sisaPel).toLocaleString('id-ID')}</span>
             </div>
             <small class="text-muted d-block mb-1">Barang: ${barangPel} | Tenor: ${p.tenor}x (${p.tipe})</small>
             <div class="d-flex">
               <button onclick="bayar(${row})" class="btn btn-success btn-action"><i class="fas fa-money-bill-wave"></i> Angsur</button>
-              <button onclick="loadKeStruk(${row})" class="btn btn-dark btn-action"><i class="fas fa-eye"></i> Lihat</button>
+              <button onclick="loadKeStruk(${row})" class="btn btn-dark btn-action"><i class="fas fa-print"></i> Muat</button>
               <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-white btn-action"><i class="fas fa-edit"></i> Edit</button>
               <button onclick="hapus(${row})" class="btn btn-danger btn-action"><i class="fas fa-trash"></i></button>
             </div>
@@ -361,6 +350,7 @@
     document.getElementById('pBayar').innerText = "CEK SISA";
     document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
     window.scrollTo({top: 0, behavior: 'smooth'});
+    setTimeout(() => { window.print(); }, 300);
   }
 
   function pindahKeEdit(rowNum) {
@@ -381,8 +371,8 @@
   function resetForm() {
     document.getElementById('editRowNum').value = "";
     document.querySelectorAll('input').forEach(i => i.value = "");
-    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-1'></i>Pelanggan Baru";
-    document.getElementById('btnSimpan').innerText = "SIMPAN KE SERVER CLOUD";
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-1'></i>Registrasi Pelanggan Baru";
+    document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
   }
 
   function filterTabel() {
@@ -395,7 +385,7 @@
   }
 
   function hapus(rowNum) {
-    if(confirm("Hapus data pelanggan ini?")) {
+    if(confirm("Hapus data pelanggan ini dari database cloud?")) {
       document.getElementById('overlay').style.display = 'flex';
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
       .then(res => res.text()).then(() => muatData());
