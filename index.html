@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - Square 6x6</title>
+  <title>Kiki Kredit Solution - Square 10x10</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
@@ -74,78 +74,79 @@
       flex-direction: column; 
     }
     
-    /* Sembunyikan cetakan struk dari layar HP */
+    /* Sembunyikan cetakan struk dari layar HP kasir */
     #strukCetak { display: none; }
 
     /* ============================================================
-       2. ARSITEKTUR KUNCI MATI UKURAN KOTAK 6x6 CM (60mm x 60mm)
+       2. ARSITEKTUR KUNCI MATI UKURAN JUMBO KOTAK 10x10 CM (100mm x 100mm)
        ============================================================ */
     @media print {
-      /* Hilangkan semua elemen web kasir saat mode print */
+      /* Hilangkan semua elemen web kasir dari kertas */
       body * { display: none !important; }
       
-      /* Paksa ukuran kertas browser dipotong kotak 60mm x 60mm */
+      /* Paksa ukuran browser ke dimensi kotak 100mm x 100mm murni */
       @page { 
-        size: 60mm 60mm !important; 
+        size: 100mm 100mm !important; 
         margin: 0mm !important; 
       }
       
-      /* Aktifkan struk saja */
+      /* Aktifkan kontainer struk */
       #strukCetak, #strukCetak * { display: block !important; }
       
       #strukCetak { 
         display: block !important; 
-        width: 60mm !important; 
-        height: 60mm !important;
+        width: 100mm !important; 
+        height: 100mm !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #ffffff !important;
-        overflow: hidden !important; /* Mencegah over-page */
+        overflow: hidden !important; /* Lock page agar tidak lolos ke lembar kedua */
       }
       
       .nota-container {
-        width: 60mm !important;
-        max-width: 60mm !important;
-        height: 60mm !important;
-        max-height: 60mm !important;
-        padding: 3mm 4mm !important;
+        width: 100mm !important;
+        max-width: 100mm !important;
+        height: 100mm !important;
+        max-height: 100mm !important;
+        padding: 8mm 8mm !important; /* Lebih lapang */
         box-sizing: border-box !important;
         background: #ffffff !important;
         color: #000000 !important;
         font-family: 'Courier New', Courier, monospace !important; 
-        font-size: 3.2mm !important; 
+        font-size: 4.5mm !important; /* Font diperbesar drastis agar gagah */
         font-weight: bold !important;
-        line-height: 1.3 !important;
+        line-height: 1.5 !important;
       }
       
       .nota-header { 
         text-align: center !important; 
         font-weight: 900 !important; 
-        font-size: 4.2mm !important; 
-        line-height: 1.2 !important; 
-        margin-bottom: 1.5mm !important; 
+        font-size: 6.5mm !important; /* Judul sangat besar & jelas */
+        line-height: 1.3 !important; 
+        margin-bottom: 3mm !important; 
+        letter-spacing: 0.5mm !important;
       }
       
-      /* Garis Pemisah Karakter Mini */
+      /* Garis Pembatas Karakter Lebar */
       .nota-garis { 
         text-align: center !important;
         white-space: nowrap !important;
         overflow: hidden !important;
-        margin: 1.5mm 0 !important; 
-        font-size: 2.8mm !important;
+        margin: 2.5mm 0 !important; 
+        font-size: 4mm !important;
       }
       .nota-garis::after {
-        content: "----------------================--" !important; 
+        content: "=========================================" !important; 
         display: block !important;
       }
       
-      /* Penataan Flex Kiri-Kanan Menempel Sempurna ke Dinding Kertas */
+      /* Penataan Rata Kiri-Kanan Melekat Sempurna di Kertas Lebar */
       .nota-item-row {
         display: flex !important;
         justify-content: space-between !important;
         align-items: flex-start !important;
         width: 100% !important;
-        margin-bottom: 1mm !important;
+        margin-bottom: 2mm !important;
       }
       
       .nota-label {
@@ -158,26 +159,27 @@
         font-weight: 900 !important;
       }
       
-      /* Sesi Total Uang Lebih Besar */
+      /* Area Angka Uang Dibuat Sangat Dominan */
       .nota-total-row {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
         width: 100% !important;
-        margin-bottom: 1mm !important;
-        font-size: 3.5mm !important;
+        margin-bottom: 2mm !important;
+        font-size: 5mm !important;
       }
       
       .nota-total-row .nota-value {
-        font-size: 4mm !important;
+        font-size: 6mm !important;
         font-weight: 900 !important;
       }
       
       .nota-footer {
         text-align: center !important;
-        font-size: 2.5mm !important;
-        margin-top: 2.5mm !important;
-        line-height: 1.2 !important;
+        font-size: 3.8mm !important;
+        margin-top: 6mm !important;
+        line-height: 1.4 !important;
+        letter-spacing: 0.2mm !important;
       }
     }
   </style>
@@ -191,37 +193,38 @@
 
   <div id="strukCetak">
     <div class="nota-container">
-      <div class="nota-header">KIKI KREDIT<br>SLIP NOTA</div>
+      <div class="nota-header">KIKI KREDIT<br>SLIP NOTA RESMI</div>
       
       <div class="nota-garis"></div>
       
       <div class="nota-item-row">
-        <div class="nota-label">Tgl:</div>
+        <div class="nota-label">Tanggal :</div>
         <div class="nota-value" id="pTgl">-</div>
       </div>
       <div class="nota-item-row">
-        <div class="nota-label">Nama:</div>
+        <div class="nota-label">Nama    :</div>
         <div class="nota-value" id="pNama">-</div>
       </div>
       <div class="nota-item-row">
-        <div class="nota-label">Brg:</div>
+        <div class="nota-label">Barang  :</div>
         <div class="nota-value" id="pBrg">-</div>
       </div>
       
       <div class="nota-garis"></div>
       
       <div class="nota-total-row">
-        <div class="nota-label">BAYAR:</div>
+        <div class="nota-label">TOTAL BAYAR :</div>
         <div class="nota-value" id="pBayar">Rp 0</div>
       </div>
       <div class="nota-total-row">
-        <div class="nota-label">SISA:</div>
+        <div class="nota-label">SISA UTANG  :</div>
         <div class="nota-value" id="pSisa">Rp 0</div>
       </div>
       
       <div class="nota-garis"></div>
       
       <div class="nota-footer">
+        *** TERIMA KASIH ***<br>
         KIKI KREDIT SOLUTION
       </div>
     </div>
