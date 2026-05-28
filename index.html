@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kiki Kredit Solution - GitHub Deploy Engine</title>
+  <title>Kiki Kredit Solution - Full Bold Print Engine</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     /* ============================================================
        1. ANTARMUKA LAYAR KASIR HP (DARK MODE - MODERN & BERSIH)
@@ -15,6 +16,7 @@
       color: #f1f5f9; 
       font-family: 'Segoe UI', sans-serif; 
       padding: 12px; 
+      font-size: 14px;
     }
     
     .card { 
@@ -25,7 +27,7 @@
       margin-bottom: 15px; 
     }
     
-    .stats-card { 
+    .header-card { 
       background: linear-gradient(135deg, #0284c7, #0369a1); 
       color: white; 
       padding: 20px; 
@@ -48,10 +50,15 @@
       box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
     }
     
-    .badge-mingguan { background: #ff9800; color: white; }
-    .btn-aksi { min-width: 65px; font-size: 12px !important; padding: 8px 4px !important; font-weight: bold; }
+    .btn-sm-custom { 
+      font-size: 13px; 
+      padding: 8px 12px; 
+      margin: 3px 2px; 
+      font-weight: bold; 
+      border-radius: 8px; 
+    }
     
-    #loadingOverlay { 
+    #overlay { 
       display: none; 
       position: fixed; 
       top:0; left:0; width:100%; height:100%; 
@@ -62,24 +69,24 @@
       flex-direction: column; 
     }
 
-    /* MATIKAN PREVIEW STRUK DI LAYAR HP AGAR RESPONSIVITASNYA FOKUS */
+    /* SEMBUNYIKAN PREVIEW STRUK DI LAYAR HP KASIR */
     #strukCetak { display: none !important; }
  
     /* ============================================================
-       2. ARSITEKTUR STRUK CETAK FISIK (MURNI TEKS TEBAL VERTIKAL)
+       2. ARSITEKTUR STRUK CETAK FISIK THERMAL (MURNI TEKS TEBAL VERTIKAL)
        ============================================================ */
     @media print {
       body * { display: none !important; }
-      html, body { height: auto; overflow: visible; background: #fff; }
+      html, body { height: auto; overflow: visible; background: #fff; margin: 0; padding: 0; }
       
       #strukCetak, #strukCetak * { display: block !important; }
-      @page { size: auto; margin: 0mm; }
+      @page { size: 58mm auto; margin: 0mm; }
       
       .nota-container {
         width: 100%;
-        padding: 5mm 2mm 5mm 2mm;
+        padding: 6mm 2mm;
         font-family: 'Courier New', Courier, monospace;
-        font-size: 21px !important; 
+        font-size: 22px !important; 
         font-weight: 900 !important; 
         color: #000 !important;
         line-height: 1.2;
@@ -89,11 +96,8 @@
       .nota-header { 
         text-align: center; 
         margin-bottom: 8px; 
-      }
-      .nota-title { 
         font-size: 24px !important; 
         font-weight: 900 !important; 
-        text-transform: uppercase; 
         line-height: 1.1;
       }
       
@@ -101,8 +105,8 @@
         text-align: center;
         white-space: nowrap;
         overflow: hidden;
-        margin: 4px 0; 
-        font-size: 21px !important;
+        margin: 5px 0; 
+        font-size: 22px !important;
         font-weight: 900 !important;
       }
       .nota-garis::after {
@@ -126,208 +130,167 @@
       
       .nota-footer { 
         text-align: center; 
-        margin-top: 12px; 
-        font-size: 18px !important; 
+        margin-top: 15px; 
+        font-size: 19px !important; 
         font-weight: 900 !important; 
         line-height: 1.2;
       }
     }
+
+    /* Style cadangan murni untuk download PDF WA */
+    .nota-pdf-wa {
+      width: 56mm;
+      padding: 4mm 2mm;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 16px;
+      color: #000;
+      line-height: 1.3;
+      background: #fff;
+    }
   </style>
 </head>
 <body>
- 
-<div id="loadingOverlay">
-  <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
-  <b class="mt-3 text-info">SINKRONISASI SERVER CLOUD...</b>
-</div>
- 
-<div id="strukCetak">
-  <div class="nota-container">
-    <div class="nota-header">
-      <div class="nota-title">KIKI KREDIT<br>SOLUTION</div>
-    </div>
-    
-    <div class="nota-garis"></div>
-    
-    <div class="nota-item-row"><div class="nota-label">TGL: </div><div class="nota-value" id="printTanggal">-</div></div>
-    <div class="nota-item-row"><div class="nota-label">NAM: </div><div class="nota-value" id="printPelanggan">-</div></div>
-    <div class="nota-item-row"><div class="nota-label">BRG: </div><div class="nota-value" id="printBarang">-</div></div>
-    
-    <div class="nota-garis"></div>
-    
-    <div class="nota-item-row"><div class="nota-label">BYR: </div><div class="nota-value" id="printDiterima">Rp 0</div></div>
-    <div class="nota-item-row"><div class="nota-label">SIS: </div><div class="nota-value" id="printSisa">Rp 0</div></div>
-    
-    <div class="nota-garis"></div>
-    
-    <div class="nota-footer">
-      *** TERIMA KASIH ***<br>
-      BUKTI PEMBAYARAN SAH.
+
+  <div id="overlay">
+    <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
+    <b class="mt-3 text-info">SINKRONISASI DATABASE...</b>
+  </div>
+
+  <div id="strukCetak">
+    <div class="nota-container" id="notaPdfArea">
+      <div class="nota-header">SLIP PEMBAYARAN<br>KIKI KREDIT Solution</div>
+      
+      <div class="nota-garis"></div>
+      
+      <div class="nota-item-row"><div class="nota-label">TGL: </div><div class="nota-value" id="pTgl">-</div></div>
+      <div class="nota-item-row"><div class="nota-label">NAM: </div><div class="nota-value" id="pNama">-</div></div>
+      <div class="nota-item-row"><div class="nota-label">BRG: </div><div class="nota-value" id="pBrg">-</div></div>
+      
+      <div class="nota-garis"></div>
+      
+      <div class="nota-item-row"><div class="nota-label">BYR: </div><div class="nota-value" id="pBayar">Rp 0</div></div>
+      <div class="nota-item-row"><div class="nota-label">SIS: </div><div class="nota-value" id="pSisa">Rp 0</div></div>
+      
+      <div class="nota-garis"></div>
+      
+      <div class="nota-footer">
+        *** TERIMA KASIH ***<br>
+        BUKTI PEMBAYARAN SAH.
+      </div>
     </div>
   </div>
-</div>
- 
-<div class="container-fluid">
-  <div class="stats-card text-center shadow mb-3">
-    <h3 class="font-weight-bold"><i class="fas fa-store mr-2"></i>TOKO USAHA KIKI</h3>
+
+  <div class="header-card text-center mb-3">
+    <h4 class="font-weight-bold"><i class="fas fa-store mr-2"></i>USAHA KIKI KREDIT</h4>
     <div class="row mt-3">
       <div class="col-6 border-right">
-        <small class="text-uppercase text-white-50 font-weight-bold">Total Piutang</small>
-        <h4 id="statPiutang" class="font-weight-bold">Rp 0</h4>
+        <small class="font-weight-bold text-white-50">TOTAL PIUTANG</small>
+        <h5 id="statPiutang" class="font-weight-bold">Rp 0</h5>
       </div>
       <div class="col-6">
-        <small class="text-uppercase text-white-50 font-weight-bold">Pelanggan Aktif</small>
-        <h4 id="statAktif" class="font-weight-bold">0</h4>
+        <small class="font-weight-bold text-white-50">PELANGGAN AKTIF</small>
+        <h5 id="statAktif" class="font-weight-bold">0</h5>
       </div>
     </div>
   </div>
- 
+
   <div class="card p-3">
-    <h6 id="formTitle" class="font-weight-bold text-info mb-3"><i class="fas fa-user-plus mr-2"></i>Registrasi Pelanggan Baru</h6>
+    <b id="formTitle" class="text-info mb-3" style="font-size: 16px;"><i class="fas fa-user-plus mr-2"></i>Registrasi Pelanggan Baru</b>
     <input type="hidden" id="editRowNum">
-    <div class="row">
-      <div class="col-md-4"><input type="text" id="nama" class="form-control form-control-custom" placeholder="Nama Pelanggan"></div>
-      <div class="col-md-8"><input type="text" id="alamat" class="form-control form-control-custom" placeholder="Alamat Lengkap"></div>
-      <div class="col-md-4"><input type="text" id="barang" class="form-control form-control-custom" placeholder="Nama Barang"></div>
-      <div class="col-md-3"><input type="number" id="harga" class="form-control form-control-custom" placeholder="Harga Total (Rp)"></div>
-      <div class="col-md-3">
+    
+    <input type="text" id="nama" class="form-control form-control-custom" placeholder="Nama Pelanggan">
+    <input type="text" id="alamat" class="form-control form-control-custom" placeholder="Alamat">
+    <input type="text" id="barang" class="form-control form-control-custom" placeholder="Nama Barang Kredit">
+    
+    <div class="form-row">
+      <div class="col-7"><input type="number" id="harga" class="form-control form-control-custom" placeholder="Harga Total (Rp)"></div>
+      <div class="col-5"><input type="number" id="tenor" class="form-control form-control-custom" placeholder="Tenor (Kali)"></div>
+    </div>
+    
+    <div class="form-row">
+      <div class="col-7">
+        <small class="text-muted d-block mb-1 font-weight-bold">Sisa Utang (Bisa manual):</small>
+        <input type="number" id="sisaUtang" class="form-control form-control-custom" placeholder="Rp 0">
+      </div>
+      <div class="col-5">
+        <small class="text-muted d-block mb-1 font-weight-bold">Tipe Tenor:</small>
         <select id="tipeTenor" class="form-control form-control-custom" style="padding:10px;">
           <option value="Bulanan">Tenor Bulanan</option>
           <option value="Mingguan">Tenor Mingguan</option>
         </select>
       </div>
-      <div class="col-md-2"><input type="number" id="tenor" class="form-control form-control-custom" placeholder="Tenor"></div>
-      <div class="col-md-4"><input type="number" id="sisaUtang" class="form-control form-control-custom" placeholder="Sisa Utang (Kosongkan jika baru)"></div>
     </div>
-    <div class="row mt-2">
-      <div class="col-9"><button id="btnSimpan" onclick="simpan()" class="btn btn-info btn-block font-weight-bold py-2 shadow" style="background:#0284c7; border:none;">SIMPAN TRANSAKSI</button></div>
-      <div class="col-3"><button onclick="resetForm()" class="btn btn-secondary btn-block py-2">BATAL</button></div>
-    </div>
+    
+    <button id="btnSimpan" onclick="simpan()" class="btn btn-info btn-block font-weight-bold py-2 mt-2 shadow" style="background:#0284c7; border:none;">SIMPAN TRANSAKSI</button>
+    <button onclick="resetForm()" class="btn btn-secondary btn-block mt-1 py-2">Batal</button>
   </div>
- 
+
   <div class="card p-2 mb-2">
-    <div class="input-group">
-      <div class="input-group-prepend"><span class="input-group-text bg-transparent border-right-0" style="border-color:#475569;"><i class="fas fa-search text-muted"></i></span></div>
-      <input type="text" id="cariInput" class="form-control border-left-0 form-control-custom mb-0" placeholder="Cari nama pelanggan..." onkeyup="filterTabel()">
-    </div>
+    <input type="text" id="cariInput" class="form-control form-control-custom mb-0" placeholder="🔍 Cari nama pelanggan..." onkeyup="filterTabel()">
   </div>
- 
+  
   <div class="card p-2">
     <div class="table-responsive">
-      <table class="table table-sm table-dark table-hover mb-0" style="font-size: 14px; background: transparent;">
-        <thead class="text-muted" style="border-bottom: 2px solid #334155;">
-          <tr>
-            <th>Pelanggan</th>
-            <th>Tipe</th>
-            <th>Tenor</th>
-            <th>Sisa Tagihan</th>
-            <th class="text-right">Aksi</th>
-          </tr>
-        </thead>
+      <table class="table table-sm table-dark table-hover mb-0" style="background: transparent;">
         <tbody id="tabelBody">
-          <tr><td colspan="5" class="text-center py-4 text-muted">Sinkronisasi basis data...</td></tr>
+          <tr><td class="text-center py-4 text-muted">Sinkronisasi database...</td></tr>
         </tbody>
       </table>
     </div>
   </div>
-</div>
- 
+
 <script>
-  // TAUTAN DRIVER UTAMA GOOGLE MACRO SCRIPT (Ganti ID dengan milik Anda jika berbeda)
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrL3ITJ4yHhqblHlEjxQlRv0bQGTk_TYmmqlkBbS6Dk323XE78_jwkB920a4-aB4hb/exec";
+  // JALUR DRIVER MACRO UTAMA YANG BARU
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwVC24h3ax58HSK6DS4NSY5O7w-R_9mn8kUQ9ZokV0vvQZXNJF8p8Gh_JQal5JLNP0r/exec";
+
   let dataStorage = [];
- 
+
   function muatData() {
-    document.getElementById('loadingOverlay').style.display = 'flex';
-    fetch(SCRIPT_URL + "?aksi=ambilDataDashboard")
+    document.getElementById('overlay').style.display = 'flex';
+    fetch(SCRIPT_URL + "?aksi=ambilData")
     .then(res => res.json())
     .then(data => {
-      if (!data || data.error) {
-        alert("Gagal sinkronisasi data!");
-        document.getElementById('tabelBody').innerHTML = "<tr><td colspan='5' class='text-center text-danger font-weight-bold'>Gagal memuat basis data!</td></tr>";
-        return;
-      }
-      
       dataStorage = data.pelanggan || [];
-      document.getElementById('statPiutang').innerText = "Rp " + data.stats.totalPiutang.toLocaleString('id-ID');
-      document.getElementById('statAktif').innerText = data.stats.aktif;
       
-      if (dataStorage.length === 0) {
-        document.getElementById('tabelBody').innerHTML = "<tr><td colspan='5' class='text-center py-4 text-muted'>Belum ada data pelanggan.</td></tr>";
-        return;
-      }
+      let totalPiutang = data.stats && data.stats.totalPiutang ? data.stats.totalPiutang : 0;
+      let aktif = data.stats && data.stats.aktif ? data.stats.aktif : 0;
+      
+      document.getElementById('statPiutang').innerText = "Rp " + totalPiutang.toLocaleString('id-ID');
+      document.getElementById('statAktif').innerText = aktif;
       
       let html = "";
       dataStorage.forEach(p => {
-        let badge = p.tipe === 'Mingguan' ? 'badge-mingguan' : 'badge-info';
-        let rowClass = p.status === 'LUNAS' ? 'table-success text-muted' : '';
-        
-        html += '<tr class="' + rowClass + '" style="border-bottom: 1px solid #334155 !important;">' +
-          '<td class="py-3"><b style="font-size: 16px; color: #38bdf8;">' + p.nama.toUpperCase() + '</b><br><span class="small text-muted">' + p.alamat + ' | ' + p.barang + '</span></td>' +
-          '<td class="py-3"><span class="badge ' + badge + ' p-1">' + p.tipe + '</span></td>' +
-          '<td class="py-3"><b>' + p.cicilanKe + '</b>/' + p.tenor + '</td>' +
-          '<td class="py-3 text-warning font-weight-bold">Rp ' + p.sisa.toLocaleString('id-ID') + '</td>' +
-          '<td class="text-right py-3">' +
-            '<div class="btn-group">' +
-              '<button onclick="bayar(' + p.rowNum + ')" class="btn btn-success btn-aksi">Bayar</button>' +
-              '<button onclick="cetakStrukLokal(' + p.rowNum + ')" class="btn btn-info btn-aksi" style="background:#0284c7; border:none;">Cetak</button>' +
-              '<button onclick="pindahKeEdit(' + p.rowNum + ')" class="btn btn-warning btn-sm text-dark px-2 font-weight-bold">✏️</button>' +
-              '<button onclick="hapus(' + p.rowNum + ')" class="btn btn-danger btn-sm px-2">🗑️</button>' +
-            '</div>' +
-          '</td>' +
-        '</tr>';
+        let namaPel = p.nama || "-";
+        let barangPel = p.barang || "-";
+        let sisaPel = p.sisa || 0;
+        let statusPel = p.status || "AKTIF";
+        let tenorPel = p.tenor || "0";
+        let tipePel = p.tipe || "Bulanan";
+        let row = p.rowNum;
+
+        html += `<tr style="border-bottom: 1px solid #334155 !important;"><td class="py-3 px-2">
+          <span class="font-weight-bold h6 d-inline-block mb-1" style="color: #38bdf8;">${namaPel.toUpperCase()}</span> 
+          <span class="badge ${statusPel==='LUNAS'?'badge-success':'badge-danger'} p-1">${statusPel}</span><br>
+          <div class="text-muted mb-1" style="font-size:13px;">${barangPel} | Sisa: <b class="text-warning">Rp ${Number(sisaPel).toLocaleString('id-ID')}</b></div>
+          <div class="text-muted mb-2" style="font-size:12px;">Tenor: ${tenorPel} (${tipePel})</div>
+          <div class="d-flex flex-wrap">
+            <button onclick="bayar(${row})" class="btn btn-success btn-sm btn-sm-custom">Bayar</button>
+            <button onclick="cetakLokal(${row})" class="btn btn-info btn-sm btn-sm-custom" style="background:#0284c7; border:none;">Cetak</button>
+            <button onclick="unduhPdfLokal(${row})" class="btn btn-secondary btn-sm btn-sm-custom">PDF</button>
+            <button onclick="pindahKeEdit(${row})" class="btn btn-warning text-dark btn-sm btn-sm-custom">✏️</button>
+            <button onclick="hapus(${row})" class="btn btn-danger btn-sm btn-sm-custom">🗑️</button>
+          </div>
+        </td></tr>`;
       });
-      document.getElementById('tabelBody').innerHTML = html;
-      document.getElementById('loadingOverlay').style.display = 'none';
-    }).catch(() => { document.getElementById('loadingOverlay').style.display = 'none'; });
+      document.getElementById('tabelBody').innerHTML = html || "<tr><td class='text-center py-3 text-muted'>Belum ada data / Sheets Kosong</td></tr>";
+      document.getElementById('overlay').style.display = 'none';
+    }).catch((err) => { 
+      console.error(err);
+      document.getElementById('tabelBody').innerHTML = "<tr><td class='text-center py-3 text-danger font-weight-bold'>Terjadi kesalahan koneksi database</td></tr>";
+      document.getElementById('overlay').style.display = 'none'; 
+    });
   }
- 
-  function cetakStrukLokal(rowNum) {
-    let p = dataStorage.find(item => item.rowNum === rowNum);
-    if (!p) return alert("Data tidak sinkron!");
- 
-    let opsi = { year: '2-digit', month: 'numeric', day: 'numeric' };
-    let tglSkg = new Date().toLocaleDateString('id-ID', opsi);
- 
-    document.getElementById('printTanggal').innerText = tglSkg;
-    document.getElementById('printPelanggan').innerText = p.nama.toUpperCase();
-    document.getElementById('printBarang').innerText = p.barang.toUpperCase();
-    document.getElementById('printDiterima').innerText = "CEK SISA"; 
-    document.getElementById('printSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
- 
-    setTimeout(() => { window.print(); }, 200);
-  }
- 
-  function bayar(rowNum) {
-    let nominalInput = prompt("Masukkan nominal pembayaran rupiah (Rp):");
-    if(nominalInput) {
-      let cekAngka = Number(nominalInput);
-      if(isNaN(cekAngka) || cekAngka <= 0) return alert("Masukkan nominal angka pembayaran yang valid!");
-      
-      document.getElementById('loadingOverlay').style.display = 'flex';
-      
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ aksi: "bayarManual", rowNum: rowNum, nominal: nominalInput })
-      })
-      .then(res => res.json())
-      .then(res => {
-        muatData();
-        let formattedNominal = Number(res.nominal).toLocaleString('id-ID');
-        let formattedSisa = Number(res.sisa).toLocaleString('id-ID');
-        
-        document.getElementById('printTanggal').innerText = res.tgl;
-        document.getElementById('printPelanggan').innerText = res.nama.toUpperCase();
-        document.getElementById('printBarang').innerText = res.barang.toUpperCase();
-        document.getElementById('printDiterima').innerText = "Rp " + formattedNominal;
-        document.getElementById('printSisa').innerText = "Rp " + formattedSisa;
-        
-        document.getElementById('loadingOverlay').style.display = 'none';
-        setTimeout(() => { window.print(); }, 300);
-      });
-    }
-  }
- 
+
   function simpan() {
     let hargaInput = document.getElementById('harga').value;
     let sisaInput = document.getElementById('sisaUtang').value;
@@ -339,74 +302,122 @@
       totalHarga: hargaInput,
       tipeTenor: document.getElementById('tipeTenor').value,
       tenor: document.getElementById('tenor').value,
-      sisaUtang: sisaInput ? sisaInput : hargaInput 
+      sisaUtang: sisaInput ? sisaInput : hargaInput
     };
-    if(!data.nama || !data.totalHarga) return alert("Nama dan Harga wajib terisi!");
-    document.getElementById('btnSimpan').disabled = true;
-    document.getElementById('loadingOverlay').style.display = 'flex';
-    
-    fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({ aksi: "simpanData", data: data })
-    })
-    .then(res => res.json())
-    .then(res => { 
-      alert(res); 
-      resetForm(); 
-      muatData(); 
+    if(!data.nama || !data.totalHarga) return alert("Nama dan Harga wajib diisi!");
+    document.getElementById('overlay').style.display = 'flex';
+    fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "simpan", data: data }) })
+    .then(res => res.json()).then(res => { alert(res); resetForm(); muatData(); });
+  }
+
+  function bayar(rowNum) {
+    let nominal = prompt("Masukkan jumlah bayar (Rp):");
+    if(!nominal) return;
+    let cekAngka = Number(nominal);
+    if(isNaN(cekAngka) || cekAngka <= 0) return alert("Nominal angka bayar tidak valid!");
+
+    document.getElementById('overlay').style.display = 'flex';
+    fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "bayar", rowNum: rowNum, nominal: nominal }) })
+    .then(res => res.json()).then(res => {
+      document.getElementById('pTgl').innerText = res.tgl;
+      document.getElementById('pNama').innerText = res.nama.toUpperCase();
+      document.getElementById('pBrg').innerText = res.barang.toUpperCase();
+      document.getElementById('pBayar').innerText = "Rp " + Number(res.nominal).toLocaleString('id-ID');
+      document.getElementById('pSisa').innerText = "Rp " + Number(res.sisa).toLocaleString('id-ID');
+      muatData();
+      setTimeout(() => { window.print(); }, 400);
     });
   }
- 
+
+  function findPelanggan(rowNum) {
+    return dataStorage.find(item => item.rowNum === rowNum);
+  }
+
+  function cetakLokal(rowNum) {
+    let p = findPelanggan(rowNum);
+    if (!p) return;
+
+    let opsi = { year: '2-digit', month: 'numeric', day: 'numeric' };
+    document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID', opsi);
+    document.getElementById('pNama').innerText = p.nama.toUpperCase();
+    document.getElementById('pBrg').innerText = p.barang.toUpperCase();
+    document.getElementById('pBayar').innerText = "CEK SISA";
+    document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
+    
+    setTimeout(() => { window.print(); }, 200);
+  }
+
+  function unduhPdfLokal(rowNum) {
+    let p = findPelanggan(rowNum);
+    if (!p) return;
+    
+    let opsiTgl = { year: '2-digit', month: 'numeric', day: 'numeric' };
+    document.getElementById('pTgl').innerText = new Date().toLocaleDateString('id-ID', opsiTgl);
+    document.getElementById('pNama').innerText = p.nama.toUpperCase();
+    document.getElementById('pBrg').innerText = p.barang.toUpperCase();
+    document.getElementById('pBayar').innerText = "CEK BERKALA";
+    document.getElementById('pSisa').innerText = "Rp " + Number(p.sisa).toLocaleString('id-ID');
+    
+    let element = document.getElementById('notaPdfArea');
+    
+    // Set style kontainer menjadi bersih putih khusus saat render PDF WA
+    element.className = "nota-pdf-wa";
+    
+    let opsi = {
+      margin:       2,
+      filename:     'Slip_' + p.nama.replace(/\s+/g, '_') + '.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, background: '#fff' },
+      jsPDF:        { unit: 'mm', format: [58, 90], orientation: 'portrait' }
+    };
+    
+    html2pdf().set(opsi).from(element).save().then(() => {
+      // Kembalikan ke style print utama setelah render selesai
+      element.className = "nota-container";
+    });
+  }
+
   function pindahKeEdit(rowNum) {
-    let p = dataStorage.find(item => item.rowNum === rowNum);
-    if(!p) return;
-    document.getElementById('editRowNum').value = rowNum;
+    let p = findPelanggan(rowNum);
+    if (!p) return;
+    
+    document.getElementById('editRowNum').value = p.rowNum;
     document.getElementById('nama').value = p.nama;
     document.getElementById('alamat').value = p.alamat;
     document.getElementById('barang').value = p.barang;
     document.getElementById('harga').value = p.total;
-    document.getElementById('tipeTenor').value = p.tipe;
     document.getElementById('tenor').value = p.tenor;
+    document.getElementById('tipeTenor').value = p.tipe;
     document.getElementById('sisaUtang').value = p.sisa;
-    document.getElementById('formTitle').innerText = "Ubah Data: " + p.nama.toUpperCase();
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit mr-2'></i>Ubah Data: " + p.nama.toUpperCase();
     document.getElementById('btnSimpan').innerText = "PERBARUI DATA";
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
- 
+
   function resetForm() {
     document.getElementById('editRowNum').value = "";
     document.querySelectorAll('input').forEach(i => i.value = "");
-    document.getElementById('formTitle').innerText = "Registrasi Pelanggan Baru";
+    document.getElementById('formTitle').innerHTML = "<i class='fas fa-user-plus mr-2'></i>Registrasi Pelanggan Baru";
     document.getElementById('btnSimpan').innerText = "SIMPAN TRANSAKSI";
-    document.getElementById('btnSimpan').disabled = false;
   }
- 
+
   function filterTabel() {
     let input = document.getElementById("cariInput").value.toUpperCase();
     let tr = document.getElementById("tabelBody").getElementsByTagName("tr");
     for (let i = 0; i < tr.length; i++) {
-      let td = tr[i].getElementsByTagName("td")[0];
-      if(td) {
-        tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none";
-      }
+      let td = tr[i].getElementsByTagName("span")[0];
+      if(td) { tr[i].style.display = (td.innerText.toUpperCase().indexOf(input) > -1) ? "" : "none"; }
     }
   }
- 
+
   function hapus(rowNum) {
-    if(confirm("Hapus data ini secara permanen dari sistem?")) {
-      document.getElementById('loadingOverlay').style.display = 'flex';
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ aksi: "hapusData", rowNum: rowNum })
-      })
-      .then(res => res.json())
-      .then(res => { 
-        muatData(); 
-        alert(res); 
-      });
+    if(confirm("Hapus data pelanggan ini secara permanen?")) {
+      document.getElementById('overlay').style.display = 'flex';
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ aksi: "hapus", rowNum: rowNum }) })
+      .then(res => res.json()).then(() => muatData());
     }
   }
- 
+
   window.onload = muatData;
 </script>
 </body>
