@@ -8,28 +8,42 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <style>
-    body { background-color: #f8f9fa; font-family: system-ui, -apple-system, sans-serif; color: #333; }
-    .navbar-custom { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 15px 0; }
-    .card-stats { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: transform 0.2s; }
-    .card-stats:hover { transform: translateY(-3px); }
-    .table-container { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 25px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.03); }
+    body { background-color: #f1f3f6; font-family: system-ui, -apple-system, sans-serif; color: #2d3748; }
+    .navbar-custom { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 18px 0; }
     
-    /* BADGE STATUS YANG JELAS */
-    .badge-status { padding: 8px 14px; border-radius: 30px; font-weight: 600; font-size: 0.85rem; display: inline-block; }
-    .badge-aktif { background-color: #e3f2fd; color: #0d6efd; border: 1px solid #b3e5fc; }
-    .badge-lunas { background-color: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; }
+    /* DASHBOARD STATS */
+    .card-stats { border: none; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); background: #fff; }
     
-    /* INPUT CARI & TOMBOL UKURAN JUMBO */
-    .input-jumbo { padding: 12px 18px; border-radius: 12px !important; font-size: 1.05rem; }
-    .btn-jumbo { padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 1.05rem; box-shadow: 0 4px 10px rgba(13, 110, 253, 0.15); }
+    /* KOTAK PENCARIAN & CIRI KHAS BUTTON JUMBO */
+    .search-box-container { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+    .input-jumbo { padding: 14px 18px; border-radius: 12px !important; font-size: 1.1rem; border: 2px solid #e2e8f0; }
+    .input-jumbo:focus { border-color: #2a5298; box-shadow: none; }
+    .btn-tambah-jumbo { padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.1rem; }
+
+    /* KARTU PELANGGAN RESPONSIF (SOLUSI ANTI-SCROLL HP) */
+    .pelanggan-card { background: white; border-radius: 18px; padding: 20px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); border: 1px solid #edf2f7; margin-bottom: 20px; transition: all 0.2s; }
+    .pelanggan-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+    .info-label { font-size: 0.8rem; color: #a0aec0; text-uppercase: uppercase; font-weight: 700; margin-bottom: 2px; }
+    .info-value { font-size: 1.05rem; font-weight: 600; color: #2d3748; margin-bottom: 12px; }
     
-    /* TOMBOL AKSI DI TABEL (BESAR DAN LEBIH EMBEDDED) */
-    .btn-aksi { padding: 8px 14px; font-size: 0.9rem; font-weight: 600; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; margin: 3px; border: none; transition: all 0.2s; }
-    .btn-aksi:hover { filter: brightness(0.9); transform: scale(1.03); }
-    
-    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
-    
-    /* DESIGN PRINT THERMAL AUTO PAS */
+    /* BADGE STATUS */
+    .status-badge { padding: 6px 16px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; display: inline-block; }
+    .status-aktif { background-color: #e3f2fd; color: #0d6efd; border: 1px solid #bbdefb; }
+    .status-lunas { background-color: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; }
+
+    /* GRUP TOMBOL BESAR RAMAH JEMPOL KASIR */
+    .grid-tombol { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; border-top: 1px solid #f0f4f8; pt: 15px; padding-top: 15px; }
+    .btn-menu { padding: 12px; font-weight: 700; font-size: 0.95rem; border-radius: 12px; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.15s; width: 100%; }
+    .btn-menu:active { transform: scale(0.96); }
+    .btn-pay { background-color: #2e7d32; color: white; }
+    .btn-prn { background-color: #4a5568; color: white; }
+    .btn-edt { background-color: #ff9800; color: white; }
+    .btn-del { background-color: #e53e3e; color: white; }
+    .btn-menu:disabled { background-color: #e2e8f0; color: #a0aec0; cursor: not-allowed; transform: none; }
+
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.93); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
+
+    /* FORMAT STRUK PRINTER THERMAL AUTO PAS */
     #areaStruk { display: none; }
     @media print {
       body * { display: none !important; }
@@ -53,7 +67,7 @@
   <div id="loading" class="loading-overlay">
     <div class="text-center">
       <div class="spinner-border text-primary" role="status" style="width: 3.5rem; height: 3.5rem;"></div>
-      <p class="mt-3 fw-bold fs-5 text-secondary">Memperbarui Data...</p>
+      <p class="mt-3 fw-bold fs-5 text-secondary">Sedang Memproses...</p>
     </div>
   </div>
 
@@ -67,61 +81,39 @@
 
   <div class="container mb-5">
     <div class="row mb-4">
-      <div class="col-md-6 mb-3">
-        <div class="card card-stats bg-white p-4 d-flex flex-row align-items-center justify-content-between">
-          <div>
-            <h6 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.8rem; letter-spacing: 0.5px;">Total Piutang Aktif</h6>
-            <h2 class="fw-bold text-primary mb-0" id="statTotalPiutang" style="font-size: 2rem;">Rp 0</h2>
-          </div>
-          <div class="bg-primary bg-opacity-10 p-3 rounded-4 text-primary"><i class="fa-solid fa-money-bill-wave fa-3xl"></i></div>
+      <div class="col-6 col-md-6 mb-2">
+        <div class="card card-stats p-3 d-flex flex-column justify-content-between h-100">
+          <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">Total Piutang</span>
+          <h3 class="fw-bold text-primary mb-0 mt-1" id="statTotalPiutang" style="font-size: 1.4rem;">Rp 0</h3>
         </div>
       </div>
-      <div class="col-md-6 mb-3">
-        <div class="card card-stats bg-white p-4 d-flex flex-row align-items-center justify-content-between">
-          <div>
-            <h6 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.8rem; letter-spacing: 0.5px;">Pelanggan Aktif</h6>
-            <h2 class="fw-bold text-success mb-0" id="statPelangganAktif" style="font-size: 2rem;">0 Orang</h2>
-          </div>
-          <div class="bg-success bg-opacity-10 p-3 rounded-4 text-success"><i class="fa-solid fa-users fa-3xl"></i></div>
+      <div class="col-6 col-md-6 mb-2">
+        <div class="card card-stats p-3 d-flex flex-column justify-content-between h-100">
+          <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">Pelanggan Aktif</span>
+          <h3 class="fw-bold text-success mb-0 mt-1" id="statPelangganAktif" style="font-size: 1.4rem;">0 Orang</h3>
         </div>
       </div>
     </div>
 
-    <div class="row g-3 justify-content-between align-items-center mb-4 bg-white p-3 rounded-4 shadow-sm border mx-0">
-      <div class="col-md-6 col-12">
-        <div class="input-group">
-          <span class="input-group-text bg-light border-end-0 px-3"><i class="fa-solid fa-magnifying-glass text-muted fs-5"></i></span>
-          <input type="text" id="inputCari" class="form-control bg-light border-start-0 input-jumbo" placeholder="Ketik nama atau alamat pelanggan untuk mencari..." oninput="filterTabelPelanggan()">
+    <div class="search-box-container mb-4">
+      <div class="row g-3">
+        <div class="col-12 col-md-8">
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0 px-3"><i class="fa-solid fa-magnifying-glass text-muted fs-5"></i></span>
+            <input type="text" id="inputCari" class="form-control bg-light border-start-0 input-jumbo" placeholder="Ketik nama / alamat untuk mencari..." oninput="filterDataKartu()">
+          </div>
         </div>
-      </div>
-      <div class="col-md-4 col-12 text-end">
-        <button class="btn btn-primary w-100 btn-jumbo" onclick="bukaModalForm()">
-          <i class="fa-solid fa-user-plus me-2"></i> Tambah Pelanggan Baru
-        </button>
+        <div class="col-12 col-md-4">
+          <button class="btn btn-primary btn-tambah-jumbo w-100 shadow-sm" onclick="bukaModalForm()">
+            <i class="fa-solid fa-user-plus me-1"></i> Tambah Pelanggan Baru
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="table-container">
-      <h5 class="fw-bold text-secondary mb-3"><i class="fa-solid fa-users-viewfinder me-2"></i> Daftar Manajemen Cicilan</h5>
-      <div class="table-responsive">
-        <table class="table table-hover align-middle table-borderless border-top border-light">
-          <thead class="table-light text-uppercase text-muted" style="font-size: 0.85rem; letter-spacing: 0.5px;">
-            <tr>
-              <th style="padding: 15px;">Nama Pelanggan</th>
-              <th>Alamat</th>
-              <th>Nama Barang</th>
-              <th>Total Harga</th>
-              <th>Tenor</th>
-              <th class="text-center">Cicilan Ke</th>
-              <th>Sisa Utang</th>
-              <th>Status</th>
-              <th class="text-center" style="width: 280px;">Aksi / Menu Utama</th>
-            </tr>
-          </thead>
-          <tbody id="tabelPelanggan" class="fw-semibold"></tbody>
-        </table>
+    <h5 class="fw-bold text-secondary mb-3"><i class="fa-solid fa-address-book me-2"></i> Manajemen Data Kredit</h5>
+    <div id="containerKartuPelanggan" class="row">
       </div>
-    </div>
   </div>
 
   <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
@@ -146,7 +138,7 @@
                 <label class="form-label fw-bold small text-muted">Metode Tenor</label>
                 <select id="formTipeTenor" class="form-select form-select-lg rounded-3"><option value="Bulanan">Bulanan</option><option value="Mingguan">Mingguan</option><option value="Harian">Harian</option></select>
               </div>
-              <div class="col-6 mb-3"><label class="form-label fw-bold small text-muted">Tenor (Jumlah Kali)</label><input type="number" id="formTenor" class="form-control form-control-lg rounded-3" required></div>
+              <div class="col-6 mb-3"><label class="form-label fw-bold small text-muted">Tenor (Kali)</label><input type="number" id="formTenor" class="form-control form-control-lg rounded-3" required></div>
             </div>
           </div>
           <div class="modal-footer border-top-0 pb-4 px-4"><button type="button" class="btn btn-light btn-lg rounded-3 px-4" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-primary btn-lg rounded-3 px-5">Simpan Data</button></div>
@@ -158,14 +150,14 @@
   <div class="modal fade" id="modalBayar" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered">
       <div class="modal-content rounded-4">
-        <div class="modal-header border-bottom-0 pt-4 px-4"><h4 class="modal-title fw-bold text-secondary">Bayar Cicilan</h4><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-header border-bottom-0 pt-4 px-4"><h4 class="modal-title fw-bold text-secondary">Bayar</h4><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
         <form id="formBayar" onsubmit="prosesBayarManual(event)">
           <div class="modal-body px-4">
             <input type="hidden" id="bayarRowNum">
-            <div class="mb-3"><label class="form-label small text-muted fw-bold d-block mb-0">Nama Pelanggan</label><input type="text" id="bayarNama" class="form-control-plaintext fw-bold text-primary fs-5 p-0" readonly></div>
-            <div class="mb-3"><label class="form-label fw-bold small text-muted">Nominal Pembayaran (Rp)</label><input type="number" id="bayarNominal" class="form-control form-control-lg rounded-3 text-success fw-bold" required placeholder="0"></div>
+            <div class="mb-2"><label class="form-label small text-muted fw-bold d-block mb-0">Pelanggan</label><input type="text" id="bayarNama" class="form-control-plaintext fw-bold text-primary fs-5 p-0" readonly></div>
+            <div class="mb-3"><label class="form-label fw-bold small text-muted">Jumlah Bayar Tunai (Rp)</label><input type="number" id="bayarNominal" class="form-control form-control-lg rounded-3 text-success fw-bold fs-4" required placeholder="0"></div>
           </div>
-          <div class="modal-footer border-top-0 pb-4 px-4"><button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-success px-4 rounded-3 fw-bold">Konfirmasi Bayar</button></div>
+          <div class="modal-footer border-top-0 pb-4 px-4"><button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-success px-4 rounded-3 fw-bold btn-lg w-100 py-2">Proses Bayar</button></div>
         </form>
       </div>
     </div>
@@ -201,37 +193,72 @@
           document.getElementById('statTotalPiutang').innerText = formatRupiah(res.stats.totalPiutang);
           document.getElementById('statPelangganAktif').innerText = res.stats.aktif + " Orang";
           
-          buatTabel(listPelanggan);
+          renderKartuPelanggan(listPelanggan);
         }).catch(err => { tunjukkanLoading(false); Swal.fire("Error", "Gagal menyambung ke database.", "error"); });
     }
 
-    function buatTabel(dataArray) {
-      const tbody = document.getElementById('tabelPelanggan');
-      tbody.innerHTML = dataArray.length === 0 ? '<tr><td colspan="9" class="text-center text-muted py-4 fs-5">Tidak ada data pelanggan ditemukan.</td></tr>' : '';
+    // MEROMBAK DISPLAY MENJADI KARTU GEDE SIAP PAKAI DI HP
+    function renderKartuPelanggan(dataArray) {
+      const container = document.getElementById('containerKartuPelanggan');
+      container.innerHTML = dataArray.length === 0 ? '<div class="col-12 text-center text-muted py-5 fs-5 card bg-white border rounded-4">Tidak ada data ditemukan.</div>' : '';
       
       dataArray.forEach(p => {
-        const tr = document.createElement('tr');
-        tr.style.borderBottom = "1px solid #f1f1f1";
-        tr.innerHTML = `
-          <td style="padding: 16px 10px;" class="text-dark fw-bold">${p.nama}</td>
-          <td><span class="text-muted small">${p.alamat}</span></td>
-          <td><span class="badge bg-light text-dark border p-2">${p.barang}</span></td>
-          <td class="text-secondary">${formatRupiah(p.total)}</td>
-          <td><small class="text-muted">${p.tenor}x (${p.tipe})</small></td>
-          <td class="text-center fs-5 text-primary fw-bold">${p.cicilanKe}</td>
-          <td class="fw-bold text-danger fs-5">${formatRupiah(p.sisa)}</td>
-          <td><span class="badge-status ${p.status === 'AKTIF' ? 'badge-aktif' : 'badge-lunas'}">${p.status}</span></td>
-          <td class="text-center">
-            <button class="btn-aksi btn-success text-white" ${p.status !== 'AKTIF'?'disabled':''} onclick="bukaModalBayar(${p.rowNum}, '${p.nama}')"><i class="fa-solid fa-hand-holding-dollar"></i> Bayar</button>
-            <button class="btn-aksi btn-secondary text-white" onclick="cetakUlangStruk(${p.rowNum})"><i class="fa-solid fa-print"></i> Print</button>
-            <button class="btn-aksi btn-warning text-dark" onclick="bukaModalForm(${p.rowNum})"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-            <button class="btn-aksi btn-danger text-white" onclick="prosesHapusData(${p.rowNum})"><i class="fa-solid fa-trash"></i> Hapus</button>
-          </td>`;
-        tbody.appendChild(tr);
+        const divCol = document.createElement('div');
+        divCol.className = "col-12 col-md-6 col-lg-4";
+        
+        divCol.innerHTML = `
+          <div class="pelanggan-card">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <div class="info-label">Nama Pelanggan</div>
+                <h4 class="fw-bold text-dark mb-0">${p.nama}</h4>
+              </div>
+              <span class="status-badge ${p.status === 'AKTIF' ? 'status-aktif' : 'status-lunas'}">${p.status}</span>
+            </div>
+            
+            <div class="text-muted small mb-3"><i class="fa-solid fa-location-dot me-1"></i> ${p.alamat}</div>
+            
+            <div class="row g-2 bg-light p-3 rounded-3 mb-3">
+              <div class="col-6">
+                <div class="info-label">Barang</div>
+                <div class="fw-bold text-truncate text-dark">${p.barang}</div>
+              </div>
+              <div class="col-6">
+                <div class="info-label">Total Harga</div>
+                <div class="fw-bold text-secondary small">${formatRupiah(p.total)}</div>
+              </div>
+              <div class="col-6 mt-2">
+                <div class="info-label">Cicilan / Tenor</div>
+                <div class="fw-bold text-primary">Ke-${p.cicilanKe} <span class="text-muted small fw-normal">dari ${p.tenor}x</span></div>
+              </div>
+              <div class="col-6 mt-2">
+                <div class="info-label">Sisa Utang</div>
+                <div class="fw-bold text-danger fs-5">${formatRupiah(p.sisa)}</div>
+              </div>
+            </div>
+            
+            <div class="grid-tombol">
+              <button class="btn-menu btn-pay" ${p.status !== 'AKTIF'?'disabled':''} onclick="bukaModalBayar(${p.rowNum}, '${p.nama}')">
+                <i class="fa-solid fa-money-bill-wave"></i> Bayar
+              </button>
+              <button class="btn-menu btn-prn" onclick="cetakUlangStruk(${p.rowNum})">
+                <i class="fa-solid fa-print"></i> Struk
+              </button>
+              <button class="btn-menu btn-edt" onclick="bukaModalForm(${p.rowNum})">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
+              <button class="btn-menu btn-del" onclick="prosesHapusData(${p.rowNum})">
+                <i class="fa-solid fa-trash"></i> Hapus
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(divCol);
       });
     }
 
-    function filterTabelPelanggan() {
+    // SEARCHING REAL-TIME LANGSUNG COCOK UNTUK KARTU
+    function filterDataKartu() {
       const input = document.getElementById('inputCari');
       if (!input) return;
       const kataKunci = input.value.toLowerCase().trim();
@@ -240,7 +267,7 @@
         (p.nama && p.nama.toLowerCase().includes(kataKunci)) || 
         (p.alamat && p.alamat.toLowerCase().includes(kataKunci))
       );
-      buatTabel(hasilFilter);
+      renderKartuPelanggan(hasilFilter);
     }
 
     function bukaModalForm(rowNum = null) {
@@ -334,7 +361,7 @@
     }
 
     function prosesHapusData(rowNum) {
-      Swal.fire({ title: "Hapus data ini?", text: "Data pelanggan akan dihapus permanen dari sistem!", icon: "warning", showCancelButton: true, confirmButtonColor: "#d33", confirmButtonText: "Ya, Hapus Terus!" }).then((result) => {
+      Swal.fire({ title: "Hapus data ini?", text: "Data pelanggan akan dihapus permanen dari sistem!", icon: "warning", showCancelButton: true, confirmButtonColor: "#d33", confirmButtonText: "Ya, Hapus!" }).then((result) => {
         if (result.isConfirmed) {
           tunjukkanLoading(true);
           irimKeApi({ action: "hapusData", rowNum: rowNum });
@@ -346,7 +373,7 @@
       fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(pesan => { tunjukkanLoading(false); Swal.fire("Berhasil", typeof pesan === 'string' ? pesan : "Selesai!", "success"); muatDataDashboard(); })
-        .catch(() => { tunjukkanLoading(false); Swal.fire("Error", "Gagal mengirim data ke server.", "error"); });
+        .catch(() => { tunjukkanLoading(false); Swal.fire("Error", "Gagal mengirim data.", "error"); });
     }
   </script>
 </body>
