@@ -461,17 +461,15 @@
     function cetakUlangStruk(rowNum) {
       let tglSkg = new Date().toLocaleDateString('id-ID', { year: '2-digit', month: 'numeric', day: 'numeric' });
       
-      // Jalur Utama: Cari lewat memori listPelanggan
       const p = listPelanggan.find(i => i.rowNum == rowNum);
       if (p) {
         pemicuKertasThermal(tglSkg, p.nama, p.barang, 0, p.sisa);
         return;
       }
       
-      // Jalur Cadangan Amfibi: Ekstrak teks html langsung dari kartu jika database tidak sinkron
       const kartu = document.getElementById(`card-row-${rowNum}`);
       if(kartu) {
-        const nama = kartu.querySelector('.target-nama')?.innerText || "Tanpa Nama";
+        const nama = kartu.querySelector('.target-nama')?.innerText || "NONAME";
         const barang = kartu.querySelector('.target-barang')?.innerText || "-";
         const sisa = kartu.querySelector('.target-sisa')?.getAttribute('data-raw') || 0;
         pemicuKertasThermal(tglSkg, nama, barang, 0, sisa);
@@ -481,7 +479,7 @@
     }
  
     function buatBarisStruk(label, value) {
-      const LEBAR_KERTAS = 26; 
+      const LEBAR_KERTAS = 24; 
       const labelStr = String(label);
       const valueStr = String(value);
       const sisaSpasi = LEBAR_KERTAS - (labelStr.length + valueStr.length);
@@ -490,31 +488,49 @@
     }
  
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
-      const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- RE-PRINT -";
+      const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "RE-PRINT";
       
+      // SINGKAT KATA-KATA AGAR PASTI 1 HALAMAN DAN HURUF TEBAL (BOLD)
       let streamTeks = "";
-      streamTeks += "   SLIP PEMBAYARAN SAH    \n";
-      streamTeks += "  KIKI KREDIT SOLUTION    \n";
-      streamTeks += "==========================\n"; 
-      streamTeks += buatBarisStruk("Tgl:", tgl);
-      streamTeks += buatBarisStruk("Nama:", nama);
-      streamTeks += buatBarisStruk("Brg:", barang);
-      streamTeks += "--------------------------\n";
-      streamTeks += buatBarisStruk("BAYAR:", _nominalDisplay);
-      streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
-      streamTeks += "--------------------------\n";
-      streamTeks += "     * TERIMA KASIH * \n";
-      streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n"; 
+      streamTeks += "   KIKI KREDIT SOLUSI   \n";
+      streamTeks += "========================\n"; 
+      streamTeks += buatBarisStruk("TGL :", tgl);
+      streamTeks += buatBarisStruk("NAMA:", nama.substring(0, 18));
+      streamTeks += buatBarisStruk("BRG :", barang.substring(0, 18));
+      streamTeks += "------------------------\n";
+      streamTeks += buatBarisStruk("BYR :", _nominalDisplay);
+      streamTeks += buatBarisStruk("SISA:", formatRupiah(sisa));
+      streamTeks += "------------------------\n";
+      streamTeks += "      TERIMA KASIH      \n";
       streamTeks = streamTeks.toUpperCase();
 
       const htmlKonten = `
         <html>
         <head>
-          <title>Cetak Struk</title>
+          <title>STRUK</title>
           <style>
-            @page { size: 58mm auto; margin: 0 !important; }
-            html, body { margin: 0 !important; padding: 0 !important; background: #ffffff !important; width: 58mm !important; }
-            pre { width: 58mm !important; box-sizing: border-box !important; padding: 4mm 2mm !important; font-family: "Courier New", Courier, monospace !important; font-size: 11pt !important; font-weight: 900 !important; white-space: pre-wrap !important; line-height: 1.2 !important; margin: 0 !important; }
+            @page { 
+              size: 58mm auto; 
+              margin: 0 !important; 
+            }
+            html, body { 
+              margin: 0 !important; 
+              padding: 0 !important; 
+              background: #ffffff !important; 
+              width: 58mm !important; 
+              overflow: hidden;
+            }
+            pre { 
+              width: 58mm !important; 
+              box-sizing: border-box !important; 
+              padding: 2mm 1mm !important; 
+              font-family: "Courier New", Courier, monospace !important; 
+              font-size: 12pt !important; 
+              font-weight: 900 !important; /* MEMBUAT HURUF SANGAT TEBAL */
+              white-space: pre-wrap !important; 
+              line-height: 1.1 !important; 
+              margin: 0 !important;
+            }
           </style>
         </head>
         <body>
@@ -522,14 +538,13 @@
           <script>
             window.onload = function() {
               window.print();
-              setTimeout(function() { window.close(); }, 500);
+              setTimeout(function() { window.close(); }, 300);
             }
           <\/script>
         </body>
         </html>
       `;
 
-      // SOLUSI TOTAL: Coba pakai iframe dulu, kalau diblokir browser, tembak lewat Jendela Tab Baru
       try {
         const iframe = document.createElement('iframe');
         iframe.style.position = 'fixed'; iframe.style.bottom = '0'; iframe.style.width = '0'; iframe.style.height = '0'; iframe.style.border = 'none';
@@ -540,14 +555,13 @@
           iframe.contentWindow.focus();
           iframe.contentWindow.print();
           document.body.removeChild(iframe); 
-        }, 300);
+        }, 200);
       } catch (e) {
-        // Jalur darurat jika sistem sandbox iframe ditolak browser
-        const win = window.open("", "_blank", "width=300,height=400");
+        const win = window.open("", "_blank", "width=300,height=350");
         if(win) {
           win.document.open(); win.document.write(htmlKonten); win.document.close();
         } else {
-          Swal.fire("Pop-up Diblokir", "Harap izinkan izin pop-up pada browser Anda untuk mencetak.", "warning");
+          Swal.fire("Pop-up Blokir", "Aktifkan pop-up browser untuk mencetak.", "warning");
         }
       }
     }
