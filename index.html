@@ -413,7 +413,7 @@
             const container = document.getElementById('actionOptionsContainer');
             container.innerHTML = `
                 <div class="opt-row opt-edit" onclick="tutupSheet('actionSheet'); isiDataKeFormulir(${p.rowNum});">✏️ Modifikasi Data Profil</div>
-                <div class="opt-row opt-print" onclick="tutupSheet('actionSheet'); printStrukKasir(${p.rowNum}, null, null);">🖨️ Cetak Ulang Struk Thermal</div>
+                <div class="opt-row opt-print" onclick="tutupSheet('actionSheet'); printStrukKasir(${p.rowNum}, null, null);">𖖛️ Cetak Ulang Struk Thermal</div>
                 <div class="opt-row opt-del" onclick="tutupSheet('actionSheet'); hapusBarisPelanggan(${p.rowNum});">🗑️ Hapus Rekor Permanen</div>
             `;
             bukaSheet('actionSheet');
@@ -477,7 +477,7 @@
             const hitungCicilan = nominalBayar !== null ? (p.cicilanKe + 1) : p.cicilanKe;
 
             document.getElementById('areaCetakStruk').innerHTML = `
-                <div class="p-center">KIKI KREDIT MITRA MANDIRI</div>
+                <div class="p-center">USAHA KIKI</div>
                 <div class="p-line">======================</div>
                 <div class="p-row"><span>TGL: ${tanggal}</span> <span>KE: ${hitungCicilan}X</span></div>
                 <div class="p-row"><span>NAMA: ${bersihkanSimbol(p.nama.substring(0,14))}</span></div>
