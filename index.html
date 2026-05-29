@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiki Kredit Solution - Smart Dashboard v4</title>
+    <title>Kiki Kredit Solution - Smart Dashboard v5 (Genius Edition)</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: #f1f5f9; color: #1e293b; padding: 20px; }
@@ -44,14 +44,15 @@
         .btn-print { background: #6366f1; } .btn-print:hover { background: #4f46e5; }
         .loading { text-align: center; padding: 30px; font-weight: 600; color: #64748b; font-size: 15px; }
         
+        /* HIGH-PERFORMANCE PRINTER ENGINE ENVIRONMENT (COURIER MONOSPACE) */
         @media print {
             body * { display: none !important; }
             #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; }
-            #areaCetakStruk { position: absolute; left: 0; top: 0; width: 52mm; padding: 0; margin: 0; background: white; color: black; font-family: 'Courier New', Courier, monospace; font-size: 9pt; }
-            .print-center { text-align: center; }
-            .print-line { border-top: 1px dashed black; margin: 5px 0; display: block !important; height: 1px; }
-            .print-double { border-top: 2px double black; margin: 5px 0; display: block !important; height: 3px; }
-            .print-row { display: flex !important; justify-content: space-between; }
+            #areaCetakStruk { position: absolute; left: 0; top: 0; width: 58mm; padding: 0; margin: 0; background: white; color: black; font-family: 'Courier New', Courier, monospace; font-size: 10pt; line-height: 1.2; }
+            .print-center { text-align: center; font-weight: bold; }
+            .print-line { border-top: 1px dashed #000; margin: 4px 0; display: block !important; height: 1px; }
+            .print-double { border-top: 3px double #000; margin: 4px 0; display: block !important; height: 3px; }
+            .print-row { display: flex !important; justify-content: space-between; font-weight: bold; }
             .print-row span { display: inline-block !important; }
         }
     </style>
@@ -143,6 +144,12 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbw2msfsM4iqNn9n-9cHCf-jy9Ja5FhwjF59ugSAumG3IYt6CbHp1EhlHBaFlWm-Akks/exec";
         let masterDataPelanggan = [];
 
+        // SANITIZER ALGORITHM: Menjamin output 100% huruf text kasir standar (Hapus segala bentuk Emoji)
+        function bersihkanTeks(str) {
+            if (!str) return '';
+            return str.toString().replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, "").trim();
+        }
+
         function hitungSimulasiOtomatis() {
             const totalHarga = parseInt(document.getElementById('totalHarga').value) || 0;
             const tenor = parseInt(document.getElementById('tenor').value) || 0;
@@ -182,7 +189,7 @@
                 
             } catch (err) {
                 console.error(err);
-                alert("Gagal terhubung ke Google Sheets API. Periksa Deployment Web App Anda.");
+                alert("Gagal terhubung ke Google Sheets API.");
             } finally {
                 document.getElementById('loadingText').style.display = "none";
                 document.getElementById('pelangganTable').style.display = "table";
@@ -242,9 +249,9 @@
             const rowNum = document.getElementById('rowNum').value;
             const payload = {
                 rowNum: rowNum ? parseInt(rowNum) : 0,
-                nama: document.getElementById('nama').value,
-                alamat: document.getElementById('alamat').value,
-                barang: document.getElementById('barang').value,
+                nama: bersihkanTeks(document.getElementById('nama').value),
+                alamat: bersihkanTeks(document.getElementById('alamat').value),
+                barang: bersihkanTeks(document.getElementById('barang').value),
                 totalHarga: parseInt(document.getElementById('totalHarga').value),
                 tipeTenor: document.getElementById('tipeTenor').value,
                 tenor: parseInt(document.getElementById('tenor').value),
@@ -309,6 +316,7 @@
             }
         }
 
+        // REKAYASA ENGINE CETAK: Format murni teks tebal berskala mikro (Pas di kertas thermal kasir)
         function cetakStrukLokal(rowNum, nominalBayarSekarang = null, sisaUtangTerbaru = null) {
             const p = masterDataPelanggan.find(item => item.rowNum === rowNum);
             if(!p) return alert("Data pelanggan tidak valid!");
@@ -327,26 +335,29 @@
                     <div class="print-double"></div>
                 </div>
                 <div class="print-row"><span><b>Tgl Nota</b></span> <span><b>: ${tanggalSkg}</b></span></div>
-                <div class="print-row"><span><b>Nama</b></span> <span><b>: ${p.nama}</b></span></div>
-                <div class="print-row"><span><b>Alamat</b></span> <span><b>: ${p.alamat}</b></span></div>
+                <div class="print-row"><span><b>Nama</b></span> <span><b>: ${bersihkanTeks(p.nama)}</b></span></div>
+                <div class="print-row"><span><b>Alamat</b></span> <span><b>: ${bersihkanTeks(p.alamat)}</b></span></div>
                 <div class="print-line"></div>
-                <div class="print-row"><span><b>Kredit Barang</b></span> <span><b>: ${p.barang}</b></span></div>
+                <div class="print-row"><span><b>Kredit</b></span> <span><b>: ${bersihkanTeks(p.barang)}</b></span></div>
                 <div class="print-row"><span><b>Total Pokok</b></span> <span><b>: Rp ${p.total.toLocaleString('id-ID')}</b></span></div>
-                <div class="print-row"><span><b>Tenor Sesi</b></span> <span><b>: ${p.tenor}x (${p.tipe})</b></span></div>
+                <div class="print-row"><span><b>Tenor</b></span> <span><b>: ${p.tenor}x (${p.tipe})</b></span></div>
                 <div class="print-row"><span><b>Cicilan Ke</b></span> <span><b>: ${cetakCicilan}</b></span></div>
                 <div class="print-line"></div>
-                <div class="print-row"><span><b>Jumlah Bayar</b></span> <span><b>: ${cetakBayar}</b></span></div>
-                <div class="print-row" style="font-weight:bold;"><span><b>SISA UTANG</b></span> <span><b>: Rp ${cetakSisa.toLocaleString('id-ID')}</b></span></div>
-                <div class="print-row"><span><b>Status Akun</b></span> <span><b>: ${cetakSisa <= 0 ? 'LUNAS' : 'AKTIF'}</b></span></div>
+                <div class="print-row"><span><b>Jml Bayar</b></span> <span><b>: ${cetakBayar}</b></span></div>
+                <div class="print-row"><span><b>SISA UTANG</b></span> <span><b>: Rp ${cetakSisa.toLocaleString('id-ID')}</b></span></div>
+                <div class="print-row"><span><b>Status</b></span> <span><b>: ${cetakSisa <= 0 ? 'LUNAS' : 'AKTIF'}</b></span></div>
                 <div class="print-line"></div>
-                <div class="print-center" style="margin-top:10px;">
+                <div class="print-center" style="margin-top:8px;">
                     <b>*** Terima Kasih ***</b><br>
                     <b>Simpan struk ini sebagai</b><br>
                     <b>bukti transaksi yang sah.</b>
                 </div>
             `;
 
-            window.print();
+            // Memberi jeda 300ms agar engine browser memetakan DOM teks murni sebelum dialog print muncul
+            setTimeout(() => {
+                window.print();
+            }, 300);
         }
 
         async function hapusData(rowNum) {
