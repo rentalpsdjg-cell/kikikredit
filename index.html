@@ -457,7 +457,7 @@
           if(res.error) { tunukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
           tunukkanLoading(false);
           
-          // ENGINE LANJUTAN: AUTO DRIVER PRINT RUNNING
+          // JALANKAN PRINT OTOMATIS BEGITU SUKSES POSTING
           pemicuKertasThermal(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
           muatDataDashboard();
         }).catch(() => { tunukkanLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
@@ -484,7 +484,7 @@
       return labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
     }
  
-    /* 🔥 100% DIRECT HARDWARE PRINT ENGINE VIA RAWBT INTENT SCHEME INTERACTION */
+    /* 🔥 PERBAIKAN DRIVER CETAK: 100% VALID PROTOCOL VIA RAWBT URL SCHEME */
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
       
@@ -500,11 +500,13 @@
       streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
       streamTeks += "--------------------------\n";
       streamTeks += "     * TERIMA KASIH * \n";
-      streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n\n"; // 4 enter feed space agar pas potong kertas
+      streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n\n"; // Jarak kosong potong kertas
  
-      // Skema protokol lempar data paksa menuju hardware printer thermal via aplikasi RawBT
-      const intentUrl = "intent:#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;S.text=" + encodeURIComponent(streamTeks) + ";end;";
-      window.location.href = intentUrl;
+      // Menggunakan skema URI "rawbt://" standar yang stabil dan didukung penuh Android
+      const rawbtUrl = "rawbt://base64," + btoa(unescape(encodeURIComponent(streamTeks)));
+      
+      // Buka tautan untuk langsung memicu print fisik tanpa dialog preview browser
+      window.location.href = rawbtUrl;
     }
  
     function prosesHapusData(rowNum) {
