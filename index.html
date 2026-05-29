@@ -44,29 +44,36 @@
         .btn-print { background: #6366f1; }
         .loading { text-align: center; padding: 20px; font-weight: 600; color: #64748b; }
         
-        /* PERBAIKAN TOTAL SISI PRINT - MENGHAPUS RUANG PUTIH KOSONG */
+        /* FIX TOTAL: MENGHAPUS SEMUA WHITE SPACE, MARGIN, DAN BACKGROUND */
         @page {
             size: auto;
-            margin: 0mm; /* Membuang margin kertas atas bawah kiri kanan browser */
+            margin: 0 !important;
         }
         @media print {
             html, body {
-                background: #fff;
-                margin: 0;
-                padding: 0;
-                height: auto; /* Memaksa printer memotong kertas saat teks habis */
+                background: transparent !important;
+                background-color: transparent !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: auto !important;
             }
-            body * { display: none !important; }
-            #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; }
+            body * { 
+                display: none !important; 
+            }
+            #areaCetakStruk, #areaCetakStruk * { 
+                display: block !important; 
+                visibility: visible !important; 
+                background: transparent !important;
+                box-shadow: none !important;
+            }
             #areaCetakStruk { 
                 position: absolute; 
                 left: 0; 
                 top: 0; 
-                width: 44mm; /* Disesuaikan agar pas di area cetak paling aman tanpa margin */
-                padding: 2mm; 
-                margin: 0; 
-                background: white; 
-                color: black; 
+                width: 44mm; 
+                padding: 0 !important; 
+                margin: 0 !important; 
+                color: #000 !important; 
                 font-family: 'Courier New', monospace; 
                 font-size: 8pt; 
                 line-height: 1.1; 
