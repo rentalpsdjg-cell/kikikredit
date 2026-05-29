@@ -1,420 +1,324 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution - Anti-Gagal Print Edition</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-  <style>
-    body { background-color: #f4f6f9; font-family: system-ui, -apple-system, sans-serif; }
-    .navbar-custom { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; }
-    .card-stats { border: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    .table-container { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    .badge-aktif { background-color: #e3f2fd; color: #0d6efd; }
-    .badge-lunas { background-color: #e8f5e9; color: #2e7d32; }
-    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
-    
-    /* PANEL POP-UP EMERGENCY PREVIEW STRUK */
-    .struk-preview-box {
-      background: #fff; border: 2px dashed #cbd5e1; font-family: 'Courier New', Courier, monospace;
-      padding: 15px; font-size: 11pt; font-weight: bold; line-height: 1.3; color: #000;
-      text-align: left; white-space: pre-wrap; max-width: 100%; margin: 0 auto;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiki Kredit Solution - Dashboard Management</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { margin-bottom: 20px; color: #2c3e50; text-align: center; }
+        
+        /* Stats Cards */
+        .stats-container { display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
+        .card { flex: 1; min-width: 250px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #3498db; }
+        .card.aktif { border-left-color: #2ecc71; }
+        .card h3 { font-size: 14px; color: #7f8c8d; text-transform: uppercase; margin-bottom: 5px; }
+        .card p { font-size: 24px; font-weight: bold; color: #2c3e50; }
 
-    /* DRIVER MATRIKS PRINT UTK DESKTOP FALLBACK */
-    #areaStrukDesktop { display: none; }
-    @media print {
-      body * { display: none !important; }
-      #areaStrukDesktop { 
-        display: block !important; position: absolute; left: 0; top: 0; width: 54mm !important; 
-        margin: 0 !important; padding: 0mm 2mm 5mm 2mm !important; background: #fff !important; color: #000 !important;
-        font-family: 'Courier New', Courier, monospace !important; font-size: 10pt !important; font-weight: bold !important;
-        white-space: pre-wrap !important; line-height: 1.4 !important;
-      }
-      @page { size: 58mm auto; margin: 0mm !important; }
-    }
-  </style>
+        /* Form & Actions */
+        .action-section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .action-section h2 { margin-bottom: 15px; font-size: 18px; color: #2c3e50; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        button { padding: 10px 15px; border: none; border-radius: 5px; background: #3498db; color: white; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: #2980b9; }
+        button.btn-clear { background: #95a5a6; }
+        button.btn-clear:hover { background: #7f8c8d; }
+
+        /* Table Style */
+        .table-container { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th { background: #2c3e50; color: white; padding: 12px 15px; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        tr:hover { background: #f9f9f9; }
+        
+        /* Badges */
+        .badge { padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; display: inline-block; }
+        .badge.aktif-bg { background: #e8f5e9; color: #2ecc71; }
+        .badge.lunas-bg { background: #ebeff5; color: #95a5a6; }
+
+        /* Action Buttons Table */
+        .btn-table { padding: 5px 10px; font-size: 12px; margin-right: 5px; }
+        .btn-pay { background: #2ecc71; } .btn-pay:hover { background: #27ae60; }
+        .btn-edit { background: #f39c12; } .btn-edit:hover { background: #d35400; }
+        .btn-delete { background: #e74c3c; } .btn-delete:hover { background: #c0392b; }
+
+        /* Loading Overlay */
+        .loading { text-align: center; padding: 20px; font-weight: bold; color: #7f8c8d; }
+    </style>
 </head>
 <body>
 
-  <div id="loading" class="loading-overlay">
-    <div class="text-center">
-      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
-      <p class="mt-2 fw-bold">Menghubungkan ke Server...</p>
-    </div>
-  </div>
+    <div class="container">
+        <h1>Kiki Kredit Solution - Panel Utama</h1>
 
-  <nav class="navbar navbar-custom shadow-sm mb-4">
-    <div class="container d-flex justify-content-between align-items-center">
-      <span class="navbar-brand mb-0 h1 text-white">
-        <i class="fa-solid fa-wallet me-2"></i> Kiki Kredit Solution
-      </span>
-      <button id="btnHardwareDirect" class="btn btn-warning btn-sm fw-bold rounded-pill px-3 shadow" onclick="hubungkanPrinterDirectBluetooth()">
-        <i class="fa-solid fa-link me-1"></i> Hubungkan Thermal Bluetooth
-      </button>
-    </div>
-  </nav>
-
-  <div class="container mb-5">
-    <div class="row mb-4">
-      <div class="col-md-6 mb-3">
-        <div class="card card-stats bg-white p-4 d-flex flex-row align-items-center justify-content-between">
-          <div>
-            <h6 class="text-muted text-uppercase mb-1" style="font-size: 0.8rem;">Total Piutang Aktif</h6>
-            <h3 class="fw-bold text-primary mb-0" id="statTotalPiutang">Rp 0</h3>
-          </div>
-          <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary"><i class="fa-solid fa-money-bill-wave fa-2xl"></i></div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <div class="card card-stats bg-white p-4 d-flex flex-row align-items-center justify-content-between">
-          <div>
-            <h6 class="text-muted text-uppercase mb-1" style="font-size: 0.8rem;">Pelanggan Aktif</h6>
-            <h3 class="fw-bold text-success mb-0" id="statPelangganAktif">0 Orang</h3>
-          </div>
-          <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success"><i class="fa-solid fa-users fa-2xl"></i></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4 class="fw-bold text-secondary mb-0"><i class="fa-solid fa-list me-2"></i> Manajer Kredit</h4>
-      <button class="btn btn-primary" onclick="bukaModalForm()"><i class="fa-solid fa-user-plus me-1"></i> Tambah Baru</button>
-    </div>
-
-    <div class="table-container">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead class="table-light">
-            <tr>
-              <th>Nama</th>
-              <th>Alamat</th>
-              <th>Barang</th>
-              <th>Total</th>
-              <th>Tenor</th>
-              <th>Cicilan</th>
-              <th>Sisa Utang</th>
-              <th>Status</th>
-              <th class="text-center">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="tabelPelanggan"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="modalFormTitle">Form Pelanggan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <form id="formPelanggan" onsubmit="prosesSimpanData(event)">
-          <div class="modal-body">
-            <input type="hidden" id="formRowNum">
-            <div class="mb-3"><label class="form-label fw-semibold">Nama</label><input type="text" id="formNama" class="form-control" required></div>
-            <div class="mb-3"><label class="form-label fw-semibold">Alamat</label><input type="text" id="formAlamat" class="form-control" required></div>
-            <div class="mb-3"><label class="form-label fw-semibold">Barang</label><input type="text" id="formBarang" class="form-control" required></div>
-            <div class="row">
-              <div class="col-6 mb-3"><label class="form-label fw-semibold">Total Harga</label><input type="number" id="formTotalHarga" class="form-control" required oninput="sinkronSisaUtang()"></div>
-              <div class="col-6 mb-3"><label class="form-label fw-semibold">Sisa Utang</label><input type="number" id="formSisaUtang" class="form-control" required></div>
+        <div class="stats-container">
+            <div class="card">
+                <h3>Total Piutang (Aktif)</h3>
+                <p id="totalPiutang">Rp 0</p>
             </div>
-            <div class="row">
-              <div class="col-6 mb-3">
-                <label class="form-label fw-semibold">Tipe</label>
-                <select id="formTipeTenor" class="form-select"><option value="Bulanan">Bulanan</option><option value="Mingguan">Mingguan</option><option value="Harian">Harian</option></select>
-              </div>
-              <div class="col-6 mb-3"><label class="form-label fw-semibold">Tenor (kali)</label><input type="number" id="formTenor" class="form-control" required></div>
+            <div class="card aktif">
+                <h3>Pelanggan Aktif</h3>
+                <p id="pelangganAktif">0 Orang</p>
             </div>
-          </div>
-          <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-primary">Simpan</button></div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalBayar" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header"><h5 class="modal-title fw-bold">Bayar</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-        <form id="formBayar" onsubmit="prosesBayarManual(event)">
-          <div class="modal-body">
-            <input type="hidden" id="bayarRowNum">
-            <div class="mb-2"><label class="form-label text-muted">Pelanggan</label><input type="text" id="bayarNama" class="form-control-plaintext fw-bold text-primary p-0" readonly></div>
-            <div class="mb-3"><label class="form-label fw-semibold">Nominal Pembayaran (Rp)</label><input type="number" id="bayarNominal" class="form-control form-control-lg" required></div>
-          </div>
-          <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-success">Bayar</button></div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalPreviewStruk" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 360px;">
-      <div class="modal-content">
-        <div class="modal-header bg-light py-2">
-          <h6 class="modal-title fw-bold text-dark mb-0"><i class="fa-solid fa-print text-success me-2"></i>Struk Transaksi Selesai</h6>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="muatDataDashboard()"></button>
         </div>
-        <div class="modal-body text-center bg-light px-3 py-3">
-          <div class="struk-preview-box mb-3" id="isiStrukLayar"></div>
-          <p class="small text-muted mb-0">Printer macet atau kertas habis? Silakan ambil gambar screenshot layar ini atau kirim ulang instruksi cetak.</p>
+
+        <div class="action-section">
+            <h2 id="formTitle">Pendaftaran / Kemas Kini Pelanggan</h2>
+            <form id="pelangganForm" onsubmit="prosesSimpanData(event)">
+                <input type="hidden" id="rowNum">
+                <input type="hidden" id="cicilanKe" value="0">
+                
+                <div class="form-grid">
+                    <input type="text" id="nama" placeholder="Nama Penuh Pelanggan" required>
+                    <input type="text" id="alamat" placeholder="Alamat" required>
+                    <input type="text" id="barang" placeholder="Nama Barang Kredit" required>
+                    <input type="number" id="totalHarga" placeholder="Total Harga (Rp)" required oninput="setSisaSamaTotal()">
+                    <select id="tipeTenor">
+                        <option value="Bulanan">Bulanan</option>
+                        <option value="Mingguan">Mingguan</option>
+                        <option value="Harian">Harian</option>
+                    </select>
+                    <input type="number" id="tenor" placeholder="Tenor (Sesi / Kali)" required>
+                    <input type="number" id="sisaUtang" placeholder="Sisa Utang (Rp)" required>
+                </div>
+                <button type="submit" id="btnSubmit">Daftar Pelanggan Baru</button>
+                <button type="button" class="btn-clear" onclick="resetForm()">Batal / Kosongkan</button>
+                <button type="button" style="background:#8e44ad;" onclick="ambilData()">Refresh Data</button>
+            </form>
         </div>
-        <div class="modal-footer d-grid gap-2 border-top-0 pt-0 pb-3">
-          <button type="button" class="btn btn-primary btn-sm fw-bold" onclick="pemicuUlangPrintSaja()">
-            <i class="fa-solid fa-rotate-right me-1"></i>Kirim Ulang Sinyal Cetak
-          </button>
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="muatDataDashboard()">
-            Selesai & Muat Ulang Tabel
-          </button>
+
+        <h2>Senarai Data Pelanggan</h2>
+        <div class="table-container" style="margin-top: 15px;">
+            <div id="loadingText" class="loading">Memuatkan data dari Google Sheets...</div>
+            <table id="pelangganTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>Barang</th>
+                        <th>Total Harga</th>
+                        <th>Tenor</th>
+                        <th>Cicilan Ke</th>
+                        <th>Sisa Utang</th>
+                        <th>Status</th>
+                        <th>Tindakan</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    </tbody>
+            </table>
         </div>
-      </div>
     </div>
-  </div>
 
-  <pre id="areaStrukDesktop"></pre>
+    <script>
+        // URL API Google Apps Script anda
+        const API_URL = "https://script.google.com/macros/s/AKfycbw2msfsM4iqNn9n-9cHCf-jy9Ja5FhwjF59ugSAumG3IYt6CbHp1EhlHBaFlWm-Akks/exec";
+        let cachePelanggan = [];
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzeWIBiIVGYMmLNi-OLD2TkhbX1ab1LDpY4uMTjEGEojHRjtiu1ElqO72bnZWYHoug/exec";
-
-    let listPelanggan = [];
-    let directBluetoothCharacteristic = null; 
-    let memoriBufferStrukTerakhir = ""; 
-
-    const bootstrapModalForm = new bootstrap.Modal(document.getElementById('modalForm'));
-    const bootstrapModalBayar = new bootstrap.Modal(document.getElementById('modalBayar'));
-    const bootstrapModalStruk = new bootstrap.Modal(document.getElementById('modalPreviewStruk'));
-
-    document.addEventListener("DOMContentLoaded", muatDataDashboard);
-
-    function tunjukkanLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
-    function formatRupiah(angka) { return "Rp " + Number(angka).toLocaleString('id-ID'); }
-    function sinkronSisaUtang() { if(!document.getElementById('formRowNum').value) document.getElementById('formSisaUtang').value = document.getElementById('formTotalHarga').value; }
-
-    function muatDataDashboard() {
-      tunjukkanLoading(true);
-      fetch(`${API_URL}?action=ambilData`)
-        .then(res => res.json())
-        .then(res => {
-          tunjukkanLoading(false);
-          if (res.error) return Swal.fire("Error", res.error, "error");
-          
-          listPelanggan = res.pelanggan;
-          document.getElementById('statTotalPiutang').innerText = formatRupiah(res.stats.totalPiutang);
-          document.getElementById('statPelangganAktif').innerText = res.stats.aktif + " Orang";
-          
-          const tbody = document.getElementById('tabelPelanggan');
-          tbody.innerHTML = listPelanggan.length === 0 ? '<tr><td colspan="9" class="text-center text-muted">Tidak ada data.</td></tr>' : '';
-          
-          listPelanggan.forEach(p => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td class="fw-bold">${p.nama}</td>
-              <td><small>${p.alamat}</small></td>
-              <td>${p.barang}</td>
-              <td>${formatRupiah(p.total)}</td>
-              <td><small>${p.tenor}x (${p.tipe})</small></td>
-              <td class="text-center">${p.cicilanKe}</td>
-              <td class="fw-bold text-danger">${formatRupiah(p.sisa)}</td>
-              <td><span class="badge ${p.status === 'AKTIF' ? 'badge-aktif' : 'badge-lunas'}">${p.status}</span></td>
-              <td class="text-center">
-                <button class="btn btn-sm btn-success me-1" ${p.status !== 'AKTIF'?'disabled':''} onclick="bukaModalBayar(${p.rowNum}, '${p.nama}')" title="Bayar Angsuran"><i class="fa-solid fa-hand-holding-dollar"></i></button>
-                <button class="btn btn-sm btn-dark me-1" onclick="cetakUlangStruk(${p.rowNum})" title="Cetak Struk"><i class="fa-solid fa-print"></i></button>
-                <button class="btn btn-sm btn-outline-primary me-1" onclick="bukaModalForm(${p.rowNum})" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button class="btn btn-sm btn-outline-danger" onclick="prosesHapusData(${p.rowNum})" title="Hapus"><i class="fa-solid fa-trash"></i></button>
-              </td>`;
-            tbody.appendChild(tr);
-          });
-        }).catch(err => { tunukkanLoading(false); Swal.fire("Error", "Gagal load data. Pastikan API Apps Script Aktif.", "error"); });
-    }
-
-    function bukaModalForm(rowNum = null) {
-      document.getElementById('formPelanggan').reset();
-      document.getElementById('formRowNum').value = rowNum || '';
-      document.getElementById('modalFormTitle').innerText = rowNum ? "Edit Pelanggan" : "Tambah Pelanggan";
-      if(rowNum) {
-        const p = listPelanggan.find(i => i.rowNum === rowNum);
-        if(p) {
-          document.getElementById('formNama').value = p.nama; document.getElementById('formAlamat').value = p.alamat;
-          document.getElementById('formBarang').value = p.barang; document.getElementById('formTotalHarga').value = p.total;
-          document.getElementById('formSisaUtang').value = p.sisa; document.getElementById('formTipeTenor').value = p.tipe;
-          document.getElementById('formTenor').value = p.tenor;
+        // Isikan automatik nilai sisa utang sama dengan total harga untuk pelanggan baru
+        function setSisaSamaTotal() {
+            const rowNum = document.getElementById('rowNum').value;
+            if (!rowNum) { // Hanya jika daftar pelanggan baharu
+                document.getElementById('sisaUtang').value = document.getElementById('totalHarga').value;
+            }
         }
-      }
-      bootstrapModalForm.show();
-    }
 
-    function prosesSimpanData(e) {
-      e.preventDefault();
-      const payload = {
-        action: "simpanData",
-        data: {
-          rowNum: document.getElementById('formRowNum').value, nama: document.getElementById('formNama').value,
-          alamat: document.getElementById('formAlamat').value, barang: document.getElementById('formBarang').value,
-          totalHarga: document.getElementById('formTotalHarga').value, sisaUtang: document.getElementById('formSisaUtang').value,
-          tipeTenor: document.getElementById('formTipeTenor').value, tenor: document.getElementById('formTenor').value
+        // 1. Fungsi Ambil Data (GET)
+        async function ambilData() {
+            document.getElementById('loadingText').style.display = "block";
+            document.getElementById('pelangganTable').style.display = "none";
+            
+            try {
+                const response = await fetch(`${API_URL}?action=ambilData`);
+                const result = await response.json();
+                
+                if (result.error) {
+                    alert("Ralat Sistem: " + result.error);
+                    return;
+                }
+
+                // Kemas kini kad statistik
+                document.getElementById('totalPiutang').innerText = "Rp " + result.stats.totalPiutang.toLocaleString('id-ID');
+                document.getElementById('pelangganAktif').innerText = result.stats.aktif + " Orang";
+                
+                cachePelanggan = result.pelanggan;
+                renderTable(result.pelanggan);
+                
+            } catch (err) {
+                console.error(err);
+                alert("Gagal menyambung ke server Google Apps Script.");
+            } finally {
+                document.getElementById('loadingText').style.display = "none";
+                document.getElementById('pelangganTable').style.display = "table";
+            }
         }
-      };
-      bootstrapModalForm.hide(); tunukkanLoading(true);
-      irimKeApi(payload);
-    }
 
-    function bukaModalBayar(rowNum, nama) {
-      document.getElementById('formBayar').reset();
-      document.getElementById('bayarRowNum').value = rowNum;
-      document.getElementById('bayarNama').value = nama;
-      bootstrapModalBayar.show();
-    }
+        // Fungsi papar data ke dalam jadual HTML
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = "";
+            
+            if(data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Tiada data pelanggan dijumpai.</td></tr>`;
+                return;
+            }
 
-    function prosesBayarManual(e) {
-      e.preventDefault();
-      const payload = {
-        action: "bayarManual",
-        rowNum: document.getElementById('bayarRowNum').value,
-        nominal: document.getElementById('bayarNominal').value
-      };
-      bootstrapModalBayar.hide(); tunukkanLoading(true);
-      
-      fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(res => res.json())
-        .then(res => {
-          if(res.error) { tunukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
-          tunukkanLoading(false);
-          
-          // Jalankan fallback cetak thermal anti-gagal secara real-time
-          buatLayoutTeksStranstaksi(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
-
-          // Backup unduhan file PDF bawaan system Anda
-          try {
-            const a = document.createElement("a");
-            a.href = "data:application/pdf;base64," + res.pdf;
-            a.download = "Slip_" + res.hasilBayar.nama.replace(/\s+/g, '_') + ".pdf";
-            a.click();
-          } catch(errPdf) { console.log("Unduhan PDF dilewati."); }
-
-        }).catch(() => { tunukkanLoading(false); Swal.fire("Error", "Gagal memproses transaksi.", "error"); });
-    }
-
-    function cetakUlangStruk(rowNum) {
-      const p = listPelanggan.find(i => i.rowNum === rowNum);
-      if (p) {
-        let opsi = { year: '2-digit', month: 'numeric', day: 'numeric' };
-        let tglSkg = new Date().toLocaleDateString('id-ID', opsi);
-        buatLayoutTeksStranstaksi(tglSkg, p.nama, p.barang, 0, p.sisa);
-      }
-    }
-
-    function buatBarisStruk(label, value) {
-      const LEBAR_KERTAS = 26; 
-      const labelStr = String(label);
-      const valueStr = String(value);
-      const sisaSpasi = LEBAR_KERTAS - (labelStr.length + valueStr.length);
-      if (sisaSpasi > 0) return labelStr + " ".repeat(sisaSpasi) + valueStr + "\n";
-      return labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
-    }
-
-    /* WEB BLUETOOTH API DRIVER */
-    async function hubungkanPrinterDirectBluetooth() {
-      try {
-        const device = await navigator.bluetooth.requestDevice({
-          filters: [
-            { services: ['000018f0-0000-1000-8000-00805f9b34fb'] }, 
-            { namePrefix: 'RPP' }, { namePrefix: 'MP' }, { namePrefix: 'PT' }, { namePrefix: 'MTP' }
-          ]
-        });
-        const server = await device.gatt.connect();
-        const service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
-        const characteristics = await service.getCharacteristics();
-        directBluetoothCharacteristic = characteristics[0];
-        
-        const btnHW = document.getElementById("btnHardwareDirect");
-        btnHW.className = "btn btn-success btn-sm fw-bold rounded-pill px-3 shadow";
-        btnHW.innerHTML = `<i class="fa-solid fa-circle-check me-1"></i> Printer Active`;
-        Swal.fire("Printer Konek", "Hardware terpasang langsung ke web.", "success");
-      } catch (err) {
-        Swal.fire("Sistem Router", "Bluetooth ditutup. Fallback print siap digunakan.", "info");
-      }
-    }
-
-    /* ENGINE UTAMA: PEMBUAT TEXT STRUK GULUNG REVENUE */
-    function buatLayoutTeksStranstaksi(tgl, nama, barang, nominal, sisa) {
-      const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
-      
-      let streamTeks = "";
-      streamTeks += "   SLIP PEMBAYARAN SAH    \n";
-      streamTeks += "  KIKI KREDIT SOLUTION    \n";
-      streamTeks += "==========================\n"; 
-      streamTeks += buatBarisStruk("Tgl:", tgl);
-      streamTeks += buatBarisStruk("Nama:", nama.substring(0, 20));
-      streamTeks += buatBarisStruk("Brg:", barang.substring(0, 20));
-      streamTeks += "--------------------------\n";
-      streamTeks += buatBarisStruk("BAYAR:", _nominalDisplay);
-      streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
-      streamTeks += "--------------------------\n";
-      streamTeks += "     * TERIMA KASIH * \n";
-      streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n\n";
-
-      memoriBufferStrukTerakhir = streamTeks;
-      document.getElementById('isiStrukLayar').textContent = streamTeks;
-      
-      bootstrapModalStruk.show();
-      eksekusiKirimKeMesinPrinter(streamTeks);
-    }
-
-    /* MULTI-ROUTER ENGINE AUTOMATIC PRINTER ROUTING */
-    async function eksekusiKirimKeMesinPrinter(teksStruk) {
-      if (directBluetoothCharacteristic) {
-        try {
-          let encoder = new TextEncoder();
-          let dataUint8 = encoder.encode(teksStruk);
-          await directBluetoothCharacteristic.writeValue(dataUint8);
-          return;
-        } catch (e) {
-          console.log("Direct hardware terputus, mengalihkan sistem...");
+            data.forEach(p => {
+                const tr = document.createElement('tr');
+                const statusClass = p.status === "AKTIF" ? "aktif-bg" : "lunas-bg";
+                
+                tr.innerHTML = `
+                    <td><strong>${p.nama}</strong></td>
+                    <td>${p.alamat}</td>
+                    <td>${p.barang}</td>
+                    <td>Rp ${p.total.toLocaleString('id-ID')}</td>
+                    <td>${p.tenor} (${p.tipe})</td>
+                    <td style="text-align:center;">${p.cicilanKe}</td>
+                    <td style="color:${p.sisa > 0 ? '#e74c3c' : '#2ecc71'}; font-weight:bold;">Rp ${p.sisa.toLocaleString('id-ID')}</td>
+                    <td><span class="badge ${statusClass}">${p.status}</span></td>
+                    <td>
+                        ${p.status === "AKTIF" ? `<button class="btn-table btn-pay" onclick="bayarManual(${p.rowNum})">Bayar</button>` : ''}
+                        <button class="btn-table btn-edit" onclick="pilihEdit(${p.rowNum})">Edit</button>
+                        <button class="btn-table btn-delete" onclick="hapusData(${p.rowNum})">Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
-      }
 
-      const isAndroid = /Android/i.test(navigator.userAgent);
-      if (isAndroid) {
-        const rawbtUrl = "rawbt://base64," + btoa(unescape(encodeURIComponent(teksStruk)));
-        window.location.href = rawbtUrl;
-      } else {
-        const areaStruk = document.getElementById('areaStrukDesktop');
-        areaStruk.textContent = teksStruk;
-        window.print();
-      }
-    }
+        // 2. Fungsi Simpan / Kemas Kini Data (POST)
+        async function prosesSimpanData(e) {
+            e.preventDefault();
+            
+            const rowNum = document.getElementById('rowNum').value;
+            const dataPayload = {
+                rowNum: rowNum ? parseInt(rowNum) : 0,
+                nama: document.getElementById('nama').value,
+                alamat: document.getElementById('alamat').value,
+                barang: document.getElementById('barang').value,
+                totalHarga: parseInt(document.getElementById('totalHarga').value),
+                tipeTenor: document.getElementById('tipeTenor').value,
+                tenor: parseInt(document.getElementById('tenor').value),
+                cicilanKe: parseInt(document.getElementById('cicilanKe').value || 0),
+                sisaUtang: parseInt(document.getElementById('sisaUtang').value)
+            };
 
-    function pemicuUlangPrintSaja() {
-      if(memoriBufferStrukTerakhir) {
-        eksekusiKirimKeMesinPrinter(memoriBufferStrukTerakhir);
-      } else {
-        Swal.fire("Kosong", "Tidak ada riwayat memori buffer.", "warning");
-      }
-    }
+            const submitBtn = document.getElementById('btnSubmit');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Memproses...";
 
-    function prosesHapusData(rowNum) {
-      Swal.fire({ title: "Hapus permanen?", text: "Data tidak bisa dikembalikan!", icon: "warning", showCancelButton: true, confirmButtonColor: "#d33", confirmButtonText: "Ya, Hapus!" }).then((result) => {
-        if (result.isConfirmed) {
-          tunjukkanLoading(true);
-          irimKeApi({ action: "hapusData", rowNum: rowNum });
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "simpanData", data: dataPayload })
+                });
+                const msg = await response.json();
+                alert(msg);
+                resetForm();
+                ambilData();
+            } catch (err) {
+                console.error(err);
+                alert("Gagal menyimpan data.");
+            } finally {
+                submitBtn.disabled = false;
+            }
         }
-      });
-    }
 
-    function irimKeApi(payload) {
-      fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(res => res.json())
-        .then(pesan => { tunukkanLoading(false); Swal.fire("Berhasil", typeof pesan === 'string' ? pesan : "Selesai!", "success"); muatDataDashboard(); })
-        .catch(() => { tunukkanLoading(false); Swal.fire("Error", "Gagal mengirim data ke server.", "error"); });
-    }
-  </script>
+        // 3. Fungsi Bayar Manual (POST) + Auto Download Slip PDF
+        async function bayarManual(rowNum) {
+            const nominal = prompt("Masukkan Nominal Pembayaran (Rp):");
+            if (nominal === null || nominal.trim() === "") return;
+            if (isNaN(nominal) || parseInt(nominal) <= 0) return alert("Nominal tidak sah!");
+
+            try {
+                document.getElementById('loadingText').style.display = "block";
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: "bayarManual",
+                        rowNum: rowNum,
+                        nominal: parseInt(nominal)
+                    })
+                });
+                const result = await response.json();
+
+                if (result.error) {
+                    alert("Ralat Bayar: " + result.error);
+                } else {
+                    alert(`Bayaran Berjaya!\nNama: ${result.hasilBayar.nama}\nSisa Utang Terkini: Rp ${result.hasilBayar.sisa.toLocaleString('id-ID')}`);
+                    
+                    // PROSES AUTO-DOWNLOAD SLIP PDF BERASASKAN BASE64
+                    const base64Pdf = result.pdf;
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = `data:application/pdf;base64,${base64Pdf}`;
+                    downloadLink.download = `Slip_${result.hasilBayar.nama.replace(/\s+/g, '_')}.pdf`;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                    
+                    ambilData(); // Segarkan semula jadual & statistik
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Ralat ketika memproses pembayaran.");
+            } finally {
+                document.getElementById('loadingText').style.display = "none";
+            }
+        }
+
+        // 4. Fungsi Hapus Data (POST)
+        async function hapusData(rowNum) {
+            if(!confirm("Adakah anda pasti mahu memadamkan data baris ini secara kekal?")) return;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "hapusData", rowNum: rowNum })
+                });
+                const msg = await response.json();
+                alert(msg);
+                ambilData();
+            } catch (err) {
+                console.error(err);
+                alert("Gagal memadam data.");
+            }
+        }
+
+        // Helper: Pilih data untuk dimasukkan ke borang (Edit Mode)
+        function pilihEdit(rowNum) {
+            const p = cachePelanggan.find(item => item.rowNum === rowNum);
+            if(!p) return;
+
+            document.getElementById('rowNum').value = p.rowNum;
+            document.getElementById('nama').value = p.nama;
+            document.getElementById('alamat').value = p.alamat;
+            document.getElementById('barang').value = p.barang;
+            document.getElementById('totalHarga').value = p.total;
+            document.getElementById('tipeTenor').value = p.tipe;
+            document.getElementById('tenor').value = p.tenor;
+            document.getElementById('cicilanKe').value = p.cicilanKe;
+            document.getElementById('sisaUtang').value = p.sisa;
+
+            document.getElementById('formTitle').innerText = "Kemas Kini Data: " + p.nama;
+            document.getElementById('btnSubmit').innerText = "Simpan Kemas Kini";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Helper: Reset Borang ke asal
+        function resetForm() {
+            document.getElementById('pelangganForm').reset();
+            document.getElementById('rowNum').value = "";
+            document.getElementById('cicilanKe').value = "0";
+            document.getElementById('formTitle').innerText = "Pendaftaran / Kemas Kini Pelanggan";
+            document.getElementById('btnSubmit').innerText = "Daftar Pelanggan Baru";
+        }
+
+        // Muat data automatik semasa halaman dibuka pertama kali
+        window.onload = ambilData;
+    </script>
 </body>
 </html>
