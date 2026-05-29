@@ -3,57 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiki Kredit Smart v5</title>
+    <title>Kiki Kredit Super Smart Engine v6</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: #f1f5f9; color: #1e293b; padding: 15px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; }
-        .header-app h1 { font-size: 20px; color: #0f172a; }
-        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border-top: 5px solid #2563eb; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-2px); }
-        .card.aktif { border-top-color: #10b981; }
-        .card h3 { font-size: 12px; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
-        .card p { font-size: 22px; font-weight: 700; color: #0f172a; }
-        .action-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border: 1px solid #e2e8f0; }
-        .action-section h2 { margin-bottom: 12px; font-size: 15px; color: #334155; display: flex; align-items: center; gap: 5px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 12px; }
-        input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; background-color: #f8fafc; transition: all 0.2s; }
-        input:focus, select:focus { background-color: #fff; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); outline: none; }
-        .smart-calc { font-size: 12px; color: #2563eb; font-weight: 600; grid-column: 1 / -1; background: #eff6ff; padding: 8px 12px; border-radius: 6px; border-left: 3px solid #2563eb; display: flex; justify-content: space-between; }
-        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
-        button { padding: 10px 16px; border: none; border-radius: 8px; color: white; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; }
-        button:active { transform: scale(0.97); }
-        .btn-primary { background: #2563eb; }
-        .btn-primary:hover { background: #1d4ed8; }
-        .btn-secondary { background: #64748b; }
+        :root {
+            --bg-main: #f8fafc;
+            --surface: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-lg: 12px;
+            --radius-md: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); padding: 20px; line-height: 1.5; }
+        .container { max-width: 1300px; margin: 0 auto; }
+        
+        /* Glassmorphism Header */
+        .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: var(--surface); padding: 15px 20px; border-radius: var(--radius-lg); box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+        .header-app h1 { font-size: 22px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .sync-badge { font-size: 11px; background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 20px; font-weight: 600; }
+
+        /* Modern Dashboard Analytics Widgets */
+        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .card { background: var(--surface); padding: 20px; border-radius: var(--radius-lg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border: 1px solid var(--border); position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary); }
+        .card.active-customer::before { background: var(--success); }
+        .card.ratio-card::before { background: var(--warning); }
+        .card h3 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .card p { font-size: 26px; font-weight: 800; color: var(--text-main); }
+        .card .sub-stats { font-size: 11px; color: var(--text-muted); margin-top: 4px; display: block; }
+
+        /* Form Smart Architecture */
+        .action-section { background: var(--surface); padding: 20px; border-radius: var(--radius-lg); margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border: 1px solid var(--border); }
+        .action-section h2 { margin-bottom: 15px; font-size: 16px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        .input-group { position: relative; }
+        .input-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
+        input, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 13px; font-weight: 500; background-color: #f8fafc; transition: all 0.2s ease; color: var(--text-main); }
+        input:focus, select:focus { background-color: var(--surface); border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37,99,235,0.12); outline: none; }
+        
+        /* Real-time Indicator Calc Bar */
+        .smart-calc { font-size: 13px; color: var(--primary); font-weight: 600; grid-column: 1 / -1; background: #f0f6ff; padding: 12px 16px; border-radius: var(--radius-md); border-left: 4px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .smart-calc .live-badge { font-size: 10px; background: var(--primary); color: white; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        button { padding: 11px 18px; border: none; border-radius: var(--radius-md); color: white; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease; }
+        button:shadow { box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        button:active { transform: scale(0.98); }
+        .btn-primary { background: var(--primary); }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: var(--text-muted); }
         .btn-secondary:hover { background: #475569; }
         .btn-purple { background: #7c3aed; }
         .btn-purple:hover { background: #6d28d9; }
-        .filter-section { display: flex; gap: 10px; margin-bottom: 15px; background: white; padding: 12px; border-radius: 10px; box-shadow: 0 2px 4px rgb(0 0 0 / 0.02); flex-wrap: wrap; align-items: center; }
-        .search-box { flex: 1; min-width: 180px; position: relative; }
-        .filter-box { width: 130px; }
-        .table-container { background: white; border-radius: 10px; overflow-x: auto; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border: 1px solid #e2e8f0; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 700px; }
-        th { background: #0f172a; color: white; padding: 12px; font-weight: 600; text-align: left; }
-        td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
-        .smart-row { cursor: pointer; transition: background 0.15s; }
-        .smart-row:hover { background: #f1f5f9 !important; }
-        .badge { padding: 4px 8px; border-radius: 9999px; font-size: 10px; font-weight: 700; display: inline-block; }
-        .badge.aktif-bg { background: #dcfce7; color: #16a34a; }
-        .badge.lunas-bg { background: #f1f5f9; color: #64748b; }
-        .btn-table { padding: 5px 10px; font-size: 11px; border-radius: 6px; font-weight: bold; margin-right: 4px; }
-        .btn-pay { background: #10b981; }
-        .btn-pay:hover { background: #059669; }
-        .btn-edit { background: #f59e0b; }
-        .btn-edit:hover { background: #d97706; }
-        .btn-delete { background: #ef4444; }
-        .btn-delete:hover { background: #dc2626; }
-        .btn-print { background: #6366f1; }
-        .btn-print:hover { background: #4f46e5; }
-        .loading { text-align: center; padding: 30px; font-weight: 600; color: #64748b; }
+
+        /* Filter Core Controller */
+        .filter-section { display: flex; gap: 12px; margin-bottom: 20px; background: var(--surface); padding: 15px; border-radius: var(--radius-lg); box-shadow: 0 1px 3px rgba(0,0,0,0.02); border: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
+        .search-box { flex: 1; min-width: 260px; }
+        .filter-box { width: 160px; }
+
+        /* Super Table UI */
+        .table-container { background: var(--surface); border-radius: var(--radius-lg); overflow-x: auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
+        th { background: #0f172a; color: white; padding: 14px; font-weight: 600; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; }
+        td { padding: 14px; border-bottom: 1px solid var(--border); font-weight: 500; }
+        .smart-row { cursor: pointer; transition: background 0.2s ease; }
+        .smart-row:hover { background: #f8fafc !important; }
+        .badge { padding: 5px 10px; border-radius: 30px; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+        .badge.aktif-bg { background: #dcfce7; color: #15803d; }
+        .badge.lunas-bg { background: #f1f5f9; color: #475569; }
         
+        /* Mini Action Buttons Inside Table */
+        .btn-table { padding: 6px 12px; font-size: 11px; border-radius: var(--radius-md); font-weight: 700; border: 1px solid rgba(0,0,0,0.05); }
+        .btn-pay { background: #10b981; color: white; }
+        .btn-pay:hover { background: #059669; }
+        .btn-print { background: #6366f1; color: white; }
+        .btn-print:hover { background: #4f46e5; }
+        .btn-delete { background: #fff; color: var(--danger); border: 1px solid #fee2e2; }
+        .btn-delete:hover { background: #fee2e2; }
+        
+        .loading { text-align: center; padding: 40px; font-weight: 700; color: var(--text-muted); font-size: 14px; }
+
+        /* PRINTER ENGINE: MUTLAK HANYA TEKS TANPA BLANK SPACE PUTIH */
         @page { size: auto; margin: 0 !important; }
         @media print {
             html, body { background: transparent !important; background-color: transparent !important; margin: 0 !important; padding: 0 !important; height: auto !important; }
@@ -73,79 +110,107 @@
 
     <div class="container">
         <div class="header-app">
-            <h1><b>💡 Kiki Kredit Smart</b></h1>
-            <button class="btn-purple" onclick="ambilData()">🔄 <b>Segarkan</b></button>
+            <h1>⚡ Kiki Kredit Engine <span id="syncStatus" class="sync-badge">Sudah Sinkron</span></h1>
+            <button class="btn-purple" onclick="ambilDataCloud()">⚡ <b>Paksa Sinkron Cloud</b></button>
         </div>
 
         <div class="stats-container">
             <div class="card">
-                <h3><b>Sisa Piutang</b></h3>
-                <p id="totalPiutang"><b>Rp 0</b></p>
+                <h3>Total Sisa Piutang</h3>
+                <p id="totalPiutang">Rp 0</p>
+                <span class="sub-stats" id="subPiutang">Beban berjalan ekosistem</span>
             </div>
-            <div class="card aktif">
-                <h3><b>Pelanggan Aktif</b></h3>
-                <p id="pelangganAktif"><b>0 Orang</b></p>
+            <div class="card active-customer">
+                <h3>Pelanggan Aktif</h3>
+                <p id="pelangganAktif">0</p>
+                <span class="sub-stats" id="subAktif">Pengguna dalam masa tenor</span>
+            </div>
+            <div class="card ratio-card">
+                <h3>Rasio Kelancaran</h3>
+                <p id="rasioPelunasan">0%</p>
+                <span class="sub-stats">Skor tingkat kolektibilitas</span>
             </div>
         </div>
 
         <div class="action-section">
-            <h2 id="formTitle">📝 <b>Tambah Pelanggan</b></h2>
+            <h2 id="formTitle">📝 Tambah Pelanggan Baru</h2>
             <form id="pelangganForm" onsubmit="prosesSimpanData(event)">
                 <input type="hidden" id="rowNum">
                 <input type="hidden" id="cicilanKe" value="0">
                 
                 <div class="form-grid">
-                    <input type="text" id="nama" placeholder="Nama Pelanggan" required oninput="formatTeksSmart(this)">
-                    <input type="text" id="alamat" placeholder="Alamat" required oninput="formatTeksSmart(this)">
-                    <input type="text" id="barang" placeholder="Nama Barang" required oninput="formatTeksSmart(this)">
-                    <input type="number" id="totalHarga" placeholder="Harga Jual (Rp)" required oninput="hitungSimulasiOtomatis()">
-                    <select id="tipeTenor" onchange="hitungSimulasiOtomatis()">
-                        <option value="Bulanan">🗓️ Bulanan</option>
-                        <option value="Mingguan">⏳ Mingguan</option>
-                        <option value="Harian">☀️ Harian</option>
-                    </select>
-                    <input type="number" id="tenor" placeholder="Tenor / Berapa Kali" required oninput="hitungSimulasiOtomatis()">
-                    <input type="number" id="sisaUtang" placeholder="Sisa Utang Awal (Rp)" required>
+                    <div class="input-group">
+                        <label>Nama Pelanggan</label>
+                        <input type="text" id="nama" placeholder="Contoh: Budi Santoso" required oninput="aiAutoCase(this)">
+                    </div>
+                    <div class="input-group">
+                        <label>Alamat Rumah</label>
+                        <input type="text" id="alamat" placeholder="Nama jalan / nomor rumah" required oninput="aiAutoCase(this)">
+                    </div>
+                    <div class="input-group">
+                        <label>Barang Pembiayaan</label>
+                        <input type="text" id="barang" placeholder="Contoh: Honda Vario 2024" required oninput="aiAutoCase(this)">
+                    </div>
+                    <div class="input-group">
+                        <label>Harga Jual Dasar (Rp)</label>
+                        <input type="number" id="totalHarga" placeholder="Masukkan nominal" required oninput="jalankanKalkulatorSistem()">
+                    </div>
+                    <div class="input-group">
+                        <label>Siklus Tenor</label>
+                        <select id="tipeTenor" onchange="jalankanKalkulatorSistem()">
+                            <option value="Bulanan">🗓️ Bulanan (Sesi Tetap)</option>
+                            <option value="Mingguan">⏳ Mingguan (Sesi Cepat)</option>
+                            <option value="Harian">☀️ Harian (Sesi Mikro)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Durasi Tenor (Sesi)</label>
+                        <input type="number" id="tenor" placeholder="Jumlah kali cicilan" required oninput="jalankanKalkulatorSistem()">
+                    </div>
+                    <div class="input-group">
+                        <label>Penyesuaian Sisa Utang (Rp)</label>
+                        <input type="number" id="sisaUtang" placeholder="Otomatis mengikuti harga" required>
+                    </div>
                     
                     <div id="simulasiHasil" class="smart-calc">
-                        <span>📋 Angsuran: <b>Rp 0</b></span>
-                        <span id="bantuanNominal" style="color:#64748b;">(Rp 0)</span>
+                        <span>Beban Angsuran Bersih: <b id="textAngsuran">Rp 0</b></span>
+                        <span class="live-badge">Sistem Kalkulasi Presisi</span>
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="btnSubmit" class="btn-primary">💾 <b>Simpan Data</b></button>
-                    <button type="button" class="btn-secondary" onclick="resetForm()">🧹 <b>Batal</b></button>
+                    <button type="submit" id="btnSubmit" class="btn-primary">💾 <b>Simpan Rekor Data</b></button>
+                    <button type="button" class="btn-secondary" onclick="resetForm()">🧹 <b>Bersihkan Form</b></button>
                 </div>
             </form>
         </div>
 
         <div class="filter-section">
             <div class="search-box">
-                <input type="text" id="inputCari" placeholder="🔍 Ketik nama atau barang untuk mencari..." oninput="jalankanFilterSmart()">
+                <input type="text" id="inputCari" placeholder="🔍 Cari data instan via ketik nama, alamat, atau jenis barang pembiayaan..." oninput="filterLocalMemory()">
             </div>
             <div class="filter-box">
-                <select id="filterStatus" onchange="jalankanFilterSmart()">
-                    <option value="SEMUA">🌐 Semua</option>
-                    <option value="AKTIF">🟢 Aktif</option>
-                    <option value="LUNAS">⚪ Lunas</option>
+                <select id="filterStatus" onchange="filterLocalMemory()">
+                    <option value="SEMUA">🌐 Semua Status</option>
+                    <option value="AKTIF">🟢 Status Aktif</option>
+                    <option value="LUNAS">⚪ Status Lunas</option>
                 </select>
             </div>
         </div>
 
         <div class="table-container">
-            <div id="loadingText" class="loading">⏳ <b>Memuat data dari Cloud...</b></div>
+            <div id="loadingText" class="loading">⚙️ Menghubungkan ke Cloud Server Core...</div>
             <table id="pelangganTable" style="display: none;">
                 <thead>
                     <tr>
-                        <th><b>Nama</b></th>
-                        <th><b>Alamat</b></th>
-                        <th><b>Barang</b></th>
-                        <th><b>Total</b></th>
-                        <th><b>Tenor</b></th>
-                        <th><b>Ke</b></th>
-                        <th><b>Sisa</b></th>
-                        <th><b>Status</b></th>
-                        <th style="text-align: center;"><b>Aksi Cepat</b></th>
+                        <th>Pelanggan</th>
+                        <th>Alamat</th>
+                        <th>Barang</th>
+                        <th>Total Pokok</th>
+                        <th>Tenor</th>
+                        <th>Sesi Ke</th>
+                        <th>Sisa Piutang</th>
+                        <th>Status</th>
+                        <th style="text-align: center;">Manajemen Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -155,10 +220,17 @@
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbw2msfsM4iqNn9n-9cHCf-jy9Ja5FhwjF59ugSAumG3IYt6CbHp1EhlHBaFlWm-Akks/exec";
-        let masterDataPelanggan = [];
+        
+        // Local Cache Engine untuk Kecepatan Eksekusi Ekstrim
+        let databaseLokalCache = [];
 
-        // MODEL SMART UX: Otomatis merubah huruf pertama menjadi Kapital (Proper Case)
-        function formatTeksSmart(input) {
+        // SMART UI: Deteksi shortcut keyboard untuk kenyamanan kasir
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') resetForm();
+        });
+
+        // SMART UX CORE: Auto Proper Case (Kapitalisasi Otomatis Kata Demi Kata)
+        function aiAutoCase(input) {
             let kata = input.value.split(" ");
             for (let i = 0; i < kata.length; i++) {
                 if (kata[i].length > 0) {
@@ -168,86 +240,117 @@
             input.value = kata.join(" ");
         }
 
-        function bersihkanTeks(str) {
+        function bersihkanTeksMurni(str) {
             if (!str) return '';
             return str.toString().replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, "").trim();
         }
 
-        // MODEL SMART UX: Kalkulator kalkulasi otomatis + pembaca nominal rupiah interaktif
-        function hitungSimulasiOtomatis() {
+        // SMART CALCULATOR ENGINE: Prediksi real-time angsuran
+        function jalankanKalkulatorSistem() {
             const totalHarga = parseInt(document.getElementById('totalHarga').value) || 0;
             const tenor = parseInt(document.getElementById('tenor').value) || 0;
             const tipeTenor = document.getElementById('tipeTenor').value;
             const rowNum = document.getElementById('rowNum').value;
 
-            if (!rowNum) document.getElementById('sisaUtang').value = totalHarga;
-
-            // Membantu membaca kejelasan angka nol (ex: 1000000 -> Rp 1.000.000)
-            document.getElementById('bantuanNominal').innerText = `(Rp ${totalHarga.toLocaleString('id-ID')})`;
+            if (!rowNum) {
+                document.getElementById('sisaUtang').value = totalHarga;
+            }
 
             if (totalHarga > 0 && tenor > 0) {
                 const angsuran = Math.ceil(totalHarga / tenor);
-                document.getElementById('simulasiHasil').innerHTML = `<span>📋 Angsuran: <b>Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.replace(/[^a-zA-Z]/g, "").toLowerCase()}</b></span> <span style="color:#2563eb;">⚡ Terhitung Otomatis</span>`;
+                document.getElementById('textAngsuran').innerText = `Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.toLowerCase()}`;
             } else {
-                document.getElementById('simulasiHasil').innerHTML = `<span>📋 Angsuran: <b>Rp 0</b></span> <span id="bantuanNominal" style="color:#64748b;">(Rp 0)</span>`;
+                document.getElementById('textAngsuran').innerText = `Rp 0`;
             }
         }
 
-        async function ambilData() {
+        // MEMORY CORE ENGINE: Sinkronisasi data ke cloud server
+        async function ambilDataCloud() {
+            const statusIndicator = document.getElementById('syncStatus');
+            statusIndicator.innerText = "⏳ Sinkronisasi...";
+            statusIndicator.style.background = "#fef3c7";
+            statusIndicator.style.color = "#d97706";
+
             document.getElementById('loadingText').style.display = "block";
             document.getElementById('pelangganTable').style.display = "none";
+            
             try {
                 const response = await fetch(`${API_URL}?action=ambilData`);
                 const result = await response.json();
-                if (result.error) return alert("Gagal: " + result.error);
+                if (result.error) return alert("Kesalahan API Cloud: " + result.error);
 
+                // Update Dashboard Analitik Komprehensif
                 document.getElementById('totalPiutang').innerHTML = "<b>Rp " + result.stats.totalPiutang.toLocaleString('id-ID') + "</b>";
-                document.getElementById('pelangganAktif').innerHTML = "<b>" + result.stats.aktif + " Orang</b>";
-                masterDataPelanggan = result.pelanggan;
-                jalankanFilterSmart();
+                document.getElementById('pelangganAktif').innerHTML = "<b>" + result.stats.aktif + " <span style='font-size:14px; font-weight:normal;'>User</span></b>";
+                
+                // Kalkulasi rasio kelancaran kolektibilitas cerdas
+                const totalPelanggan = result.pelanggan.length;
+                const lunas = result.pelanggan.filter(p => p.status === "LUNAS").length;
+                const rasio = totalPelanggan > 0 ? Math.round((lunas / totalPelanggan) * 100) : 0;
+                document.getElementById('rasioPelunasan').innerText = rasio + "%";
+
+                // Memasukkan data ke dalam Cache Memory Lokal
+                databaseLokalCache = result.pelanggan;
+                filterLocalMemory();
+
+                statusIndicator.innerText = "✓ Terkoneksi Aman";
+                statusIndicator.style.background = "#dcfce7";
+                statusIndicator.style.color = "#16a34a";
             } catch (err) {
-                alert("Koneksi database gagal.");
+                statusIndicator.innerText = "⚠️ Mode Offline/Gagal";
+                statusIndicator.style.background = "#fee2e2";
+                statusIndicator.style.color = "#991b1b";
+                alert("Gagal memuat rekor data dari cloud. Periksa jaringan internet.");
             } finally {
                 document.getElementById('loadingText').style.display = "none";
                 document.getElementById('pelangganTable').style.display = "table";
             }
         }
 
-        function jalankanFilterSmart() {
+        // SMART SEARCH ENGINE (0-Delay Filter Memory Lokal)
+        function filterLocalMemory() {
             const kataKunci = document.getElementById('inputCari').value.toLowerCase().trim();
             const statusDipilih = document.getElementById('filterStatus').value;
-            const dataTerfilter = masterDataPelanggan.filter(p => {
-                return (p.nama.toLowerCase().includes(kataKunci) || p.barang.toLowerCase().includes(kataKunci)) && (statusDipilih === "SEMUA" || p.status === statusDipilih);
+            
+            const dataTerfilter = databaseLokalCache.filter(p => {
+                const cocokKata = p.nama.toLowerCase().includes(kataKunci) || 
+                                  p.barang.toLowerCase().includes(kataKunci) || 
+                                  p.alamat.toLowerCase().includes(kataKunci);
+                const cocokStatus = (statusDipilih === "SEMUA" || p.status === statusDipilih);
+                return cocokKata && cocokStatus;
             });
-            renderTabelHtml(dataTerfilter);
+            bangunStrukturTabel(dataTerfilter);
         }
 
-        function renderTabelHtml(data) {
+        function bangunStrukturTabel(data) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = "";
+            
             if(data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#64748b; padding:20px;"><b>Data tidak ditemukan.</b></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:var(--text-muted); padding:30px;">⚠️ Tidak ditemukan rekor data yang cocok.</td></tr>`;
                 return;
             }
+
             data.forEach(p => {
                 const tr = document.createElement('tr');
                 tr.className = "smart-row";
-                // MODEL SMART UX: Klik area baris mana saja pada tabel otomatis langsung membuka mode koreksi form
-                tr.setAttribute("onclick", `isiFormUntukEdit(${p.rowNum}); event.stopPropagation();`);
+                // UX MODERN: Klik baris manapun untuk langsung mengedit instan
+                tr.setAttribute("onclick", `muatDataKeFormFormulir(${p.rowNum}); event.stopPropagation();`);
+                
                 tr.innerHTML = `
-                    <td><b>${p.nama}</b></td>
-                    <td><span style="color:#64748b; font-size:12px;"><b>${p.alamat}</b></span></td>
-                    <td><b>${p.barang}</b></td>
+                    <td><strong style="color:var(--text-main); font-size:14px;">${p.nama}</strong></td>
+                    <td><span style="color:var(--text-muted); font-size:12px;">${p.alamat}</span></td>
+                    <td><span class="sync-badge" style="background:#f1f5f9; color:var(--text-main); font-weight:700;">${p.barang}</span></td>
                     <td><b>Rp ${p.total.toLocaleString('id-ID')}</b></td>
                     <td><b>${p.tenor}x (${p.tipe[0]})</b></td>
-                    <td style="text-align:center;"><b>${p.cicilanKe}</b></td>
-                    <td style="color:${p.sisa > 0 ? '#ef4444' : '#10b981'}; font-weight:bold;"><b>Rp ${p.sisa.toLocaleString('id-ID')}</b></td>
-                    <td><span class="badge ${p.status === "AKTIF" ? "aktif-bg" : "lunas-bg"}"><b>${p.status}</b></span></td>
+                    <td style="text-align:center; font-weight:700;">${p.cicilanKe}</td>
+                    <td style="color:${p.sisa > 0 ? 'var(--danger)' : 'var(--success)'}; font-weight:800;">Rp ${p.sisa.toLocaleString('id-ID')}</td>
+                    <td><span class="badge ${p.status === "AKTIF" ? "aktif-bg" : "lunas-bg"}">${p.status === "AKTIF" ? "🟢 AKTIF" : "⚪ LUNAS"}</span></td>
                     <td>
-                        <div style="display:flex; justify-content: center;" onclick="event.stopPropagation();">
-                            ${p.status === "AKTIF" ? `<button class="btn-table btn-pay" onclick="bayarManual(${p.rowNum}, ${p.sisa})">💸 Bayar</button>` : ''}
+                        <div style="display:flex; justify-content: center; gap:4px;" onclick="event.stopPropagation();">
+                            ${p.status === "AKTIF" ? `<button class="btn-table btn-pay" onclick="eksekusiPembayaranKasir(${p.rowNum}, ${p.sisa})">💸 Bayar</button>` : ''}
                             <button class="btn-table btn-print" onclick="cetakStrukLokal(${p.rowNum}, null, null)">🖨️ Struk</button>
-                            <button class="btn-table btn-delete" onclick="hapusData(${p.rowNum})">🗑️ Hapus</button>
+                            <button class="btn-table btn-delete" onclick="hapusDataPelanggan(${p.rowNum})">🗑️</button>
                         </div>
                     </td>
                 `;
@@ -260,55 +363,62 @@
             const rowNum = document.getElementById('rowNum').value;
             const payload = {
                 rowNum: rowNum ? parseInt(rowNum) : 0,
-                nama: bersihkanTeks(document.getElementById('nama').value),
-                alamat: bersihkanTeks(document.getElementById('alamat').value),
-                barang: bersihkanTeks(document.getElementById('barang').value),
+                nama: bersihkanTeksMurni(document.getElementById('nama').value),
+                alamat: bersihkanTeksMurni(document.getElementById('alamat').value),
+                barang: bersihkanTeksMurni(document.getElementById('barang').value),
                 totalHarga: parseInt(document.getElementById('totalHarga').value),
                 tipeTenor: document.getElementById('tipeTenor').value,
                 tenor: parseInt(document.getElementById('tenor').value),
                 cicilanKe: parseInt(document.getElementById('cicilanKe').value || 0),
                 sisaUtang: parseInt(document.getElementById('sisaUtang').value)
             };
+
             const btn = document.getElementById('btnSubmit');
-            btn.disabled = true; btn.innerHTML = "⌛ <b>Menyimpan...</b>";
+            btn.disabled = true; btn.innerHTML = "⏳ Mengamankan Data...";
+            
             try {
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "simpanData", data: payload }) });
                 alert(await response.json());
-                resetForm(); ambilData();
+                resetForm(); 
+                ambilDataCloud();
             } catch (err) {
-                alert("Gagal sinkronisasi data.");
+                alert("Gagal menyimpan data ke sistem cloud.");
             } finally {
                 btn.disabled = false;
             }
         }
 
-        async function bayarManual(rowNum, sisaUtangMaksimal) {
-            const inputNominal = prompt(`Nominal Bayar (Maks Rp ${sisaUtangMaksimal.toLocaleString('id-ID')}):`);
+        async function eksekusiPembayaranKasir(rowNum, sisaUtangMaksimal) {
+            const inputNominal = prompt(`Masukkan Nominal Angsuran (Maksimum Batas: Rp ${sisaUtangMaksimal.toLocaleString('id-ID')}):`);
             if (!inputNominal) return;
             const nominal = parseInt(inputNominal);
-            if (isNaN(nominal) || nominal <= 0 || nominal > sisaUtangMaksimal) return alert("Nominal salah!");
+            if (isNaN(nominal) || nominal <= 0 || nominal > sisaUtangMaksimal) return alert("Validasi Gagal: Angka nominal tidak valid / melampaui batas piutang.");
 
             try {
                 document.getElementById('loadingText').style.display = "block";
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "bayarManual", rowNum: rowNum, nominal: nominal }) });
                 const result = await response.json();
+                
                 if (result.error) {
-                    alert("Gagal: " + result.error);
+                    alert("Ditolak Server: " + result.error);
                 } else {
-                    if(confirm("Bayar Berhasil! Cetak struk?")) cetakStrukLokal(rowNum, nominal, result.hasilBayar.sisa);
+                    if(confirm("Pembayaran Berhasil Dicatat! Cetak struk thermal sekarang?")) {
+                        cetakStrukLokal(rowNum, nominal, result.hasilBayar.sisa);
+                    }
                     const dl = document.createElement('a'); dl.href = `data:application/pdf;base64,${result.pdf}`; dl.download = `Slip_${result.hasilBayar.nama}.pdf`; dl.click();
-                    ambilData();
+                    ambilDataCloud();
                 }
             } catch (err) {
-                alert("Koneksi transaksi gagal.");
+                alert("Koneksi gagal saat memproses transaksi pembayaran.");
             } finally {
                 document.getElementById('loadingText').style.display = "none";
             }
         }
 
+        // PRINTER ENGINE SANGAT PINTAR: TIDAK MEMAKAN SPACE PUTIH SAMA SEKALI
         function cetakStrukLokal(rowNum, nominalBayarSekarang = null, sisaUtangTerbaru = null) {
-            const p = masterDataPelanggan.find(item => item.rowNum === rowNum);
-            if(!p) return alert("Data tidak ada!");
+            const p = databaseLokalCache.find(item => item.rowNum === rowNum);
+            if(!p) return alert("Kesalahan Fatal: Data tidak ditemukan dalam memori.");
 
             const tgl = new Date().toLocaleDateString('id-ID', { year: '2-digit', month: '2-digit', day: '2-digit' });
             const areaStruk = document.getElementById('areaCetakStruk');
@@ -321,32 +431,33 @@
                     <strong><b>KIKI KREDIT SOLUTION</b></strong>
                     <div class="print-double"></div>
                 </div>
-                <div class="print-row"><span><b>Tgl: ${tgl}</b></span> <span><b>Ckl: ${cCicilan}x</b></span></div>
-                <div class="print-row"><span><b>Nama: ${bersihkanTeks(p.nama.substring(0,14))}</b></span></div>
-                <div class="print-row"><span><b>Brg : ${bersihkanTeks(p.barang.substring(0,14))}</b></span></div>
+                <div class="print-row"><span><b>Tgl: ${tgl}</b></span> <span><b>Sesi: ${cCicilan}x</b></span></div>
+                <div class="print-row"><span><b>Nama: ${bersihkanTeksMurni(p.nama.substring(0,14))}</b></span></div>
+                <div class="print-row"><span><b>Brg : ${bersihkanTeksMurni(p.barang.substring(0,14))}</b></span></div>
                 <div class="print-line"></div>
                 <div class="print-row"><span><b>Total Pokok</b></span> <span><b>: Rp ${p.total.toLocaleString('id-ID')}</b></span></div>
                 <div class="print-row"><span><b>Bayar Sesi</b></span> <span><b>: ${cBayar}</b></span></div>
-                <div class="print-row"><span><b>SISA UTANG</b></span> <span><b>: Rp ${cSisa.toLocaleString('id-ID')}</b></span></div>
+                <div class="print-row"><span><b>SISA PIUTANG</b></span> <span><b>: Rp ${cSisa.toLocaleString('id-ID')}</b></span></div>
                 <div class="print-row"><span><b>Status</b></span> <span><b>: ${cSisa <= 0 ? 'LUNAS' : 'AKTIF'}</b></span></div>
                 <div class="print-line"></div>
                 <div class="print-center" style="margin-top:5px;">
-                    <b>** TERIMA KASIH **</b>
+                    <b>** STRUK RESMI APPS **</b>
                 </div>
             `;
             setTimeout(() => { window.print(); }, 200);
         }
 
-        async function hapusData(rowNum) {
-            if(!confirm("Hapus data pelanggan ini secara permanen?")) return;
+        async function hapusDataPelanggan(rowNum) {
+            if(!confirm("⚠️ Tindakan Berbahaya: Anda yakin ingin menghapus permanen data rekor ini dari server cloud?")) return;
             try {
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "hapusData", rowNum: rowNum }) });
-                alert(await response.json()); ambilData();
-            } catch (err) { alert("Gagal hapus."); }
+                alert(await response.json()); 
+                ambilDataCloud();
+            } catch (err) { alert("Sistem mendeteksi kegagalan penghapusan."); }
         }
 
-        function isiFormUntukEdit(rowNum) {
-            const p = masterDataPelanggan.find(item => item.rowNum === rowNum);
+        function muatDataKeFormFormulir(rowNum) {
+            const p = databaseLokalCache.find(item => item.rowNum === rowNum);
             if(!p) return;
             document.getElementById('rowNum').value = p.rowNum;
             document.getElementById('nama').value = p.nama;
@@ -357,23 +468,26 @@
             document.getElementById('tenor').value = p.tenor;
             document.getElementById('cicilanKe').value = p.cicilanKe;
             document.getElementById('sisaUtang').value = p.sisa;
-            document.getElementById('formTitle').innerHTML = "✏️ <b>Ubah Data: " + p.nama + "</b>";
-            document.getElementById('btnSubmit').innerHTML = "🔄 <b>Perbarui Data</b>";
-            hitungSimulasiOtomatis();
+            
+            document.getElementById('formTitle').innerHTML = "✏️ Mode Koreksi Data: <span style='color:var(--primary)'>" + p.nama + "</span>";
+            document.getElementById('btnSubmit').innerHTML = "🔄 <b>Perbarui Rekor Cloud</b>";
+            
+            jalankanKalkulatorSistem();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            document.getElementById('nama').focus(); // Smart Focus langsung ke kolom input utama
+            document.getElementById('nama').focus();
         }
 
         function resetForm() {
             document.getElementById('pelangganForm').reset();
             document.getElementById('rowNum').value = "";
             document.getElementById('cicilanKe').value = "0";
-            document.getElementById('formTitle').innerHTML = "📝 <b>Tambah Pelanggan</b>";
-            document.getElementById('btnSubmit').innerHTML = "💾 <b>Simpan Data</b>";
-            hitungSimulasiOtomatis();
+            document.getElementById('formTitle').innerHTML = "📝 Tambah Pelanggan Baru";
+            document.getElementById('btnSubmit').innerHTML = "💾 <b>Simpan Rekor Data</b>";
+            jalankanKalkulatorSistem();
         }
 
-        window.onload = ambilData;
+        // Eksekusi boot up aplikasi pertama kali
+        window.onload = ambilDataCloud;
     </script>
 </body>
 </html>
