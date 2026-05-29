@@ -3,105 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kiki Kredit Mobile v10</title>
+    <title>Kiki Kredit - Neon Lumina v11</title>
     <style>
         :root {
-            --bg-app: #f6f8fb;
-            --surface: #ffffff;
-            --text-dark: #1e293b;
-            --text-gray: #94a3b8;
-            --primary: #4f46e5;
-            --primary-light: #eef2ff;
-            --success: #10b981;
-            --success-light: #dcfce7;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --border-color: #f1f5f9;
-            --shadow-sm: 0 2px 8px rgba(148, 163, 184, 0.08);
-            --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.15);
+            --bg-app: #0b0f19;
+            --surface: #121826;
+            --surface-card: #1a2333;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #243249;
+            
+            /* Eye-Pleasing Neon Gradients */
+            --gradient-primary: linear-gradient(135deg, #6366f1, #4f46e5);
+            --gradient-emerald: linear-gradient(135deg, #10b981, #059669);
+            --gradient-rose: linear-gradient(135deg, #f43f5e, #e11d48);
+            --gradient-gold: linear-gradient(135deg, #fbbf24, #f59e0b);
+            
+            --shadow-premium: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            --shadow-glow: 0 0 15px rgba(99, 102, 241, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-app); color: var(--text-dark); font-size: 14px; padding-bottom: 80px; }
+        body { background-color: var(--bg-app); color: var(--text-main); font-size: 14px; padding-bottom: 90px; }
         .container { padding: 16px; max-width: 480px; margin: 0 auto; }
 
-        /* Top Bar Modern */
-        .app-bar { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 14px 16px; border-radius: 16px; box-shadow: var(--shadow-sm); margin-bottom: 16px; }
-        .app-bar h1 { font-size: 16px; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 6px; }
-        .sync-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 700; background: var(--success-light); color: var(--success); }
-        .btn-sync-icon { background: var(--primary-light); color: var(--primary); border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; }
+        /* Top Bar Neon Styling */
+        .app-bar { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 16px; border-radius: 20px; box-shadow: var(--shadow-premium); margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .app-bar h1 { font-size: 17px; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .sync-badge { font-size: 11px; padding: 4px 12px; border-radius: 20px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .btn-sync-icon { background: rgba(99, 102, 241, 0.1); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.2); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+        .btn-sync-icon:active { transform: rotate(180deg); background: rgba(99, 102, 241, 0.2); }
 
-        /* Dashboard Horizontal Scroll / Mini Card Widgets */
-        .stats-scroller { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 4px; scrollbar-width: none; }
+        /* Premium Smooth Dashboard Widget */
+        .stats-scroller { display: flex; gap: 12px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 4px; scrollbar-width: none; }
         .stats-scroller::-webkit-scrollbar { display: none; }
-        .stat-bubble { background: var(--surface); padding: 12px 16px; border-radius: 14px; min-width: 130px; flex: 1; box-shadow: var(--shadow-sm); border: 1px solid #f8fafc; }
-        .stat-bubble h3 { font-size: 10px; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
-        .stat-bubble p { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+        .stat-bubble { background: var(--surface); padding: 14px 18px; border-radius: 18px; min-width: 140px; flex: 1; box-shadow: var(--shadow-premium); border: 1px solid var(--border-color); position: relative; }
+        .stat-bubble::after { content: ''; position: absolute; bottom: 0; left: 10%; width: 80%; height: 2px; border-radius: 20px; background: var(--gradient-primary); opacity: 0.5; }
+        .stat-bubble.danger-glow::after { background: var(--gradient-rose); }
+        .stat-bubble h3 { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+        .stat-bubble p { font-size: 16px; font-weight: 800; color: #ffffff; }
 
-        /* Filter & Search Bar */
-        .search-container { display: flex; gap: 8px; margin-bottom: 16px; }
-        .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 12px; font-size: 13px; color: var(--text-dark); box-shadow: var(--shadow-sm); outline: none; }
-        .filter-select { background: var(--surface); border: 1px solid var(--border-color); padding: 0 10px; border-radius: 12px; font-size: 13px; color: var(--text-dark); box-shadow: var(--shadow-sm); outline: none; font-weight: 600; }
+        /* Modern Filter & Search Interface */
+        .search-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 16px; font-size: 13px; color: #fff; box-shadow: var(--shadow-premium); outline: none; transition: all 0.2s; }
+        .search-input:focus { border-color: #6366f1; box-shadow: var(--shadow-glow); }
+        .filter-select { background: var(--surface); border: 1px solid var(--border-color); padding: 0 14px; border-radius: 16px; font-size: 13px; color: #fff; box-shadow: var(--shadow-premium); outline: none; font-weight: 600; }
 
-        /* Modern Customer Cards (Pengganti Tabel Besar) */
-        .cards-feed { display: flex; flex-direction: column; gap: 12px; }
-        .customer-card { background: var(--surface); padding: 16px; border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid #f8fafc; position: relative; overflow: hidden; }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-        .cust-name { font-size: 15px; font-weight: 700; color: var(--text-dark); }
-        .cust-address { font-size: 11px; color: var(--text-gray); margin-top: 1px; }
-        .status-tag { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase; }
-        .tag-aktif { background: var(--success-light); color: var(--success); }
-        .tag-lunas { background: #f1f5f9; color: #475569; }
+        /* Glow-Card Feed System */
+        .cards-feed { display: flex; flex-direction: column; gap: 14px; }
+        .customer-card { background: var(--surface); padding: 18px; border-radius: 22px; box-shadow: var(--shadow-premium); border: 1px solid var(--border-color); position: relative; transition: all 0.2s; }
+        .customer-card:active { transform: scale(0.99); background: var(--surface-card); }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .cust-name { font-size: 16px; font-weight: 700; color: #ffffff; }
+        .cust-address { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
         
-        .card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 12px; }
-        .info-label { font-size: 10px; color: var(--text-gray); text-transform: uppercase; }
-        .info-val { font-size: 12px; font-weight: 600; color: var(--text-dark); }
-        .info-val.danger { color: var(--danger); font-weight: 700; }
+        .status-tag { font-size: 9px; padding: 4px 10px; border-radius: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+        .tag-aktif { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .tag-lunas { background: rgba(148, 163, 184, 0.1); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.15); }
+        
+        .card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(26, 35, 51, 0.4); padding: 12px; border-radius: 14px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.02); }
+        .info-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.02em; }
+        .info-val { font-size: 12px; font-weight: 600; color: #f1f5f9; margin-top: 1px; }
+        .info-val.danger { color: #f43f5e; font-weight: 700; text-shadow: 0 0 10px rgba(244, 63, 94, 0.1); }
 
-        .card-actions { display: flex; gap: 6px; }
-        .btn-mobile { flex: 1; padding: 10px; border: none; border-radius: 10px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; }
-        .btn-m-pay { background: var(--primary); color: white; }
-        .btn-m-menu { background: #f1f5f9; color: #475569; max-width: 50px; font-size: 14px; }
+        .card-actions { display: flex; gap: 8px; }
+        .btn-mobile { flex: 1; padding: 12px; border: none; border-radius: 14px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: all 0.2s; }
+        .btn-m-pay { background: var(--gradient-primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .btn-m-menu { background: var(--surface-card); color: #cbd5e1; border: 1px solid var(--border-color); max-width: 65px; font-size: 13px; }
 
-        /* FLOATING ACTION BUTTON (FAB) */
-        .fab-add { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4); border: none; z-index: 99; cursor: pointer; }
+        /* FLOATING ACTION BUTTON (FAB) NEON EFFECT */
+        .fab-add { position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45); border: none; z-index: 99; cursor: pointer; }
 
-        /* MODERN BOTTOM SHEET MODAL (Formulir & Pilihan Bayar) */
-        .bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); display: none; align-items: flex-end; justify-content: center; z-index: 1000; animation: fadeIn 0.2s ease; }
-        .sheet-content { background: var(--surface); width: 100%; max-width: 480px; border-radius: 24px 24px 0 0; padding: 20px; box-shadow: var(--shadow-md); animation: slideUp 0.2s cubic-bezier(0.1, 0.7, 0.1, 1); max-height: 90vh; overflow-y: auto; }
-        .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); }
-        .sheet-header h3 { font-size: 15px; font-weight: 700; }
-        .btn-close-sheet { background: none; border: none; font-size: 18px; color: var(--text-gray); cursor: pointer; }
+        /* OREO GLASSMORPHISM BOTTOM SHEET */
+        .bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 15, 25, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: flex-end; justify-content: center; z-index: 1000; animation: fadeIn 0.2s ease; }
+        .sheet-content { background: var(--surface); width: 100%; max-width: 480px; border-radius: 28px 28px 0 0; padding: 22px; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); border-top: 1px solid var(--border-color); animation: slideUp 0.25s cubic-bezier(0.1, 0.8, 0.1, 1); max-height: 85vh; overflow-y: auto; }
+        .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .sheet-header h3 { font-size: 16px; font-weight: 800; color: #fff; }
+        .btn-close-sheet { background: rgba(255,255,255,0.05); border: none; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* Form Controls */
-        .form-flex { display: flex; flex-direction: column; gap: 12px; }
-        .input-group { display: flex; flex-direction: column; gap: 4px; }
-        .input-group label { font-size: 11px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; }
-        .input-group input, .input-group select { background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; font-size: 13px; color: var(--text-dark); outline: none; width: 100%; }
-        .input-group input:focus { border-color: var(--primary); background: var(--surface); }
-        .live-banner { background: #f5f3ff; padding: 10px 14px; border-radius: 8px; border-left: 3px solid var(--primary); font-size: 12px; font-weight: 700; color: var(--primary); text-align: center; }
+        /* Form Controls Dark Premium */
+        .form-flex { display: flex; flex-direction: column; gap: 14px; }
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        .input-group label { font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .input-group input, .input-group select { background: var(--surface-card); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 14px; font-size: 13px; color: #fff; outline: none; width: 100%; transition: all 0.2s; }
+        .input-group input:focus { border-color: #6366f1; background: #1e293b; box-shadow: var(--shadow-glow); }
+        .live-banner { background: rgba(99, 102, 241, 0.1); border: 1px dashed rgba(99, 102, 241, 0.3); padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 700; color: #a5b4fc; text-align: center; }
 
-        /* Smart Pay Quick Buttons Grid */
-        .pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-        .btn-coin { background: #f8fafc; border: 1px solid var(--border-color); padding: 12px 8px; border-radius: 10px; font-weight: 700; font-size: 13px; color: #334155; text-align: center; }
-        .btn-coin:disabled { opacity: 0.3; }
-        .btn-coin-lunas { grid-column: span 3; background: var(--text-dark); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 13px; text-align: center; margin-top: 4px; }
+        /* Coin Box Grid */
+        .pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+        .btn-coin { background: var(--surface-card); border: 1px solid var(--border-color); padding: 14px 8px; border-radius: 14px; font-weight: 700; font-size: 13px; color: #e2e8f0; text-align: center; cursor: pointer; transition: all 0.15s; }
+        .btn-coin:active:not(:disabled) { background: #6366f1; border-color: #6366f1; }
+        .btn-coin:disabled { opacity: 0.2; cursor: not-allowed; }
+        .btn-coin-lunas { grid-column: span 3; background: var(--gradient-emerald); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 13px; text-align: center; margin-top: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
 
-        /* Menu Opsi Lainnya Sheet */
-        .opt-row { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
-        .opt-edit { background: #fffbeb; color: var(--warning); }
-        .opt-print { background: #eef2ff; color: #6366f1; }
-        .opt-del { background: #fee2e2; color: var(--danger); }
+        /* Action Rows Minimalist Menu */
+        .opt-row { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 14px; font-weight: 700; font-size: 13px; margin-bottom: 10px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+        .opt-edit { background: rgba(251, 191, 36, 0.08); color: #fbbf24; border-color: rgba(251, 191, 36, 0.15); }
+        .opt-print { background: rgba(99, 102, 241, 0.08); color: #818cf8; border-color: rgba(99, 102, 241, 0.15); }
+        .opt-del { background: rgba(244, 63, 94, 0.08); color: #f43f5e; border-color: rgba(244, 63, 94, 0.15); }
+        .opt-row:active { transform: scale(0.98); }
 
-        .loader { text-align: center; padding: 30px; font-weight: 700; color: var(--text-gray); font-size: 12px; }
+        .loader { text-align: center; padding: 40px; font-weight: 700; color: var(--text-muted); font-size: 12px; letter-spacing: 0.05em; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(150px); } to { transform: translateY(0); } }
 
-        /* THERMAL HARDWARE PRINT OVERRIDES */
+        /* CRITICAL THERMAL HARDWARE PRINT HANDLING */
         @page { size: auto; margin: 0 !important; }
         @media print {
-            html, body { background: transparent !important; margin: 0 !important; padding: 0 !important; }
+            html, body { background: #fff !important; color: #000 !important; margin: 0 !important; padding: 0 !important; }
             body * { display: none !important; }
             #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; }
             #areaCetakStruk { position: absolute; left: 0; top: 0; width: 44mm; color: #000 !important; font-family: 'Courier New', monospace; font-size: 8pt; line-height: 1.1; }
@@ -120,10 +130,10 @@
     <div id="paySheet" class="bottom-sheet" onclick="tutupSheet('paySheet')">
         <div class="sheet-content" onclick="event.stopPropagation()">
             <div class="sheet-header">
-                <h3 id="paySheetNama">💸 Bayar Kilat</h3>
+                <h3 id="paySheetNama">💸 Pembayaran Instan</h3>
                 <button class="btn-close-sheet" onclick="tutupSheet('paySheet')">✕</button>
             </div>
-            <p style="font-size:12px; color:var(--text-gray); margin-bottom:12px;">Sisa Tagihan Akun: <strong id="paySheetSisa" style="color:var(--danger)">Rp 0</strong></p>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">Sisa Tunggakan: <strong id="paySheetSisa" style="color:#f43f5e">Rp 0</strong></p>
             <div class="pay-grid" id="payButtonContainer"></div>
         </div>
     </div>
@@ -131,7 +141,7 @@
     <div id="actionSheet" class="bottom-sheet" onclick="tutupSheet('actionSheet')">
         <div class="sheet-content" onclick="event.stopPropagation()">
             <div class="sheet-header">
-                <h3 id="actionSheetTitle">Opsi Manajemen</h3>
+                <h3 id="actionSheetTitle">Manajemen Rekor</h3>
                 <button class="btn-close-sheet" onclick="tutupSheet('actionSheet')">✕</button>
             </div>
             <div id="actionOptionsContainer"></div>
@@ -141,7 +151,7 @@
     <div id="formSheet" class="bottom-sheet" onclick="tutupSheet('formSheet')">
         <div class="sheet-content" onclick="event.stopPropagation()">
             <div class="sheet-header">
-                <h3 id="formTitle">📝 Tambah Pelanggan Baru</h3>
+                <h3 id="formTitle">📝 Tambah Konsumen Baru</h3>
                 <button class="btn-close-sheet" onclick="tutupSheet('formSheet')">✕</button>
             </div>
             <form id="pelangganForm" class="form-flex" onsubmit="simpanDataKeSistem(event)">
@@ -149,79 +159,79 @@
                 <input type="hidden" id="cicilanKe" value="0">
                 
                 <div class="input-group">
-                    <label>Nama Pelanggan</label>
-                    <input type="text" id="nama" placeholder="Nama lengkap" required oninput="kapitalisasiSmart(this)">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Masukkan nama" required oninput="kapitalisasiSmart(this)">
                 </div>
                 <div class="input-group">
-                    <label>Alamat Tinggal</label>
-                    <input type="text" id="alamat" placeholder="Alamat lengkap" required oninput="kapitalisasiSmart(this)">
+                    <label>Alamat Rumah</label>
+                    <input type="text" id="alamat" placeholder="Masukkan lokasi" required oninput="kapitalisasiSmart(this)">
                 </div>
                 <div class="input-group">
-                    <label>Nama Barang Pembiayaan</label>
-                    <input type="text" id="barang" placeholder="Nama & tipe barang" required oninput="kapitalisasiSmart(this)">
+                    <label>Nama Barang</label>
+                    <input type="text" id="barang" placeholder="Tipe & seri barang" required oninput="kapitalisasiSmart(this)">
                 </div>
                 <div class="input-group">
-                    <label>Harga Jual Total (Rp)</label>
-                    <input type="number" id="totalHarga" placeholder="Nominal angka" required oninput="kalkulasiOtomatisTenor()">
+                    <label>Harga Pembiayaan Jual (Rp)</label>
+                    <input type="number" id="totalHarga" placeholder="Contoh: 5000000" required oninput="kalkulasiOtomatisTenor()">
                 </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
                     <div class="input-group">
-                        <label>Siklus</label>
+                        <label>Siklus Sesi</label>
                         <select id="tipeTenor" onchange="kalkulasiOtomatisTenor()">
-                            <option value="Bulanan">🗓️ Bulanan</option>
-                            <option value="Mingguan">⏳ Mingguan</option>
-                            <option value="Harian">☀️ Harian</option>
+                            <option value="Bulanan">Bulanan</option>
+                            <option value="Mingguan">Mingguan</option>
+                            <option value="Harian">Harian</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Tenor (Sesi)</label>
-                        <input type="number" id="tenor" placeholder="Kali" required oninput="kalkulasiOtomatisTenor()">
+                        <label>Tenor (Kali)</label>
+                        <input type="number" id="tenor" placeholder="Berapa kali" required oninput="kalkulasiOtomatisTenor()">
                     </div>
                 </div>
                 <div class="input-group">
-                    <label>Sisa Penyesuaian Utang (Rp)</label>
+                    <label>Sisa Penyesuaian Dana (Rp)</label>
                     <input type="number" id="sisaUtang" required>
                 </div>
-                <div id="textAngsuran" class="live-banner">Angsuran: Rp 0</div>
-                <button type="submit" id="btnSubmit" class="btn-mobile btn-m-pay" style="padding:14px; font-size:13px;">💾 <b>Simpan Data Pelanggan</b></button>
+                <div id="textAngsuran" class="live-banner">Angsuran berkala: Rp 0</div>
+                <button type="submit" id="btnSubmit" class="btn-mobile btn-m-pay" style="padding:15px; font-size:13px; margin-top:4px;">💾 <b>Simpan Konsumen</b></button>
             </form>
         </div>
     </div>
 
     <div class="container">
         <div class="app-bar">
-            <h1>⚡ Kiki Kredit Mobile</h1>
-            <div style="display:flex; align-items:center; gap:8px;">
-                <span id="syncIndicator" class="sync-badge">Sinkron</span>
+            <h1>🛸 KIKI KREDIT ENGINE</h1>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span id="syncIndicator" class="sync-badge">ONLINE</span>
                 <button class="btn-sync-icon" onclick="ambilDataDariCloud()">🔄</button>
             </div>
         </div>
 
         <div class="stats-scroller">
-            <div class="stat-bubble">
-                <h3>Total Piutang</h3>
-                <p id="totalPiutang" style="color:var(--danger)">Rp 0</p>
+            <div class="stat-bubble danger-glow">
+                <h3>Sisa Piutang</h3>
+                <p id="totalPiutang" style="color:#f43f5e;">Rp 0</p>
             </div>
             <div class="stat-bubble">
-                <h3>Aktif</h3>
-                <p id="pelangganAktif">0 Org</p>
+                <h3>Akun Aktif</h3>
+                <p id="pelangganAktif">0 Akun</p>
             </div>
             <div class="stat-bubble">
-                <h3>Kelancaran</h3>
+                <h3>Pelunasan</h3>
                 <p id="rasioPelunasan">0%</p>
             </div>
         </div>
 
         <div class="search-container">
-            <input type="text" id="inputCari" class="search-input" placeholder="🔍 Cari Nama, Alamat, atau Barang..." oninput="jalankanPencarianLokal()">
+            <input type="text" id="inputCari" class="search-input" placeholder="🔍 Cari nama, alamat, tipe barang..." oninput="jalankanPencarianLokal()">
             <select id="filterStatus" class="filter-select" onchange="jalankanPencarianLokal()">
-                <option value="SEMUA">🌐 Semua</option>
-                <option value="AKTIF">🟢 Aktif</option>
-                <option value="LUNAS">⚪ Lunas</option>
+                <option value="SEMUA">Semua</option>
+                <option value="AKTIF">Aktif</option>
+                <option value="LUNAS">Lunas</option>
             </select>
         </div>
 
-        <div id="loadingText" class="loader">⏳ Menghubungkan ke Cloud Server...</div>
+        <div id="loadingText" class="loader">⏳ MENGHUBUNGKAN CORE CLOUD DATA V11...</div>
         <div id="cardsFeed" class="cards-feed"></div>
     </div>
 
@@ -252,9 +262,9 @@
 
             if (totalHarga > 0 && tenor > 0) {
                 const angsuran = Math.ceil(totalHarga / tenor);
-                document.getElementById('textAngsuran').innerText = `Angsuran: Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.toLowerCase()}`;
+                document.getElementById('textAngsuran').innerText = `Angsuran berkala: Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.toLowerCase()}`;
             } else {
-                document.getElementById('textAngsuran').innerText = `Angsuran: Rp 0`;
+                document.getElementById('textAngsuran').innerText = `Angsuran berkala: Rp 0`;
             }
         }
 
@@ -263,7 +273,7 @@
 
         async function ambilDataDariCloud() {
             const ind = document.getElementById('syncIndicator');
-            ind.innerText = "Memuat..."; ind.style.background = "#fffbeb"; ind.style.color = "#d97706";
+            ind.innerText = "MEMUAT..."; ind.style.background = "rgba(251, 191, 36, 0.1)"; ind.style.color = "#fbbf24";
             document.getElementById('loadingText').style.display = "block";
             document.getElementById('cardsFeed').innerHTML = "";
 
@@ -272,7 +282,7 @@
                 const result = await response.json();
                 
                 document.getElementById('totalPiutang').innerText = "Rp " + result.stats.totalPiutang.toLocaleString('id-ID');
-                document.getElementById('pelangganAktif').innerText = result.stats.aktif + " Org";
+                document.getElementById('pelangganAktif').innerText = result.stats.aktif + " Akun";
                 
                 const total = result.pelanggan.length;
                 const lunas = result.pelanggan.filter(x => x.status === "LUNAS").length;
@@ -281,9 +291,9 @@
                 cacheDataLokal = result.pelanggan;
                 jalankanPencarianLokal();
 
-                ind.innerText = "Sinkron"; ind.style.background = "var(--success-light)"; ind.style.color = "var(--success)";
+                ind.innerText = "ONLINE"; ind.style.background = "rgba(16, 185, 129, 0.1)"; ind.style.color = "#10b981";
             } catch (err) {
-                ind.innerText = "Gagal"; ind.style.background = "#fee2e2"; ind.style.color = "var(--danger)";
+                ind.innerText = "ERROR"; ind.style.background = "rgba(244, 63, 94, 0.1)"; ind.style.color = "#f43f5e";
             } finally {
                 document.getElementById('loadingText').style.display = "none";
             }
@@ -306,7 +316,7 @@
             feed.innerHTML = "";
 
             if(data.length === 0) {
-                feed.innerHTML = `<div class="loader">Data tidak cocok / kosong.</div>`;
+                feed.innerHTML = `<div class="loader" style="color:var(--text-muted)">TIDAK ADA DATA KONSUMEN</div>`;
                 return;
             }
 
@@ -322,14 +332,14 @@
                         <span class="status-tag ${p.status === 'AKTIF' ? 'tag-aktif' : 'tag-lunas'}">${p.status}</span>
                     </div>
                     <div class="card-body">
-                        <div><div class="info-label">Barang</div><div class="info-val">${p.barang}</div></div>
-                        <div><div class="info-label">Total Jual</div><div class="info-val">Rp ${p.total.toLocaleString('id-ID')}</div></div>
-                        <div><div class="info-label">Sesi Cicilan</div><div class="info-val">${p.cicilanKe} / ${p.tenor}x (${p.tipe[0]})</div></div>
-                        <div><div class="info-label">Sisa Utang</div><div class="info-val ${p.sisa > 0 ? 'danger' : ''}">Rp ${p.sisa.toLocaleString('id-ID')}</div></div>
+                        <div><div class="info-label">Barang</div><div class="info-val" style="color:#60a5fa">${p.barang}</div></div>
+                        <div><div class="info-label">Total Pokok</div><div class="info-val">Rp ${p.total.toLocaleString('id-ID')}</div></div>
+                        <div><div class="info-label">Sesi Angsuran</div><div class="info-val">${p.cicilanKe} / ${p.tenor}x (${p.tipe[0]})</div></div>
+                        <div><div class="info-label">Sisa Dana</div><div class="info-val danger">Rp ${p.sisa.toLocaleString('id-ID')}</div></div>
                     </div>
                     <div class="card-actions">
                         ${p.status === 'AKTIF' ? `<button class="btn-mobile btn-m-pay" onclick="bukaModalBayarSmart(${p.rowNum})">💸 Bayar Sesi</button>` : ''}
-                        <button class="btn-mobile btn-m-menu" onclick="bukaMenuOpsiLainnya(${p.rowNum})">⚡ Menu</button>
+                        <button class="btn-mobile btn-m-menu" onclick="bukaMenuOpsiLainnya(${p.rowNum})">⚙️ Menu</button>
                     </div>
                 `;
                 feed.appendChild(card);
@@ -340,7 +350,7 @@
             const p = cacheDataLokal.find(x => x.rowNum === rowNum);
             if(!p) return;
 
-            document.getElementById('paySheetNama').innerText = `💸 Bayar: ${p.nama}`;
+            document.getElementById('paySheetNama').innerText = `💸 Pembayaran: ${p.nama}`;
             document.getElementById('paySheetSisa').innerText = `Rp ${p.sisa.toLocaleString('id-ID')}`;
 
             const container = document.getElementById('payButtonContainer');
@@ -358,7 +368,7 @@
 
             const btnLunas = document.createElement('button');
             btnLunas.className = "btn-coin-lunas";
-            btnLunas.innerText = `🎯 Bayar Sisa Lunas (Rp ${p.sisa.toLocaleString('id-ID')})`;
+            btnLunas.innerText = `🎯 Pelunasan Langsung (Rp ${p.sisa.toLocaleString('id-ID')})`;
             btnLunas.setAttribute("onclick", `eksekusiBayarOtomatis(${p.rowNum}, ${p.sisa}, ${p.sisa})`);
             container.appendChild(btnLunas);
 
@@ -372,9 +382,9 @@
             document.getElementById('actionSheetTitle').innerText = `${p.nama}`;
             const container = document.getElementById('actionOptionsContainer');
             container.innerHTML = `
-                <div class="opt-row opt-edit" onclick="tutupSheet('actionSheet'); isiDataKeFormulir(${p.rowNum});">✏️ Edit Profil & Piutang</div>
-                <div class="opt-row opt-print" onclick="tutupSheet('actionSheet'); printStrukKasir(${p.rowNum}, null, null);">🖨️ Cetak Ulang Struk Kasir</div>
-                <div class="opt-row opt-del" onclick="tutupSheet('actionSheet'); hapusBarisPelanggan(${p.rowNum});">🗑️ Hapus Rekor Pelanggan</div>
+                <div class="opt-row opt-edit" onclick="tutupSheet('actionSheet'); isiDataKeFormulir(${p.rowNum});">✏️ Modifikasi Data Profil</div>
+                <div class="opt-row opt-print" onclick="tutupSheet('actionSheet'); printStrukKasir(${p.rowNum}, null, null);">🖨️ Cetak Ulang Struk Thermal</div>
+                <div class="opt-row opt-del" onclick="tutupSheet('actionSheet'); hapusBarisPelanggan(${p.rowNum});">🗑️ Hapus Rekor Permanen</div>
             `;
             bukaSheet('actionSheet');
         }
@@ -394,13 +404,13 @@
                 
                 if (result.error) return alert(result.error);
                 
-                if(confirm(`Berhasil Masuk Rp ${nominal.toLocaleString('id-ID')}! Cetak nota thermal?`)) {
+                if(confirm(`Sukses Masuk Rp ${nominal.toLocaleString('id-ID')}! Print Nota Kasir?`)) {
                     printStrukKasir(rowNum, nominal, result.hasilBayar.sisa);
                 }
                 const link = document.createElement('a'); link.href = `data:application/pdf;base64,${result.pdf}`; link.download = `Nota_${result.hasilBayar.nama}.pdf`; link.click();
                 ambilDataDariCloud();
             } catch (err) {
-                alert("Gangguan konektivitas.");
+                alert("Gangguan Jaringan Server Cloud.");
             }
         }
 
@@ -425,7 +435,7 @@
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "simpanData", data: payload }) });
                 alert(await response.json());
                 ambilDataDariCloud();
-            } catch (err) { alert("Error Server."); }
+            } catch (err) { alert("Sinkronisasi Ditolak Cloud."); }
         }
 
         function printStrukKasir(rowNum, nominalBayar = null, sisaBaru = null) {
@@ -446,18 +456,18 @@
                 <div class="p-row"><span>Bayar Sesi</span> <span>: Rp ${(nominalBayar || 0).toLocaleString('id-ID')}</span></div>
                 <div class="p-row"><span>SISA UTANG</span> <span>: Rp ${sisaAkhir.toLocaleString('id-ID')}</span></div>
                 <div class="p-line"></div>
-                <div class="p-center">** STRUK VALID **</div>
+                <div class="p-center">** STRUK SAH **</div>
             `;
             setTimeout(() => { window.print(); }, 200);
         }
 
         async function hapusBarisPelanggan(rowNum) {
-            if(!confirm("Hapus data pelanggan ini?")) return;
+            if(!confirm("Hapus akun ini dari sistem secara permanen?")) return;
             document.getElementById('loadingText').style.display = "block";
             try {
                 await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "hapusData", rowNum: rowNum }) });
                 ambilDataDariCloud();
-            } catch (err) { alert("Gagal."); }
+            } catch (err) { alert("Akses Ditolak Cloud."); }
         }
 
         function isiDataKeFormulir(rowNum) {
@@ -473,7 +483,7 @@
             document.getElementById('cicilanKe').value = p.cicilanKe;
             document.getElementById('sisaUtang').value = p.sisa;
             
-            document.getElementById('formTitle').innerText = "✏️ Ubah Data Pelanggan";
+            document.getElementById('formTitle').innerText = "✏️ Perbarui Data Profil";
             kalkulasiOtomatisTenor();
             bukaSheet('formSheet');
         }
@@ -482,7 +492,7 @@
             document.getElementById('pelangganForm').reset();
             document.getElementById('rowNum').value = "";
             document.getElementById('cicilanKe').value = "0";
-            document.getElementById('formTitle').innerText = "📝 Tambah Pelanggan Baru";
+            document.getElementById('formTitle').innerText = "📝 Tambah Konsumen Baru";
             kalkulasiOtomatisTenor();
         }
 
