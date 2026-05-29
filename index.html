@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiki Kredit v5</title>
+    <title>Kiki Kredit Smart v5</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: #f1f5f9; color: #1e293b; padding: 15px; }
@@ -11,73 +11,55 @@
         .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; }
         .header-app h1 { font-size: 20px; color: #0f172a; }
         .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border-top: 5px solid #2563eb; }
+        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border-top: 5px solid #2563eb; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); }
         .card.aktif { border-top-color: #10b981; }
         .card h3 { font-size: 12px; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
         .card p { font-size: 22px; font-weight: 700; color: #0f172a; }
-        .action-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
-        .action-section h2 { margin-bottom: 12px; font-size: 15px; color: #334155; }
+        .action-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border: 1px solid #e2e8f0; }
+        .action-section h2 { margin-bottom: 12px; font-size: 15px; color: #334155; display: flex; align-items: center; gap: 5px; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 12px; }
-        input, select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; background-color: #f8fafc; }
-        input:focus, select:focus { background-color: #fff; border-color: #2563eb; outline: none; }
-        .smart-calc { font-size: 12px; color: #2563eb; font-weight: 600; grid-column: 1 / -1; }
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; background-color: #f8fafc; transition: all 0.2s; }
+        input:focus, select:focus { background-color: #fff; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); outline: none; }
+        .smart-calc { font-size: 12px; color: #2563eb; font-weight: 600; grid-column: 1 / -1; background: #eff6ff; padding: 8px 12px; border-radius: 6px; border-left: 3px solid #2563eb; display: flex; justify-content: space-between; }
         .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
-        button { padding: 8px 14px; border: none; border-radius: 6px; color: white; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; }
+        button { padding: 10px 16px; border: none; border-radius: 8px; color: white; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; }
+        button:active { transform: scale(0.97); }
         .btn-primary { background: #2563eb; }
+        .btn-primary:hover { background: #1d4ed8; }
         .btn-secondary { background: #64748b; }
+        .btn-secondary:hover { background: #475569; }
         .btn-purple { background: #7c3aed; }
-        .filter-section { display: flex; gap: 10px; margin-bottom: 15px; background: white; padding: 12px; border-radius: 10px; box-shadow: 0 2px 4px rgb(0 0 0 / 0.02); flex-wrap: wrap; }
-        .search-box { flex: 1; min-width: 180px; }
+        .btn-purple:hover { background: #6d28d9; }
+        .filter-section { display: flex; gap: 10px; margin-bottom: 15px; background: white; padding: 12px; border-radius: 10px; box-shadow: 0 2px 4px rgb(0 0 0 / 0.02); flex-wrap: wrap; align-items: center; }
+        .search-box { flex: 1; min-width: 180px; position: relative; }
         .filter-box { width: 130px; }
-        .table-container { background: white; border-radius: 10px; overflow-x: auto; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background: #0f172a; color: white; padding: 12px; font-weight: 600; }
+        .table-container { background: white; border-radius: 10px; overflow-x: auto; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 700px; }
+        th { background: #0f172a; color: white; padding: 12px; font-weight: 600; text-align: left; }
         td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
-        tr:hover { background: #f8fafc; }
-        .badge { padding: 3px 8px; border-radius: 9999px; font-size: 10px; font-weight: 600; }
+        .smart-row { cursor: pointer; transition: background 0.15s; }
+        .smart-row:hover { background: #f1f5f9 !important; }
+        .badge { padding: 4px 8px; border-radius: 9999px; font-size: 10px; font-weight: 700; display: inline-block; }
         .badge.aktif-bg { background: #dcfce7; color: #16a34a; }
         .badge.lunas-bg { background: #f1f5f9; color: #64748b; }
-        .btn-table { padding: 4px 8px; font-size: 11px; border-radius: 4px; font-weight: bold; margin-right: 2px; }
+        .btn-table { padding: 5px 10px; font-size: 11px; border-radius: 6px; font-weight: bold; margin-right: 4px; }
         .btn-pay { background: #10b981; }
+        .btn-pay:hover { background: #059669; }
         .btn-edit { background: #f59e0b; }
+        .btn-edit:hover { background: #d97706; }
         .btn-delete { background: #ef4444; }
+        .btn-delete:hover { background: #dc2626; }
         .btn-print { background: #6366f1; }
-        .loading { text-align: center; padding: 20px; font-weight: 600; color: #64748b; }
+        .btn-print:hover { background: #4f46e5; }
+        .loading { text-align: center; padding: 30px; font-weight: 600; color: #64748b; }
         
-        /* FIX TOTAL: MENGHAPUS SEMUA WHITE SPACE, MARGIN, DAN BACKGROUND */
-        @page {
-            size: auto;
-            margin: 0 !important;
-        }
+        @page { size: auto; margin: 0 !important; }
         @media print {
-            html, body {
-                background: transparent !important;
-                background-color: transparent !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                height: auto !important;
-            }
-            body * { 
-                display: none !important; 
-            }
-            #areaCetakStruk, #areaCetakStruk * { 
-                display: block !important; 
-                visibility: visible !important; 
-                background: transparent !important;
-                box-shadow: none !important;
-            }
-            #areaCetakStruk { 
-                position: absolute; 
-                left: 0; 
-                top: 0; 
-                width: 44mm; 
-                padding: 0 !important; 
-                margin: 0 !important; 
-                color: #000 !important; 
-                font-family: 'Courier New', monospace; 
-                font-size: 8pt; 
-                line-height: 1.1; 
-            }
+            html, body { background: transparent !important; background-color: transparent !important; margin: 0 !important; padding: 0 !important; height: auto !important; }
+            body * { display: none !important; }
+            #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; background: transparent !important; box-shadow: none !important; }
+            #areaCetakStruk { position: absolute; left: 0; top: 0; width: 44mm; padding: 0 !important; margin: 0 !important; color: #000 !important; font-family: 'Courier New', monospace; font-size: 8pt; line-height: 1.1; }
             .print-center { text-align: center; font-weight: bold; }
             .print-line { border-top: 1px dashed #000; margin: 3px 0; display: block !important; height: 1px; }
             .print-double { border-top: 2px double #000; margin: 3px 0; display: block !important; height: 2px; }
@@ -91,8 +73,8 @@
 
     <div class="container">
         <div class="header-app">
-            <h1><b>Kiki Kredit Solution</b></h1>
-            <button class="btn-purple" onclick="ambilData()"><b>Segarkan</b></button>
+            <h1><b>💡 Kiki Kredit Smart</b></h1>
+            <button class="btn-purple" onclick="ambilData()">🔄 <b>Segarkan</b></button>
         </div>
 
         <div class="stats-container">
@@ -107,48 +89,51 @@
         </div>
 
         <div class="action-section">
-            <h2 id="formTitle"><b>Tambah Pelanggan</b></h2>
+            <h2 id="formTitle">📝 <b>Tambah Pelanggan</b></h2>
             <form id="pelangganForm" onsubmit="prosesSimpanData(event)">
                 <input type="hidden" id="rowNum">
                 <input type="hidden" id="cicilanKe" value="0">
                 
                 <div class="form-grid">
-                    <input type="text" id="nama" placeholder="Nama" required>
-                    <input type="text" id="alamat" placeholder="Alamat" required>
-                    <input type="text" id="barang" placeholder="Barang" required>
-                    <input type="number" id="totalHarga" placeholder="Harga (Rp)" required oninput="hitungSimulasiOtomatis()">
+                    <input type="text" id="nama" placeholder="Nama Pelanggan" required oninput="formatTeksSmart(this)">
+                    <input type="text" id="alamat" placeholder="Alamat" required oninput="formatTeksSmart(this)">
+                    <input type="text" id="barang" placeholder="Nama Barang" required oninput="formatTeksSmart(this)">
+                    <input type="number" id="totalHarga" placeholder="Harga Jual (Rp)" required oninput="hitungSimulasiOtomatis()">
                     <select id="tipeTenor" onchange="hitungSimulasiOtomatis()">
-                        <option value="Bulanan">Bulanan</option>
-                        <option value="Mingguan">Mingguan</option>
-                        <option value="Harian">Harian</option>
+                        <option value="Bulanan">🗓️ Bulanan</option>
+                        <option value="Mingguan">⏳ Mingguan</option>
+                        <option value="Harian">☀️ Harian</option>
                     </select>
-                    <input type="number" id="tenor" placeholder="Tenor (Sesi)" required oninput="hitungSimulasiOtomatis()">
+                    <input type="number" id="tenor" placeholder="Tenor / Berapa Kali" required oninput="hitungSimulasiOtomatis()">
                     <input type="number" id="sisaUtang" placeholder="Sisa Utang Awal (Rp)" required>
                     
-                    <div id="simulasiHasil" class="smart-calc"><b>Angsuran: Rp 0</b></div>
+                    <div id="simulasiHasil" class="smart-calc">
+                        <span>📋 Angsuran: <b>Rp 0</b></span>
+                        <span id="bantuanNominal" style="color:#64748b;">(Rp 0)</span>
+                    </div>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="btnSubmit" class="btn-primary"><b>Simpan</b></button>
-                    <button type="button" class="btn-secondary" onclick="resetForm()"><b>Reset</b></button>
+                    <button type="submit" id="btnSubmit" class="btn-primary">💾 <b>Simpan Data</b></button>
+                    <button type="button" class="btn-secondary" onclick="resetForm()">🧹 <b>Batal</b></button>
                 </div>
             </form>
         </div>
 
         <div class="filter-section">
             <div class="search-box">
-                <input type="text" id="inputCari" placeholder="Cari nama / barang..." oninput="jalankanFilterSmart()">
+                <input type="text" id="inputCari" placeholder="🔍 Ketik nama atau barang untuk mencari..." oninput="jalankanFilterSmart()">
             </div>
             <div class="filter-box">
                 <select id="filterStatus" onchange="jalankanFilterSmart()">
-                    <option value="SEMUA">Semua</option>
-                    <option value="AKTIF">Aktif</option>
-                    <option value="LUNAS">Lunas</option>
+                    <option value="SEMUA">🌐 Semua</option>
+                    <option value="AKTIF">🟢 Aktif</option>
+                    <option value="LUNAS">⚪ Lunas</option>
                 </select>
             </div>
         </div>
 
         <div class="table-container">
-            <div id="loadingText" class="loading"><b>Memuat data...</b></div>
+            <div id="loadingText" class="loading">⏳ <b>Memuat data dari Cloud...</b></div>
             <table id="pelangganTable" style="display: none;">
                 <thead>
                     <tr>
@@ -160,7 +145,7 @@
                         <th><b>Ke</b></th>
                         <th><b>Sisa</b></th>
                         <th><b>Status</b></th>
-                        <th style="text-align: center;"><b>Aksi</b></th>
+                        <th style="text-align: center;"><b>Aksi Cepat</b></th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -172,11 +157,23 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbw2msfsM4iqNn9n-9cHCf-jy9Ja5FhwjF59ugSAumG3IYt6CbHp1EhlHBaFlWm-Akks/exec";
         let masterDataPelanggan = [];
 
+        // MODEL SMART UX: Otomatis merubah huruf pertama menjadi Kapital (Proper Case)
+        function formatTeksSmart(input) {
+            let kata = input.value.split(" ");
+            for (let i = 0; i < kata.length; i++) {
+                if (kata[i].length > 0) {
+                    kata[i] = kata[i][0].toUpperCase() + kata[i].substr(1);
+                }
+            }
+            input.value = kata.join(" ");
+        }
+
         function bersihkanTeks(str) {
             if (!str) return '';
             return str.toString().replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, "").trim();
         }
 
+        // MODEL SMART UX: Kalkulator kalkulasi otomatis + pembaca nominal rupiah interaktif
         function hitungSimulasiOtomatis() {
             const totalHarga = parseInt(document.getElementById('totalHarga').value) || 0;
             const tenor = parseInt(document.getElementById('tenor').value) || 0;
@@ -185,11 +182,14 @@
 
             if (!rowNum) document.getElementById('sisaUtang').value = totalHarga;
 
+            // Membantu membaca kejelasan angka nol (ex: 1000000 -> Rp 1.000.000)
+            document.getElementById('bantuanNominal').innerText = `(Rp ${totalHarga.toLocaleString('id-ID')})`;
+
             if (totalHarga > 0 && tenor > 0) {
                 const angsuran = Math.ceil(totalHarga / tenor);
-                document.getElementById('simulasiHasil').innerHTML = `<b>Angsuran: Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.toLowerCase()}</b>`;
+                document.getElementById('simulasiHasil').innerHTML = `<span>📋 Angsuran: <b>Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.replace(/[^a-zA-Z]/g, "").toLowerCase()}</b></span> <span style="color:#2563eb;">⚡ Terhitung Otomatis</span>`;
             } else {
-                document.getElementById('simulasiHasil').innerHTML = `<b>Angsuran: Rp 0</b>`;
+                document.getElementById('simulasiHasil').innerHTML = `<span>📋 Angsuran: <b>Rp 0</b></span> <span id="bantuanNominal" style="color:#64748b;">(Rp 0)</span>`;
             }
         }
 
@@ -206,7 +206,7 @@
                 masterDataPelanggan = result.pelanggan;
                 jalankanFilterSmart();
             } catch (err) {
-                alert("Koneksi Google Sheets gagal.");
+                alert("Koneksi database gagal.");
             } finally {
                 document.getElementById('loadingText').style.display = "none";
                 document.getElementById('pelangganTable').style.display = "table";
@@ -226,11 +226,14 @@
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = "";
             if(data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#64748b; padding:20px;"><b>Data kosong.</b></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#64748b; padding:20px;"><b>Data tidak ditemukan.</b></td></tr>`;
                 return;
             }
             data.forEach(p => {
                 const tr = document.createElement('tr');
+                tr.className = "smart-row";
+                // MODEL SMART UX: Klik area baris mana saja pada tabel otomatis langsung membuka mode koreksi form
+                tr.setAttribute("onclick", `isiFormUntukEdit(${p.rowNum}); event.stopPropagation();`);
                 tr.innerHTML = `
                     <td><b>${p.nama}</b></td>
                     <td><span style="color:#64748b; font-size:12px;"><b>${p.alamat}</b></span></td>
@@ -241,11 +244,10 @@
                     <td style="color:${p.sisa > 0 ? '#ef4444' : '#10b981'}; font-weight:bold;"><b>Rp ${p.sisa.toLocaleString('id-ID')}</b></td>
                     <td><span class="badge ${p.status === "AKTIF" ? "aktif-bg" : "lunas-bg"}"><b>${p.status}</b></span></td>
                     <td>
-                        <div style="display:flex; justify-content: center;">
-                            ${p.status === "AKTIF" ? `<button class="btn-table btn-pay" onclick="bayarManual(${p.rowNum}, ${p.sisa})"><b>Bayar</b></button>` : ''}
-                            <button class="btn-table btn-edit" onclick="isiFormUntukEdit(${p.rowNum})"><b>Edit</b></button>
-                            <button class="btn-table btn-print" onclick="cetakStrukLokal(${p.rowNum}, null, null)"><b>Struk</b></button>
-                            <button class="btn-table btn-delete" onclick="hapusData(${p.rowNum})"><b>Hapus</b></button>
+                        <div style="display:flex; justify-content: center;" onclick="event.stopPropagation();">
+                            ${p.status === "AKTIF" ? `<button class="btn-table btn-pay" onclick="bayarManual(${p.rowNum}, ${p.sisa})">💸 Bayar</button>` : ''}
+                            <button class="btn-table btn-print" onclick="cetakStrukLokal(${p.rowNum}, null, null)">🖨️ Struk</button>
+                            <button class="btn-table btn-delete" onclick="hapusData(${p.rowNum})">🗑️ Hapus</button>
                         </div>
                     </td>
                 `;
@@ -268,7 +270,7 @@
                 sisaUtang: parseInt(document.getElementById('sisaUtang').value)
             };
             const btn = document.getElementById('btnSubmit');
-            btn.disabled = true; btn.innerHTML = "<b>Proses...</b>";
+            btn.disabled = true; btn.innerHTML = "⌛ <b>Menyimpan...</b>";
             try {
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "simpanData", data: payload }) });
                 alert(await response.json());
@@ -336,7 +338,7 @@
         }
 
         async function hapusData(rowNum) {
-            if(!confirm("Hapus permanen?")) return;
+            if(!confirm("Hapus data pelanggan ini secara permanen?")) return;
             try {
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "hapusData", rowNum: rowNum }) });
                 alert(await response.json()); ambilData();
@@ -355,18 +357,19 @@
             document.getElementById('tenor').value = p.tenor;
             document.getElementById('cicilanKe').value = p.cicilanKe;
             document.getElementById('sisaUtang').value = p.sisa;
-            document.getElementById('formTitle').innerHTML = "<b>Edit: " + p.nama + "</b>";
-            document.getElementById('btnSubmit').innerHTML = "<b>Ubah</b>";
+            document.getElementById('formTitle').innerHTML = "✏️ <b>Ubah Data: " + p.nama + "</b>";
+            document.getElementById('btnSubmit').innerHTML = "🔄 <b>Perbarui Data</b>";
             hitungSimulasiOtomatis();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('nama').focus(); // Smart Focus langsung ke kolom input utama
         }
 
         function resetForm() {
             document.getElementById('pelangganForm').reset();
             document.getElementById('rowNum').value = "";
             document.getElementById('cicilanKe').value = "0";
-            document.getElementById('formTitle').innerHTML = "<b>Tambah Pelanggan</b>";
-            document.getElementById('btnSubmit').innerHTML = "<b>Simpan</b>";
+            document.getElementById('formTitle').innerHTML = "📝 <b>Tambah Pelanggan</b>";
+            document.getElementById('btnSubmit').innerHTML = "💾 <b>Simpan Data</b>";
             hitungSimulasiOtomatis();
         }
 
