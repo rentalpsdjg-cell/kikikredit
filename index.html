@@ -469,14 +469,13 @@
  
     function buatBarisStruk(label, value) {
       const LEBAR_KERTAS = 26; 
-      const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
+      const sisaSpasi = LEBAR_KERTAS - (label.length + String(value).length);
       if (sisaSpasi > 0) {
         return label + " ".repeat(sisaSpasi) + value + "\n";
       }
-      return label + "\n" + " ".repeat(LEBAR_KERTAS - value.length) + value + "\n";
+      return label + "\n" + " ".repeat(LEBAR_KERTAS - String(value).length) + value + "\n";
     }
  
-    // SOLUSI CETAK VIRTUAL IFRAME: ANTI-HILANG & COMPATIBLE UNTUK ALL HP/PC
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- RE-PRINT -";
       
@@ -495,7 +494,6 @@
       streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n"; 
       streamTeks = streamTeks.toUpperCase();
 
-      // Membuat container cetak bayangan di memory tanpa merusak CSS body halaman utama
       const iframe = document.createElement('iframe');
       iframe.style.position = 'fixed';
       iframe.style.bottom = '0';
@@ -541,11 +539,10 @@
       `);
       doc.close();
 
-      // Eksekusi printer sesaat setelah data siap disuntikkan ke dokumen
       setTimeout(() => {
         iframe.contentWindow.focus();
         iframe.contentWindow.print();
-        document.body.removeChild(iframe); // Bersihkan sisa elemen pembuangan memory
+        document.body.removeChild(iframe); 
       }, 400);
     }
  
