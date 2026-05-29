@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiki Kredit Modern Clean v7</title>
+    <title>Kiki Kredit Ultra Smart v8</title>
     <style>
         :root {
-            --bg-app: #f4f6f9;
+            --bg-app: #f1f5f9;
             --surface: #ffffff;
-            --text-dark: #1e293b;
+            --text-dark: #0f172a;
             --text-gray: #64748b;
             --primary: #4f46e5;
             --primary-hover: #4338ca;
@@ -16,7 +16,7 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --border-color: #e2e8f0;
-            --radius: 10px;
+            --radius: 12px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
@@ -25,80 +25,86 @@
         
         /* Header Section */
         .app-header { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 18px 24px; border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 20px; border: 1px solid var(--border-color); }
-        .app-header h1 { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--text-dark); }
+        .app-header h1 { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
         .status-pill { font-size: 11px; background: #eef2ff; color: var(--primary); padding: 4px 10px; border-radius: 20px; font-weight: 600; }
 
         /* Dashboard Metric Widgets */
         .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px; }
-        .metric-card { background: var(--surface); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .metric-card { background: var(--surface); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border-color); }
         .metric-card h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-        .metric-card p { font-size: 24px; font-weight: 700; color: var(--text-dark); }
-        .metric-card .sub-text { font-size: 11px; color: var(--text-gray); margin-top: 4px; display: block; }
+        .metric-card p { font-size: 24px; font-weight: 700; }
 
         /* Form Card */
-        .form-card { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 20px; }
-        .form-card h2 { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
+        .form-card { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border-color); margin-bottom: 20px; }
+        .form-card h2 { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 16px; }
         
         .input-box { display: flex; flex-direction: column; gap: 4px; }
         .input-box label { font-size: 11px; font-weight: 600; color: var(--text-gray); text-transform: uppercase; }
-        input, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px; font-weight: 500; background-color: #f8fafc; transition: all 0.15s ease; color: var(--text-dark); }
+        input, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 13px; font-weight: 500; background-color: #f8fafc; color: var(--text-dark); transition: all 0.15s ease; }
         input:focus, select:focus { background-color: var(--surface); border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); outline: none; }
         
-        /* Info Live Banner */
-        .live-calc-banner { grid-column: 1 / -1; background: #f5f3ff; padding: 12px 16px; border-radius: 6px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; color: var(--primary); }
+        .live-calc-banner { grid-column: 1 / -1; background: #f5f3ff; padding: 12px 16px; border-radius: 8px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; color: var(--primary); }
 
         .btn-container { display: flex; gap: 8px; flex-wrap: wrap; }
-        button { padding: 10px 16px; border: none; border-radius: 6px; color: white; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease; }
+        button { padding: 10px 16px; border: none; border-radius: 8px; color: white; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease; }
         button:active { transform: scale(0.98); }
         .btn-indigo { background: var(--primary); }
         .btn-indigo:hover { background: var(--primary-hover); }
         .btn-slate { background: var(--text-gray); }
-        .btn-slate:hover { background: #475569; }
         .btn-refresh { background: #7c3aed; }
 
         /* Filter Controls */
         .search-filter-bar { display: flex; gap: 12px; margin-bottom: 16px; background: var(--surface); padding: 14px; border-radius: var(--radius); border: 1px solid var(--border-color); flex-wrap: wrap; }
         .search-input-wrapper { flex: 1; min-width: 250px; }
-        .filter-select-wrapper { width: 150px; }
 
-        /* Clean Minimalist Table */
-        .table-holder { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border-color); overflow-x: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        /* Table Design */
+        .table-holder { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border-color); overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 950px; }
-        th { background: #0f172a; color: white; padding: 14px; font-weight: 600; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.02em; }
-        td { padding: 14px; border-bottom: 1px solid var(--border-color); color: #334155; }
+        th { background: #0f172a; color: white; padding: 14px; font-weight: 600; text-align: left; font-size: 12px; text-transform: uppercase; }
+        td { padding: 14px; border-bottom: 1px solid var(--border-color); }
         .row-hover:hover { background-color: #f8fafc; }
         
-        /* Badges status */
-        .status-tag { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; display: inline-block; }
+        .status-tag { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
         .tag-active { background: #dcfce7; color: #16a34a; }
         .tag-done { background: #f1f5f9; color: #475569; }
 
-        /* Row Action Grid Buttons */
         .action-flex { display: flex; gap: 4px; justify-content: center; }
-        .btn-action { padding: 5px 10px; font-size: 11px; border-radius: 4px; font-weight: 700; color: white; border: none; }
+        .btn-action { padding: 6px 12px; font-size: 11px; border-radius: 6px; font-weight: 700; color: white; border: none; }
         .btn-action-pay { background: var(--success); }
-        .btn-action-pay:hover { background: #059669; }
         .btn-action-print { background: #6366f1; }
-        .btn-action-print:hover { background: #4f46e5; }
         .btn-action-edit { background: var(--warning); }
-        .btn-action-edit:hover { background: #d97706; }
         .btn-action-del { background: #fff; color: var(--danger); border: 1px solid #fee2e2; }
         .btn-action-del:hover { background: #fee2e2; }
 
+        /* SMART PAY PANEL SLIDE */
+        .smart-pay-panel { background: #fafafa; border-top: 2px solid #e2e8f0; animation: slideDown 0.2s ease-out; }
+        .pay-panel-container { padding: 12px 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .pay-title { font-size: 12px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; margin-right: 10px; }
+        .btn-quick-money { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; font-size: 12px; padding: 6px 14px; border-radius: 6px; }
+        .btn-quick-money:hover:not(:disabled) { background: #eff6ff; border-color: var(--primary); color: var(--primary); }
+        .btn-quick-money:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-quick-lunas { background: #0f172a; color: white; border: none; font-size: 12px; padding: 6px 14px; border-radius: 6px; }
+        .btn-quick-lunas:hover { background: #1e293b; }
+
         .loader-text { text-align: center; padding: 40px; font-weight: 600; color: var(--text-gray); }
 
-        /* THERMAL PRINTER CORE: NO BLANK PAGES AT ALL */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* THERMAL PRINTER NO BLANK SPACE RULES */
         @page { size: auto; margin: 0 !important; }
         @media print {
-            html, body { background: transparent !important; background-color: transparent !important; margin: 0 !important; padding: 0 !important; height: auto !important; }
+            html, body { background: transparent !important; margin: 0 !important; padding: 0 !important; height: auto !important; }
             body * { display: none !important; }
-            #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; background: transparent !important; box-shadow: none !important; }
+            #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; background: transparent !important; }
             #areaCetakStruk { position: absolute; left: 0; top: 0; width: 44mm; padding: 0 !important; margin: 0 !important; color: #000 !important; font-family: 'Courier New', monospace; font-size: 8pt; line-height: 1.1; }
             .print-center { text-align: center; font-weight: bold; }
             .print-line { border-top: 1px dashed #000; margin: 3px 0; display: block !important; height: 1px; }
             .print-double { border-top: 2px double #000; margin: 3px 0; display: block !important; height: 2px; }
-            .print-row { display: flex !important; justify-content: space-between; font-weight: bold; white-space: nowrap; }
+            .print-row { display: flex !important; justify-content: space-between; font-weight: bold; }
         }
     </style>
 </head>
@@ -108,7 +114,7 @@
 
     <div class="container">
         <div class="app-header">
-            <h1>📊 Kiki Kredit Solution <span id="syncIndicator" class="status-pill">Sinkron</span></h1>
+            <h1>⚡ Kiki Kredit Ultra Smart <span id="syncIndicator" class="status-pill">Sinkron</span></h1>
             <button class="btn-refresh" onclick="ambilDataDariCloud()">🔄 <b>Ambil Data Baru</b></button>
         </div>
 
@@ -116,17 +122,14 @@
             <div class="metric-card">
                 <h3>Total Sisa Piutang</h3>
                 <p id="totalPiutang">Rp 0</p>
-                <span class="sub-text">Sisa saldo yang harus ditagih</span>
             </div>
             <div class="metric-card">
                 <h3>Pelanggan Aktif</h3>
                 <p id="pelangganAktif">0 Orang</p>
-                <span class="sub-text">Pelanggan dengan cicilan berjalan</span>
             </div>
             <div class="metric-card">
                 <h3>Rasio Kelancaran</h3>
                 <p id="rasioPelunasan">0%</p>
-                <span class="sub-text">Persentase akun berstatus lunas</span>
             </div>
         </div>
 
@@ -147,32 +150,32 @@
                     </div>
                     <div class="input-box">
                         <label>Nama Barang</label>
-                        <input type="text" id="barang" placeholder="Contoh: Kulkas Sharp 2 Pintu" required oninput="kapitalisasiSmart(this)">
+                        <input type="text" id="barang" placeholder="Contoh: Kulkas Sharp" required oninput="kapitalisasiSmart(this)">
                     </div>
                     <div class="input-box">
-                        <label>Harga Jual Jauh (Rp)</label>
+                        <label>Harga Jual Dasar (Rp)</label>
                         <input type="number" id="totalHarga" placeholder="Masukkan nominal" required oninput="kalkulasiOtomatisTenor()">
                     </div>
                     <div class="input-box">
                         <label>Metode Siklus</label>
                         <select id="tipeTenor" onchange="kalkulasiOtomatisTenor()">
-                            <option value="Bulanan">🗓️ Bulanan</option>
-                            <option value="Mingguan">⏳ Mingguan</option>
-                            <option value="Harian">☀️ Harian</option>
+                            <option value="Bulanan">Bulanan</option>
+                            <option value="Mingguan">Mingguan</option>
+                            <option value="Harian">Harian</option>
                         </select>
                     </div>
                     <div class="input-box">
                         <label>Lama Tenor (Kali)</label>
-                        <input type="number" id="tenor" placeholder="Jumlah kali bayar" required oninput="kalkulasiOtomatisTenor()">
+                        <input type="number" id="tenor" placeholder="Jumlah sesi" required oninput="kalkulasiOtomatisTenor()">
                     </div>
                     <div class="input-box">
-                        <label>Sisa Utang Saat Ini (Rp)</label>
-                        <input type="number" id="sisaUtang" placeholder="Otomatis sinkron harga" required>
+                        <label>Sisa Utang Terkunci (Rp)</label>
+                        <input type="number" id="sisaUtang" placeholder="Otomatis sinkron" required>
                     </div>
                     
                     <div id="simulasiHasil" class="live-calc-banner">
-                        <span>Besaran Angsuran: <b id="textAngsuran">Rp 0</b></span>
-                        <span style="font-size:11px; opacity:0.8;">Kalkulator Otomatis</span>
+                        <span>Besaran Angsuran Berjalan: <b id="textAngsuran">Rp 0</b></span>
+                        <span style="font-size:11px; opacity:0.8;">Sistem Kalkulator Cerdas</span>
                     </div>
                 </div>
                 <div class="btn-container">
@@ -184,31 +187,31 @@
 
         <div class="search-filter-bar">
             <div class="search-input-wrapper">
-                <input type="text" id="inputCari" placeholder="🔍 Cari nama pelanggan, alamat, atau nama barang pembiayaan..." oninput="jalankanPencarianLokal()">
+                <input type="text" id="inputCari" placeholder="🔍 Masukkan kata kunci nama, alamat, atau barang..." oninput="jalankanPencarianLokal()">
             </div>
-            <div class="filter-select-wrapper">
+            <div style="width: 150px;">
                 <select id="filterStatus" onchange="jalankanPencarianLokal()">
                     <option value="SEMUA">🌐 Semua Status</option>
-                    <option value="AKTIF">🟢 Status Aktif</option>
-                    <option value="LUNAS">⚪ Status Lunas</option>
+                    <option value="AKTIF">🟢 Aktif</option>
+                    <option value="LUNAS">⚪ Lunas</option>
                 </select>
             </div>
         </div>
 
         <div class="table-holder">
-            <div id="loadingText" class="loader-text">⏳ Memproses data dari Cloud Server...</div>
+            <div id="loadingText" class="loader-text">⏳ Memproses basis data cloud...</div>
             <table id="pelangganTable" style="display: none;">
                 <thead>
                     <tr>
                         <th>Pelanggan</th>
                         <th>Alamat</th>
-                        <th>Nama Barang</th>
+                        <th>Barang Pembiayaan</th>
                         <th>Total Pokok</th>
                         <th>Tenor</th>
-                        <th>Sesi Ke</th>
+                        <th>Ke</th>
                         <th>Sisa Piutang</th>
                         <th>Status</th>
-                        <th style="text-align: center;">Tindakan Manajemen</th>
+                        <th style="text-align: center;">Tindakan Operasional</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -220,23 +223,19 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbw2msfsM4iqNn9n-9cHCf-jy9Ja5FhwjF59ugSAumG3IYt6CbHp1EhlHBaFlWm-Akks/exec";
         let cacheDataLokal = [];
 
-        // SMART UX: Auto Upper Case untuk kata pertama
         function kapitalisasiSmart(input) {
             let kata = input.value.split(" ");
             for (let i = 0; i < kata.length; i++) {
-                if (kata[i].length > 0) {
-                    kata[i] = kata[i][0].toUpperCase() + kata[i].substr(1);
-                }
+                if (kata[i].length > 0) kata[i] = kata[i][0].toUpperCase() + kata[i].substr(1);
             }
             input.value = kata.join(" ");
         }
 
         function bersihkanSimbol(str) {
             if (!str) return '';
-            return str.toString().replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, "").trim();
+            return str.toString().replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]/g, "").trim();
         }
 
-        // Live Kalkulator Form
         function kalkulasiOtomatisTenor() {
             const totalHarga = parseInt(document.getElementById('totalHarga').value) || 0;
             const tenor = parseInt(document.getElementById('tenor').value) || 0;
@@ -253,21 +252,17 @@
             }
         }
 
-        // Fetch Data Engine
         async function ambilDataDariCloud() {
             const ind = document.getElementById('syncIndicator');
             ind.innerText = "🔄 Memuat...";
-            ind.style.background = "#fffbeb";
-            ind.style.color = "#d97706";
-
+            ind.style.background = "#fffbeb"; ind.style.color = "#d97706";
             document.getElementById('loadingText').style.display = "block";
             document.getElementById('pelangganTable').style.display = "none";
 
             try {
                 const response = await fetch(`${API_URL}?action=ambilData`);
                 const result = await response.json();
-                if (result.error) return alert("API Error: " + result.error);
-
+                
                 document.getElementById('totalPiutang').innerHTML = "<b>Rp " + result.stats.totalPiutang.toLocaleString('id-ID') + "</b>";
                 document.getElementById('pelangganAktif').innerHTML = "<b>" + result.stats.aktif + " Orang</b>";
                 
@@ -279,20 +274,16 @@
                 jalankanPencarianLokal();
 
                 ind.innerText = "🟢 Sinkron";
-                ind.style.background = "#dcfce7";
-                ind.style.color = "#16a34a";
+                ind.style.background = "#dcfce7"; ind.style.color = "#16a34a";
             } catch (err) {
-                ind.innerText = "🔴 Gagal Sinkron";
-                ind.style.background = "#fee2e2";
-                ind.style.color = "#ef4444";
-                alert("Sambungan server terputus.");
+                ind.innerText = "🔴 Gagal";
+                ind.style.background = "#fee2e2"; ind.style.color = "#ef4444";
             } finally {
                 document.getElementById('loadingText').style.display = "none";
                 document.getElementById('pelangganTable').style.display = "table";
             }
         }
 
-        // Zero-Delay Client Filter Search
         function jalankanPencarianLokal() {
             const keyword = document.getElementById('inputCari').value.toLowerCase().trim();
             const status = document.getElementById('filterStatus').value;
@@ -305,17 +296,12 @@
             buatRenderTabel(terfilter);
         }
 
-        // Render Table DOM Builder
         function buatRenderTabel(data) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = "";
 
-            if(data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:var(--text-gray); padding:24px;">Data tidak ditemukan.</td></tr>`;
-                return;
-            }
-
             data.forEach(p => {
+                // Baris Utama Data Pelanggan
                 const tr = document.createElement('tr');
                 tr.className = "row-hover";
                 tr.innerHTML = `
@@ -329,7 +315,7 @@
                     <td><span class="status-tag ${p.status === 'AKTIF' ? 'tag-active' : 'tag-done'}">${p.status}</span></td>
                     <td>
                         <div class="action-flex">
-                            ${p.status === "AKTIF" ? `<button class="btn-action btn-action-pay" onclick="prosesBayarManual(${p.rowNum}, ${p.sisa})">💸 Bayar</button>` : ''}
+                            ${p.status === "AKTIF" ? `<button class="btn-action btn-action-pay" onclick="bukaPanelBayarSmart(${p.rowNum}, this)">💸 Bayar</button>` : ''}
                             <button class="btn-action btn-action-print" onclick="printStrukKasir(${p.rowNum}, null, null)">🖨️ Struk</button>
                             <button class="btn-action btn-action-edit" onclick="isiDataKeFormulir(${p.rowNum})">✏️ Edit</button>
                             <button class="btn-action btn-action-del" onclick="hapusBarisPelanggan(${p.rowNum})">🗑️</button>
@@ -337,10 +323,76 @@
                     </td>
                 `;
                 tbody.appendChild(tr);
+
+                // Baris Tersembunyi untuk Sub-Panel Pilihan Tombol Duit Smart
+                const trPanel = document.createElement('tr');
+                trPanel.id = `panel-pay-${p.rowNum}`;
+                trPanel.className = "smart-pay-panel";
+                trPanel.style.display = "none";
+                trPanel.innerHTML = `
+                    <td colspan="9">
+                        <div class="pay-panel-container">
+                            <span class="pay-title">⚡ Opsi Bayar Cepat:</span>
+                            <button class="btn-quick-money" ${p.sisa < 50000 ? 'disabled' : ''} onclick="eksekusiBayarOtomatis(${p.rowNum}, 50000, ${p.sisa})">💵 50K</button>
+                            <button class="btn-quick-money" ${p.sisa < 100000 ? 'disabled' : ''} onclick="eksekusiBayarOtomatis(${p.rowNum}, 100000, ${p.sisa})">💵 100K</button>
+                            <button class="btn-quick-money" ${p.sisa < 150000 ? 'disabled' : ''} onclick="eksekusiBayarOtomatis(${p.rowNum}, 150000, ${p.sisa})">💵 150K</button>
+                            <button class="btn-quick-money" ${p.sisa < 200000 ? 'disabled' : ''} onclick="eksekusiBayarOtomatis(${p.rowNum}, 200000, ${p.sisa})">💵 200K</button>
+                            <button class="btn-quick-money" ${p.sisa < 300000 ? 'disabled' : ''} onclick="eksekusiBayarOtomatis(${p.rowNum}, 300000, ${p.sisa})">💵 300K</button>
+                            <button class="btn-quick-money" ${p.sisa < 500000 ? 'disabled' : ''} onclick="eksekusiBayarOtomatis(${p.rowNum}, 500000, ${p.sisa})">💵 500K</button>
+                            <button class="btn-quick-lunas" onclick="eksekusiBayarOtomatis(${p.rowNum}, ${p.sisa}, ${p.sisa})">🎯 Sisa Lunas (Rp ${(p.sisa).toLocaleString('id-ID')})</button>
+                            <button class="btn-action btn-action-del" style="margin-left:auto; padding: 4px 8px;" onclick="tutupPanelBayar(${p.rowNum})">✕ Tutup</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(trPanel);
             });
         }
 
-        // Simpan / Edit Controller
+        // Toggle Expand Panel Bayar Instan
+        function bukaPanelBayarSmart(rowNum, buttonElement) {
+            // Tutup semua panel bayar lain yang sedang terbuka terlebih dahulu
+            document.querySelectorAll('.smart-pay-panel').forEach(panel => {
+                if(panel.id !== `panel-pay-${rowNum}`) panel.style.display = "none";
+            });
+
+            const targetPanel = document.getElementById(`panel-pay-${rowNum}`);
+            if (targetPanel.style.display === "none") {
+                targetPanel.style.display = "table-row";
+            } else {
+                targetPanel.style.display = "none";
+            }
+        }
+
+        function tutupPanelBayar(rowNum) {
+            document.getElementById(`panel-pay-${rowNum}`).style.display = "none";
+        }
+
+        // Eksekusi Pembayaran Tanpa Ketik
+        async function eksekusiBayarOtomatis(rowNum, nominal, maksimalSisa) {
+            if (nominal <= 0 || nominal > maksimalSisa) return alert("Penyimpangan nominal transaksional.");
+            tutupPanelBayar(rowNum);
+
+            try {
+                document.getElementById('loadingText').style.display = "block";
+                const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "bayarManual", rowNum: rowNum, nominal: nominal }) });
+                const result = await response.json();
+                
+                if (result.error) {
+                    alert("Error: " + result.error);
+                } else {
+                    if(confirm(`Sukses Masuk Rp ${nominal.toLocaleString('id-ID')}! Cetak struk belanja thermal?`)) {
+                        printStrukKasir(rowNum, nominal, result.hasilBayar.sisa);
+                    }
+                    const link = document.createElement('a'); link.href = `data:application/pdf;base64,${result.pdf}`; link.download = `Nota_${result.hasilBayar.nama}.pdf`; link.click();
+                    ambilDataDariCloud();
+                }
+            } catch (err) {
+                alert("Gangguan transmisi data finansial.");
+            } finally {
+                document.getElementById('loadingText').style.display = "none";
+            }
+        }
+
         async function simpanDataKeSistem(e) {
             e.preventDefault();
             const rowNum = document.getElementById('rowNum').value;
@@ -365,42 +417,15 @@
                 resetFormulir();
                 ambilDataDariCloud();
             } catch (err) {
-                alert("Komunikasi data ke cloud terganggu.");
+                alert("Komunikasi awan terputus.");
             } finally {
                 btn.disabled = false;
             }
         }
 
-        // Action Pay Manual
-        async function prosesBayarManual(rowNum, maksimalSisa) {
-            const nominalInput = prompt(`Input Angka Pembayaran (Maks Rp ${maksimalSisa.toLocaleString('id-ID')}):`);
-            if (!nominalInput) return;
-            const nominal = parseInt(nominalInput);
-            if (isNaN(nominal) || nominal <= 0 || nominal > maksimalSisa) return alert("Peringatan: Nominal di luar batas validasi.");
-
-            try {
-                document.getElementById('loadingText').style.display = "block";
-                const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "bayarManual", rowNum: rowNum, nominal: nominal }) });
-                const result = await response.json();
-                
-                if (result.error) {
-                    alert("Error: " + result.error);
-                } else {
-                    if(confirm("Sukses! Cetak struk belanja sekarang?")) printStrukKasir(rowNum, nominal, result.hasilBayar.sisa);
-                    const link = document.createElement('a'); link.href = `data:application/pdf;base64,${result.pdf}`; link.download = `Nota_${result.hasilBayar.nama}.pdf`; link.click();
-                    ambilDataDariCloud();
-                }
-            } catch (err) {
-                alert("Gagal melakukan enkripsi pembayaran.");
-            } finally {
-                document.getElementById('loadingText').style.display = "none";
-            }
-        }
-
-        // Thermal Print Output Generation
         function printStrukKasir(rowNum, nominalBayar = null, sisaBaru = null) {
             const p = cacheDataLokal.find(x => x.rowNum === rowNum);
-            if(!p) return alert("Rekor tidak valid.");
+            if(!p) return alert("Identitas transaksi kabur.");
 
             const tanggal = new Date().toLocaleDateString('id-ID', { year: '2-digit', month: '2-digit', day: '2-digit' });
             const containerStruk = document.getElementById('areaCetakStruk');
@@ -422,16 +447,13 @@
                 <div class="print-row"><span><b>SISA UTANG</b></span> <span><b>: Rp ${sisaAkhir.toLocaleString('id-ID')}</b></span></div>
                 <div class="print-row"><span><b>Status</b></span> <span><b>: ${sisaAkhir <= 0 ? 'LUNAS' : 'AKTIF'}</b></span></div>
                 <div class="print-line"></div>
-                <div class="print-center" style="margin-top:5px;">
-                    <b>** STRUK VALID **</b>
-                </div>
+                <div class="print-center" style="margin-top:4px;"><b>** STRUK VALID **</b></div>
             `;
             setTimeout(() => { window.print(); }, 200);
         }
 
-        // Delete Row Operation
         async function hapusBarisPelanggan(rowNum) {
-            if(!confirm("Yakin ingin menghapus permanen data pelanggan ini?")) return;
+            if(!confirm("Hapus data rekor pelanggan secara permanen?")) return;
             try {
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "hapusData", rowNum: rowNum }) });
                 alert(await response.json());
@@ -439,7 +461,6 @@
             } catch (err) { alert("Penghapusan gagal."); }
         }
 
-        // Fill Form for Modification
         function isiDataKeFormulir(rowNum) {
             const p = cacheDataLokal.find(x => x.rowNum === rowNum);
             if(!p) return;
@@ -453,7 +474,7 @@
             document.getElementById('cicilanKe').value = p.cicilanKe;
             document.getElementById('sisaUtang').value = p.sisa;
             
-            document.getElementById('formTitle').innerHTML = "✏️ Ubah Data Pelanggan: <span style='color:var(--primary)'>" + p.nama + "</span>";
+            document.getElementById('formTitle').innerHTML = "✏️ Ubah Data Pelanggan: " + p.nama;
             document.getElementById('btnSubmit').innerHTML = "🔄 <b>Perbarui Data</b>";
             
             kalkulasiOtomatisTenor();
@@ -461,7 +482,6 @@
             document.getElementById('nama').focus();
         }
 
-        // Reset state
         function resetFormulir() {
             document.getElementById('pelangganForm').reset();
             document.getElementById('rowNum').value = "";
@@ -471,7 +491,6 @@
             kalkulasiOtomatisTenor();
         }
 
-        // Boot Init
         window.onload = ambilDataDariCloud;
     </script>
 </body>
