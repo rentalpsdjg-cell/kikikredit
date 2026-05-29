@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution - Smart POS v7.0</title>
+  <title>Kiki Kredit Solution - Smart POS v7.5</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -145,7 +145,7 @@
   <nav class="navbar navbar-custom shadow-sm mb-4">
     <div class="container">
       <span class="navbar-brand mb-0 h1 text-white fw-bold fs-4">
-        <i class="fa-solid fa-bolt text-warning me-2"></i> Kiki Kredit <span class="badge bg-light text-dark fs-6 ms-2">v7.0 Smart POS</span>
+        <i class="fa-solid fa-bolt text-warning me-2"></i> Kiki Kredit <span class="badge bg-light text-dark fs-6 ms-2">v7.5 Ultra-Print</span>
       </span>
     </div>
   </nav>
@@ -449,7 +449,7 @@
           if(res.error) { tunukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
           tunukkanLoading(false);
           
-          // AKTIF 100%: Memicu cetak langsung otomatis setelah cloud sukses menerima data
+          // KIRIM LANGSUNG KE PRINTER BEGITU SUKSES
           pemicuKertasThermal(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
           muatDataDashboard();
         }).catch(() => { tunukkanLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
@@ -465,7 +465,7 @@
     }
  
     function buatBarisStruk(label, value) {
-      const LEBAR_KERTAS = 26; 
+      const LEBAR_KERTAS = 32; // Standar lebar karakter printer thermal 58mm
       const labelStr = String(label); 
       const valueStr = String(value);
       const sisaSpasi = LEBAR_KERTAS - (labelStr.length + valueStr.length);
@@ -475,72 +475,29 @@
       return labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
     }
  
-    /* 🔥 ENGINE MODE AGRESIF: INSTANT IFRAME GENERATOR FOR SILENT PRINT */
+    /* 🔥 100% DIRECT PRINT ENGINE VIA RAWBT INTENT INTERACTION */
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
       
-      let streamTeks = "";
-      streamTeks += "   SLIP PEMBAYARAN SAH    \n";
-      streamTeks += "  KIKI KREDIT SOLUTION    \n";
-      streamTeks += "==========================\n"; 
-      streamTeks += buatBarisStruk("Tgl:", tgl);
-      streamTeks += buatBarisStruk("Nama:", nama.substring(0, 20));
-      streamTeks += buatBarisStruk("Brg:", barang.substring(0, 20));
-      streamTeks += "--------------------------\n";
-      streamTeks += buatBarisStruk("BAYAR:", _nominalDisplay);
-      streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
-      streamTeks += "--------------------------\n";
-      streamTeks += "     * TERIMA KASIH * \n";
-      streamTeks += "BUKTI TRANSAKSI YANG VALID"; 
+      let teksStruk = "";
+      teksStruk += "   SLIP PEMBAYARAN ANGSURAN   \n";
+      teksStruk += "     KIKI KREDIT SOLUTION     \n";
+      teksStruk += "==============================\n"; 
+      teksStruk += buatBarisStruk("Tanggal :", tgl);
+      teksStruk += buatBarisStruk("Nasabah :", nama.substring(0, 22));
+      teksStruk += buatBarisStruk("Barang  :", barang.substring(0, 22));
+      teksStruk += "------------------------------\n";
+      teksStruk += buatBarisStruk("TOTAL BAYAR:", _nominalDisplay);
+      teksStruk += buatBarisStruk("SISA UTANG :", formatRupiah(sisa));
+      teksStruk += "------------------------------\n";
+      teksStruk += "      * TERIMA KASIH * \n";
+      teksStruk += "  SIMPAN SEBAGAI BUKTI SAH    \n\n\n"; // Beri feed jarak potong kertas
  
-      const sisaIframe = document.getElementById('siluman-printer-v70');
-      if (sisaIframe) sisaIframe.remove();
- 
-      const iframe = document.createElement('iframe');
-      iframe.id = 'siluman-printer-v70';
-      iframe.style.position = 'fixed';
-      iframe.style.bottom = '0';
-      iframe.style.right = '0';
-      iframe.style.width = '0px';
-      iframe.style.height = '0px';
-      iframe.style.border = 'none';
-      document.body.appendChild(iframe);
- 
-      const doc = iframe.contentWindow.document;
-      doc.write(`
-        <html>
-        <head>
-          <style>
-            @media print {
-              html, body { margin: 0 !important; padding: 0 !important; width: 58mm !important; background: #fff; }
-              @page { size: 58mm auto; margin: 0mm !important; }
-              pre {
-                font-family: "Courier New", Courier, monospace !important;
-                font-size: 10pt !important;
-                font-weight: 900 !important;
-                line-height: 1.3 !important;
-                color: #000 !important;
-                white-space: pre !important;
-                margin: 0 !important;
-                padding: 2mm !important;
-              }
-            }
-            body { margin: 0; padding: 0; background: #fff; }
-            pre { font-family: "Courier New", Courier, monospace; font-size: 10pt; font-weight: 900; white-space: pre; }
-          </style>
-        </head>
-        <body>
-          <pre>${streamTeks}</pre>
-        </body>
-        </html>
-      `);
-      doc.close();
- 
-      // Jeda dipangkas ke 10 milidetik agar eksekusi cetak langsung instan terjadi
-      setTimeout(() => {
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-      }, 10);
+      // Mengubah teks mentah menjadi skema tautan URL Protocol RawBT APP
+      const intentUrl = "intent:#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;S.text=" + encodeURIComponent(teksStruk) + ";end;";
+      
+      // Melempar data secara paksa ke aplikasi printer lokal
+      window.location.href = intentUrl;
     }
  
     function prosesHapusData(rowNum) {
