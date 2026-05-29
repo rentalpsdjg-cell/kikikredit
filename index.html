@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution - Premium Ultra POS</title>
+  <title>Kiki Kredit Solution - Premium Smart POS</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -61,7 +61,7 @@
       font-size: 1rem;
     }
  
-    /* KARTU PELANGGAN (ANTI GESER LAYAR HP) */
+    /* KARTU PELANGGAN */
     .loan-card { 
       background: #ffffff; 
       border-radius: var(--card-radius); 
@@ -83,10 +83,8 @@
     .info-title { font-size: 0.75rem; color: #718096; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
     .info-desc { font-size: 1rem; font-weight: 600; color: #1a202c; }
     
-    /* PROGRESS BAR UTANG */
     .progress { height: 8px; border-radius: 10px; background-color: #edf2f7; }
  
-    /* GRID UTAMA MENU AKSI RAMAH JARI */
     .action-grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
@@ -115,7 +113,6 @@
     .btn-action-panel.delete { background-color: #dc3545; color: #ffffff; }
     .btn-action-panel:disabled { background-color: #e2e8f0 !important; color: #a0aec0 !important; cursor: not-allowed; transform: none; }
  
-    /* LOADING LAYAR PENUH */
     .loading-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
       background: rgba(255,255,255,0.95); 
@@ -123,7 +120,6 @@
       z-index: 9999; display: none; 
     }
 
-    /* QUICK CASH SMART BUTTON */
     .smart-cash-btn {
       font-size: 0.8rem;
       padding: 6px 12px;
@@ -137,6 +133,26 @@
     .smart-cash-btn:hover {
       background: #198754;
       color: #fff;
+    }
+
+    /* AREA ELEMEN STRUK DESKTOP (TERSEMBUNYI DARI LAYAR UTAMA) */
+    #areaStrukDesktop {
+      display: none;
+    }
+
+    /* MATRIKS ATURAN CETAK PRINTER WINDOWS/MAC/LINUX KERTAS 58mm */
+    @media print {
+      body * { display: none !important; }
+      #areaStrukDesktop { 
+        display: block !important;
+        position: absolute; left: 0; top: 0; width: 58mm !important; 
+        margin: 0 !important; padding: 0mm 2mm !important;
+        background: #ffffff !important; color: #000000 !important;
+        font-family: "Courier New", Courier, monospace !important; 
+        font-size: 10pt !important; font-weight: bold !important;
+        white-space: pre-wrap !important; line-height: 1.2 !important;
+      }
+      @page { size: 58mm auto; margin: 0mm !important; }
     }
   </style>
 </head>
@@ -152,7 +168,7 @@
   <nav class="navbar navbar-custom shadow-sm mb-4">
     <div class="container">
       <span class="navbar-brand mb-0 h1 text-white fw-bold fs-4">
-        <i class="fa-solid fa-layer-group text-warning me-2"></i> Kiki Kredit Solution <span class="badge bg-light text-dark fs-6 ms-2">V2.5 PRO Ultra-Print</span>
+        <i class="fa-solid fa-layer-group text-warning me-2"></i> Kiki Kredit Solution <span class="badge bg-light text-dark fs-6 ms-2">V2.6 Smart-Print</span>
       </span>
     </div>
   </nav>
@@ -209,7 +225,7 @@
         <form id="formPelanggan" onsubmit="prosesSimpanData(event)">
           <div class="modal-body px-4">
             <input type="hidden" id="formRowNum">
-            <div class="mb-3"><label class="form-label fw-bold small text-muted">Nama Lengkap Konsumen</label><input type="text" id="formNama" class="form-control form-control-lg rounded-3" required></div>
+            <div class="mb-3"><label class="form-label fw-bold small text-muted">Nama Lengkapamp Konsumen</label><input type="text" id="formNama" class="form-control form-control-lg rounded-3" required></div>
             <div class="mb-3"><label class="form-label fw-bold small text-muted">Alamat Domisili KTP</label><input type="text" id="formAlamat" class="form-control form-control-lg rounded-3" required></div>
             <div class="mb-3"><label class="form-label fw-bold small text-muted">Deskripsi Barang Kredit</label><input type="text" id="formBarang" class="form-control form-control-lg rounded-3" required></div>
             <div class="row">
@@ -253,13 +269,15 @@
           </div>
           <div class="modal-footer border-top-0 pb-4 px-4">
             <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-success w-100 rounded-3 fw-bold py-2 shadow-sm">Posting + Auto Cetak</button>
+            <button type="submit" class="btn btn-success w-100 rounded-3 fw-bold py-2 shadow-sm">Posting + Smart Cetak</button>
           </div>
         </form>
       </div>
     </div>
   </div>
  
+  <pre id="areaStrukDesktop"></pre>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
  
@@ -457,7 +475,7 @@
           if(res.error) { tunukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
           tunukkanLoading(false);
           
-          // JALANKAN PRINT OTOMATIS BEGITU SUKSES POSTING
+          // POSTING BERHASIL -> STRUK OTOMATIS DICETAK
           pemicuKertasThermal(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
           muatDataDashboard();
         }).catch(() => { tunukkanLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
@@ -472,7 +490,6 @@
       }
     }
  
-    /* ENGINE MATRIX TEXT 26 KARAKTER (PAS UNTUK PRINTER BLUETOOTH MINI) */
     function buatBarisStruk(label, value) {
       const LEBAR_KERTAS = 26; 
       const labelStr = String(label);
@@ -484,7 +501,7 @@
       return labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
     }
  
-    /* 🔥 PERBAIKAN DRIVER CETAK: 100% VALID PROTOCOL VIA RAWBT URL SCHEME */
+    /* 🔥 HYBRID SMART-PRINT ENGINE ENGINE V2.6 */
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
       
@@ -500,13 +517,21 @@
       streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
       streamTeks += "--------------------------\n";
       streamTeks += "     * TERIMA KASIH * \n";
-      streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n\n"; // Jarak kosong potong kertas
- 
-      // Menggunakan skema URI "rawbt://" standar yang stabil dan didukung penuh Android
-      const rawbtUrl = "rawbt://base64," + btoa(unescape(encodeURIComponent(streamTeks)));
-      
-      // Buka tautan untuk langsung memicu print fisik tanpa dialog preview browser
-      window.location.href = rawbtUrl;
+      streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n\n";
+
+      // DETEKSI SMART: Cek apakah user membuka dari HP Android
+      const isAndroid = /Android/i.test(navigator.userAgent);
+
+      if (isAndroid) {
+        // JALUR 1: Direct Kirim Perintah ke Printer via Aplikasi Driver RawBT Android
+        const rawbtUrl = "rawbt://base64," + btoa(unescape(encodeURIComponent(streamTeks)));
+        window.location.href = rawbtUrl;
+      } else {
+        // JALUR 2: Buka Modul Print Browser Otomatis (Untuk Pengguna Laptop / Komputer / PC)
+        const areaStruk = document.getElementById('areaStrukDesktop');
+        areaStruk.textContent = streamTeks;
+        window.print();
+      }
     }
  
     function prosesHapusData(rowNum) {
