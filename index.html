@@ -127,7 +127,7 @@
     }
  
     /* ==========================================================================
-       CSS PRINT UTAMA: DIOPTIMALKAN SUPAYA SUPER TEBAL & PAS 1 HALAMAN
+       CSS PRINT FIX: LEBAR 40MM, BEBAS TERPOTONG & ANTI JATUH KE BAWAH
        ========================================================================== */
     #areaStruk { display: none; }
     @media print {
@@ -137,32 +137,32 @@
         margin: 0 !important;
         padding: 0 !important;
       }
-      body * { display: none !important; } /* Sembunyikan semua elemen dashboard aplikasi saat print */
+      body * { display: none !important; }
       
       #areaStruk { 
         display: block !important;
         position: absolute; 
         left: 0; top: 0; 
-        width: 44mm !important; /* Pas dengan margin kertas gulung thermal 58mm */
-        height: max-content !important; /* Mencegah printer menarik kertas kosong berlebih */
+        width: 40mm !important; /* Dipersempit ke 40mm agar ruang cetak aman */
+        height: max-content !important; 
         margin: 0 !important; 
         padding: 0mm 1mm !important;
         background: #ffffff !important; 
         color: #000000 !important;
         font-family: monospace !important; 
-        font-size: 10pt !important; 
+        font-size: 9.5pt !important; /* Penyesuaian font agar seimbang */
         
-        /* Modifikasi penebalan huruf ekstrem/bold pekat */
+        /* Penebalan ekstrem anti buram */
         font-weight: 900 !important; 
         -webkit-text-stroke: 0.8px #000000; 
-        text-shadow: 0.5px 0.5px 0px #000000; 
+        text-shadow: 0.4px 0.4px 0px #000000; 
         
         white-space: pre !important; 
         line-height: 1.1 !important;
-        page-break-inside: avoid !important; /* Paksa satu kesatuan halaman tunggal */
+        page-break-inside: avoid !important;
       }
       @page { 
-        size: 58mm auto; /* Set standar printer kasir mini */
+        size: 58mm auto; 
         margin: 0mm !important; 
       }
     }
@@ -317,7 +317,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
  
   <script>
-    // URL Web App Google Apps Script API Cloud Anda
     const API_URL = "https://script.google.com/macros/s/AKfycbzeWIBiIVGYMmLNi-OLD2TkhbX1ab1LDpY4uMTjEGEojHRjtiu1ElqO72bnZWYHoug/exec";
  
     let listPelanggan = [];
@@ -330,7 +329,6 @@
     function formatRupiah(angka) { return "Rp " + Number(angka).toLocaleString('id-ID'); }
     function sinkronSisaUtang() { if(!document.getElementById('formRowNum').value) document.getElementById('formSisaUtang').value = document.getElementById('formTotalHarga').value; }
  
-    // Mengambil data terupdate dari Google Sheets Cloud
     function muatDataDashboard() {
       tunukkanLoading(true);
       fetch(`${API_URL}?action=ambilData`)
@@ -348,7 +346,6 @@
         }).catch(err => { tunukkanLoading(false); Swal.fire("Koneksi Putus", "Gagal memproses konektivitas API.", "error"); });
     }
  
-    // Membaca array data dan mengubahnya menjadi komponen visual kartu nasabah
     function renderDataKeSistemGrid(dataArray) {
       const container = document.getElementById('containerDataKonsumen');
       container.innerHTML = dataArray.length === 0 ? '<div class="col-12 text-center text-muted py-5 fs-6 card bg-white border rounded-4 shadow-sm">Pencarian tidak menemukan kecocokan berkas data.</div>' : '';
@@ -424,7 +421,6 @@
       });
     }
  
-    // Fungsi pencarian/pencocokan nama & alamat nasabah secara real-time
     function filterDataSistem() {
       const input = document.getElementById('inputCari');
       if (!input) return;
@@ -484,7 +480,6 @@
       bootstrapModalBayar.show();
     }
  
-    // Mengirimkan nominal bayar angsuran ke database cloud
     function prosesBayarManual(e) {
       e.preventDefault();
       const payload = {
@@ -501,13 +496,11 @@
           if(res.error) { tunukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
           tunukkanLoading(false);
           
-          // Trigger cetak otomatis seketika setelah data sukses terekam
           pemicuKertasThermal(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
           muatDataDashboard();
         }).catch(() => { tunukkanLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
     }
  
-    // Fitur cetak ulang struk lama tanpa memotong saldo/utang nasabah
     function cetakUlangStruk(rowNum) {
       const p = listPelanggan.find(i => i.rowNum === rowNum);
       if (p) {
@@ -517,31 +510,30 @@
       }
     }
  
-    // Perhitungan spasi teks rata kiri-kanan pada batasan lebar printer kasir mini
+    // FIX BARIS: LEBAR_KERTAS dikunci pada 22 karakter agar muat sempurna
     function buatBarisStruk(label, value) {
-      const LEBAR_KERTAS = 24; 
+      const LEBAR_KERTAS = 22; 
       const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
       return sisaSpasi > 0 ? label + " ".repeat(sisaSpasi) + value + "\n" : label + "\n" + " ".repeat(LEBAR_KERTAS - value.length) + value + "\n";
     }
  
-    // Mengisi data transaksi ke lembar print out thermal
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- RE-PRINT -";
       const strukPre = document.getElementById('areaStruk');
       
       let teks = "";
-      teks += "  SLIP PEMBAYARAN SAH   \n";
-      teks += " KIKI KREDIT SOLUTION   \n";
-      teks += "========================\n"; 
+      teks += " SLIP PEMBAYARAN SAH  \n";
+      teks += "KIKI KREDIT SOLUTION  \n";
+      teks += "======================\n"; 
       teks += buatBarisStruk("TGL:", tgl);
       teks += buatBarisStruk("NAMA:", nama);
       teks += buatBarisStruk("BRG:", barang);
-      teks += "------------------------\n";
+      teks += "----------------------\n";
       teks += buatBarisStruk("BAYAR:", _nominalDisplay);
       teks += buatBarisStruk("SISA:", formatRupiah(sisa));
-      teks += "------------------------\n";
-      teks += "    * TERIMA KASIH * \n";
-      teks += "BUKTI TRANSAKSI YANG SAH"; /* Akhir teks tanpa baris kosong baru agar printer langsung memotong kertas pas */
+      teks += "----------------------\n";
+      teks += "   * TERIMA KASIH * \n";
+      teks += "BUKTI TRANSAKSI YANG SAH"; 
  
       strukPre.textContent = teks.toUpperCase();
       window.print();
