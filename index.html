@@ -282,16 +282,16 @@
  
     document.addEventListener("DOMContentLoaded", muatDataDashboard);
  
-    function tunukkanLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
+    function kendaliLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
     function formatRupiah(angka) { return "Rp " + Number(angka).toLocaleString('id-ID'); }
     function sinkronSisaUtang() { if(!document.getElementById('formRowNum').value) document.getElementById('formSisaUtang').value = document.getElementById('formTotalHarga').value; }
  
     function muatDataDashboard() {
-      tunukkanLoading(true);
+      kendaliLoading(true);
       fetch(`${API_URL}?action=ambilData`)
         .then(res => res.json())
         .then(res => {
-          tunukkanLoading(false);
+          kendaliLoading(false);
           if (res.error) return Swal.fire("Sistem Error", res.error, "error");
           
           listPelanggan = res.pelanggan || [];
@@ -300,7 +300,7 @@
           document.getElementById('lblInfoCount').innerText = "Data Ter-Load: " + listPelanggan.length;
           
           renderDataKeSistemGrid(listPelanggan);
-        }).catch(err => { tunukkanLoading(false); Swal.fire("Koneksi Putus", "Gagal memproses konektivitas API.", "error"); });
+        }).catch(err => { kendaliLoading(false); Swal.fire("Koneksi Putus", "Gagal memproses konektivitas API.", "error"); });
     }
  
     function renderDataKeSistemGrid(dataArray) {
@@ -396,7 +396,8 @@
       document.getElementById('formRowNum').value = rowNum || '';
       document.getElementById('modalFormTitle').innerText = rowNum ? "⚙️ Perbarui Kontrak Manajemen" : "👤 Daftarkan Konsumen Baru";
       if(rowNum) {
-        const p = listPelanggan.find(i => i.rowNum === rowNum);
+        // Menggunakan == agar kebal terhadap perbedaan tipe data (string vs number)
+        const p = listPelanggan.find(i => i.rowNum == rowNum);
         if(p) {
           document.getElementById('formNama').value = p.nama;
           document.getElementById('formAlamat').value = p.alamat;
@@ -426,7 +427,7 @@
         }
       };
       bootstrapModalForm.hide(); 
-      tunukkanLoading(true);
+      kendaliLoading(true);
       kirimKeApi(payload);
     }
  
@@ -445,35 +446,40 @@
         nominal: document.getElementById('bayarNominal').value
       };
       bootstrapModalBayar.hide(); 
-      tunukkanLoading(true);
+      kendaliLoading(true);
       
       fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
-          if(res.error) { tunukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
-          tunukkanLoading(false);
+          if(res.error) { kendaliLoading(false); return Swal.fire("Gagal", res.error, "error"); }
+          kendaliLoading(false);
           
           pemicuKertasThermal(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
           muatDataDashboard();
-        }).catch(() => { tunukkanLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
+        }).catch(() => { kendaliLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
     }
  
     function cetakUlangStruk(rowNum) {
-      const p = listPelanggan.find(i => i.rowNum === rowNum);
+      // Menggunakan == agar pencarian data tidak gagal jika baris berbentuk teks string
+      const p = listPelanggan.find(i => i.rowNum == rowNum);
       if (p) {
         let opsi = { year: '2-digit', month: 'numeric', day: 'numeric' };
         let tglSkg = new Date().toLocaleDateString('id-ID', opsi);
         pemicuKertasThermal(tglSkg, p.nama, p.barang, 0, p.sisa);
+      } else {
+        Swal.fire("Gagal Cetak", "Data baris ke-" + rowNum + " tidak teridentifikasi di memori.", "warning");
       }
     }
  
     function buatBarisStruk(label, value) {
       const LEBAR_KERTAS = 26; 
-      const sisaSpasi = LEBAR_KERTAS - (label.length + String(value).length);
+      const labelStr = String(label);
+      const valueStr = String(value);
+      const sisaSpasi = LEBAR_KERTAS - (labelStr.length + valueStr.length);
       if (sisaSpasi > 0) {
-        return label + " ".repeat(sisaSpasi) + value + "\n";
+        return labelStr + " ".repeat(sisaSpasi) + valueStr + "\n";
       }
-      return label + "\n" + " ".repeat(LEBAR_KERTAS - String(value).length) + value + "\n";
+      return labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
     }
  
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
@@ -557,7 +563,7 @@
         confirmButtonText: "Ya, Hapus Data!" 
       }).then((result) => {
         if (result.isConfirmed) {
-          tunukkanLoading(true);
+          kendaliLoading(true);
           kirimKeApi({ action: "hapusData", rowNum: rowNum });
         }
       });
@@ -567,12 +573,12 @@
       fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(pesan => { 
-          tunukkanLoading(false); 
+          kendaliLoading(false); 
           Swal.fire("Berhasil", typeof pesan === 'string' ? pesan : "Transaksi Berhasil Di-Posting!", "success"); 
           muatDataDashboard(); 
         })
         .catch(() => { 
-          tunukkanLoading(false); 
+          kendaliLoading(false); 
           Swal.fire("Kesalahan Server", "Gagal mengirimkan instruksi mutasi ke Cloud.", "error"); 
         });
     }
