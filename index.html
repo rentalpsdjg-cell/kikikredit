@@ -127,60 +127,52 @@
     }
  
     /* ==========================================================================
-       CSS PRINT PROTEKSI: LOCK TOTAL SATU HALAMAN ANTI-TEMBUS 2 HALAMAN
+       CSS PRINT REVISI TOTAL: FIX AMAN MUNCUL & GARANSI 1 HALAMAN CENTER
        ========================================================================== */
     #areaStruk { display: none; }
+    
     @media print {
+      /* Sembunyikan elemen utama web agar memori cetak kosong */
+      body > :not(#areaStruk) { 
+        display: none !important; 
+      }
+      
       html, body {
-        height: 100vh !important;
-        max-height: 100vh !important;
-        overflow: hidden !important;
+        background: #ffffff !important;
         margin: 0 !important;
         padding: 0 !important;
-        background: #ffffff !important;
+        width: 58mm !important;
       }
-      body * { display: none !important; }
       
       #areaStruk { 
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: flex-start !important;
-        position: absolute; 
-        left: 0; top: 0; 
-        width: 100% !important; 
+        display: block !important;
+        width: 58mm !important;
         max-width: 58mm !important;
-        height: auto !important; 
-        max-height: 100vh !important;
-        margin: 0 auto !important; 
-        padding: 1mm 4mm !important; 
+        padding: 2mm 3mm !important;
         box-sizing: border-box !important;
-        background: #ffffff !important; 
+        background: #ffffff !important;
         color: #000000 !important;
-        font-family: 'Courier New', Courier, monospace !important; 
-        font-size: 3vw !important; /* Dikecilkan sedikit agar menghemat ruang vertikal */
-        font-weight: 900 !important; 
-        -webkit-text-stroke: 0.4px #000000;
         
-        text-align: center !important; 
-        line-height: 1.2 !important;
-        word-break: break-word !important; 
+        /* Font Monospace Tebal Terbaca Jelas */
+        font-family: 'Courier New', Courier, monospace !important;
+        font-size: 9pt !important;
+        font-weight: bold !important;
         
-        /* Proteksi keras anti penambahan lembar baru */
+        /* Pengunci Rata Tengah & Anti Potong Otomatis */
+        text-align: center !important;
+        line-height: 1.3 !important;
+        word-wrap: break-word !important;
+        white-space: pre-line !important;
+        
+        /* Proteksi Keras Blokir Lembar Ke-2 */
         page-break-inside: avoid !important;
         page-break-after: avoid !important;
         page-break-before: avoid !important;
       }
       
-      .struk-line {
-        width: 100% !important;
-        white-space: pre-wrap !important;
-        display: block !important;
-      }
-      
       @page { 
         size: 58mm auto;
-        margin: 0mm !important; 
+        margin: 0 !important; 
       }
     }
   </style>
@@ -527,28 +519,27 @@
       }
     }
  
-    // FORMAT 1 HALAMAN STRICT LOCK
+    // FORMAT FIX AMAN MUNCUL - AUTO CENTER 1 HALAMAN
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- RE-PRINT -";
       const strukContainer = document.getElementById('areaStruk');
       
-      let isiStruk = `
-        <div class="struk-line" style="font-weight: bold;">SLIP PEMBAYARAN SAH</div>
-        <div class="struk-line" style="font-weight: bold;">KIKI KREDIT SOLUTION</div>
-        <div class="struk-line">====================</div>
-        <div class="struk-line">TGL: ${tgl}</div>
-        <div class="struk-line">NAMA: ${nama}</div>
-        <div class="struk-line">BRG: ${barang}</div>
-        <div class="struk-line">--------------------</div>
-        <div class="struk-line">BAYAR:</div>
-        <div class="struk-line" style="font-size: 1.1em; font-weight: bold;">${_nominalDisplay}</div>
-        <div class="struk-line">SISA PIUTANG:</div>
-        <div class="struk-line" style="font-size: 1.1em; font-weight: bold;">${formatRupiah(sisa)}</div>
-        <div class="struk-line">--------------------</div>
-        <div class="struk-line" style="font-size: 0.9em;">* TERIMA KASIH *</div>
-      `;
+      let teksStruk = "";
+      teksStruk += "SLIP PEMBAYARAN SAH\n";
+      teksStruk += "KIKI KREDIT SOLUTION\n";
+      teksStruk += "====================\n";
+      teksStruk += `TGL: ${tgl}\n`;
+      teksStruk += `NAMA: ${nama}\n`;
+      teksStruk += `BRG: ${barang}\n`;
+      teksStruk += "--------------------\n";
+      teksStruk += "TOTAL BAYAR:\n";
+      teksStruk += `${_nominalDisplay}\n\n`;
+      teksStruk += "SISA PIUTANG:\n";
+      teksStruk += `${formatRupiah(sisa)}\n`;
+      teksStruk += "--------------------\n";
+      teksStruk += "* TERIMA KASIH *";
  
-      strukContainer.innerHTML = isiStruk.toUpperCase();
+      strukContainer.textContent = teksStruk.toUpperCase();
       window.print();
     }
  
