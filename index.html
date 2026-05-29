@@ -61,7 +61,7 @@
       font-size: 1rem; 
     }
 
-    /* KARTU PELANGGAN */
+    /* KARTU PELANGGAN (ANTI GESER LAYAR HP) */
     .loan-card { 
       background: #ffffff; 
       border-radius: var(--card-radius); 
@@ -86,7 +86,7 @@
     /* PROGRESS BAR UTANG */
     .progress { height: 8px; border-radius: 10px; background-color: #edf2f7; }
 
-    /* GRID UTAMA MENU AKSI */
+    /* GRID UTAMA MENU AKSI RAMAH JARI */
     .action-grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
@@ -123,7 +123,7 @@
       z-index: 9999; display: none; 
     }
 
-    /* KONTROL STRUK KERTAS THERMAL: TEKS JALAN TERUS (AUTO-WRAP) & ANTI POTONG */
+    /* MATRIKS DOKUMEN CETAK: AUTO-WRAP & EKSTRA PEKAT */
     #areaStruk { display: none; }
     @media print {
       body * { display: none !important; }
@@ -138,15 +138,15 @@
         background: #ffffff !important; 
         color: #000000 !important;
         
-        font-family: "monospace", "Courier New", Courier !important; 
-        font-size: 15pt !important; /* Ukuran seimbang: Terbaca jelas di kertas kecil */
-        font-weight: bold !important;
+        font-family: "Courier New", Courier, monospace !important; 
+        font-size: 15pt !important; /* Ukuran pas seimbang untuk printer thermal */
         
-        /* Trik cetak tebal pekat lapis ganda */
+        /* Trik super tebal ganda (Font-weight + stroke + shadow) */
+        font-weight: 900 !important; 
         -webkit-text-stroke: 1px #000000;
         text-shadow: 0.5px 0px 0px #000000;
         
-        /* Kunci utama agar semua teks masuk (Otomatis bungkus kebawah jika kepanjangan) */
+        /* Menjamin teks panjang otomatis turun ke bawah secara aman */
         white-space: pre-wrap !important; 
         word-wrap: break-word !important;
         word-break: break-word !important;
@@ -214,8 +214,7 @@
       <span class="badge bg-secondary px-3 py-2 rounded-3" id="lblInfoCount">Data Ter-Load: 0</span>
     </div>
     
-    <div id="containerDataKonsumen" class="row">
-      </div>
+    <div id="containerDataKonsumen" class="row"></div>
 
   </div>
 
@@ -456,8 +455,8 @@
       }
     }
 
-    /* ENGINE WRAPPING STRUK: AUTO TURUN BARIS JIKA MELEBIHI 18 KARAKTER, DATA UTAS MASUK SEMUA */
-    function buatBarisStrukMultiLine(label, value) {
+    /* ENGINE MULTI-LINE AUTO-WRAP AGAR TEKS PANJANG JATUH KE BAWAH SECARA RAPI */
+    function buatBarisStruk(label, value) {
       const LEBAR_KERTAS = 18; 
       const lebarMaksValue = LEBAR_KERTAS - label.length;
       
@@ -465,7 +464,6 @@
         const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
         return label + " ".repeat(sisaSpasi) + value + "\n";
       } else {
-        // Jika nilai text terlalu panjang, potong-potong per baris secara otomatis
         let hasilBaris = "";
         let sisaText = value;
         let barisPertama = true;
@@ -479,7 +477,6 @@
             barisPertama = false;
           } else {
             let chunk = sisaText.substring(0, LEBAR_KERTAS);
-            // Taruh sisa text rata kanan
             hasilBaris += " ".repeat(LEBAR_KERTAS - chunk.length) + chunk + "\n";
             sisaText = sisaText.substring(LEBAR_KERTAS);
           }
@@ -496,12 +493,12 @@
       streamTeks += "SLIP PEMBAYARAN SAH\n";
       streamTeks += "KIKI KREDIT KASIR\n";
       streamTeks += "==================\n"; 
-      streamTeks += buatBarisStrukMultiLine("Tgl:", tgl);
-      streamTeks += buatBarisStrukMultiLine("Nma:", nama);   // Text panjang aman, otomatis turun baris
-      streamTeks += buatBarisStrukMultiLine("Brg:", barang); // Text panjang aman, otomatis turun baris
+      streamTeks += buatBarisStruk("Tgl:", tgl);
+      streamTeks += buatBarisStruk("Nma:", nama);   // Auto lipat ke bawah jika terlalu panjang
+      streamTeks += buatBarisStruk("Brg:", barang); // Auto lipat ke bawah jika terlalu panjang
       streamTeks += "------------------\n";
-      streamTeks += buatBarisStrukMultiLine("BYR:", _nominalDisplay);
-      streamTeks += buatBarisStrukMultiLine("SIS:", formatRupiah(sisa));
+      streamTeks += buatBarisStruk("BYR:", _nominalDisplay);
+      streamTeks += buatBarisStruk("SIS:", formatRupiah(sisa));
       streamTeks += "------------------\n";
       streamTeks += " * TERIMA KASIH * \n";
       streamTeks += "SIMPAN BUKTI INI\n\n\n"; 
