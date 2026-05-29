@@ -125,56 +125,6 @@
       z-index: 9999;
       display: none; 
     }
- 
-    /* ==========================================================================
-       CSS PRINT REVISI TOTAL: FIX AMAN MUNCUL & GARANSI 1 HALAMAN CENTER
-       ========================================================================== */
-    #areaStruk { display: none; }
-    
-    @media print {
-      /* Sembunyikan elemen utama web agar memori cetak kosong */
-      body > :not(#areaStruk) { 
-        display: none !important; 
-      }
-      
-      html, body {
-        background: #ffffff !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 58mm !important;
-      }
-      
-      #areaStruk { 
-        display: block !important;
-        width: 58mm !important;
-        max-width: 58mm !important;
-        padding: 2mm 3mm !important;
-        box-sizing: border-box !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        
-        /* Font Monospace Tebal Terbaca Jelas */
-        font-family: 'Courier New', Courier, monospace !important;
-        font-size: 9pt !important;
-        font-weight: bold !important;
-        
-        /* Pengunci Rata Tengah & Anti Potong Otomatis */
-        text-align: center !important;
-        line-height: 1.3 !important;
-        word-wrap: break-word !important;
-        white-space: pre-line !important;
-        
-        /* Proteksi Keras Blokir Lembar Ke-2 */
-        page-break-inside: avoid !important;
-        page-break-after: avoid !important;
-        page-break-before: avoid !important;
-      }
-      
-      @page { 
-        size: 58mm auto;
-        margin: 0 !important; 
-      }
-    }
   </style>
 </head>
 <body>
@@ -319,8 +269,6 @@
       </div>
     </div>
   </div>
- 
-  <div id="areaStruk"></div>
  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -519,10 +467,9 @@
       }
     }
  
-    // FORMAT FIX AMAN MUNCUL - AUTO CENTER 1 HALAMAN
+    // METODE VIRTUAL PRINT WINDOW: SOLUSI ANTI-GAGAL, 1 HALAMAN & FULL CENTER
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- RE-PRINT -";
-      const strukContainer = document.getElementById('areaStruk');
       
       let teksStruk = "";
       teksStruk += "SLIP PEMBAYARAN SAH\n";
@@ -538,9 +485,65 @@
       teksStruk += `${formatRupiah(sisa)}\n`;
       teksStruk += "--------------------\n";
       teksStruk += "* TERIMA KASIH *";
- 
-      strukContainer.textContent = teksStruk.toUpperCase();
-      window.print();
+      teksStruk = teksStruk.toUpperCase();
+
+      // Membuat Iframe tersembunyi sebagai wadah cetak steril tanpa mengganggu dokumen asli
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.bottom = '0';
+      iframe.style.right = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = 'none';
+      document.body.appendChild(iframe);
+
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <html>
+        <head>
+          <style>
+            @page { 
+              size: 58mm auto; 
+              margin: 0 !important; 
+            }
+            html, body {
+              margin: 0 !important;
+              padding: 0 !important;
+              background: #ffffff !important;
+              width: 58mm !important;
+              max-height: 100vh !important;
+              overflow: hidden !important;
+            }
+            .kontainer-struk {
+              width: 58mm !important;
+              box-sizing: border-box !important;
+              padding: 3mm 4mm !important;
+              font-family: 'Courier New', Courier, monospace !important;
+              font-size: 10pt !important;
+              font-weight: bold !important;
+              text-align: center !important;
+              white-space: pre-line !important;
+              word-wrap: break-word !important;
+              line-height: 1.3 !important;
+              page-break-inside: avoid !important;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="kontainer-struk">${teksStruk}</div>
+        </body>
+        </html>
+      `);
+      doc.close();
+
+      // Memicu cetak langsung saat iframe selesai memuat data
+      setTimeout(() => {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        // Hancurkan iframe setelah selesai agar ram tetap bersih
+        document.body.removeChild(iframe);
+      }, 500);
     }
  
     function prosesHapusData(rowNum) {
