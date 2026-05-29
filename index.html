@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution - Ultra-Pro POS</title>
+  <title>Kiki Kredit Solution - Quantum POS</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -11,29 +11,29 @@
   
   <style>
     :root {
-      --bg-dark-main: #0a0f1d;
-      --bg-dark-card: #131c32;
+      --bg-dark-main: #060913;
+      --bg-dark-card: #0f1424;
       --accent-glow: #00f2fe;
-      --premium-gradient: linear-gradient(135deg, #0575e6 0%, #00f2fe 100%);
+      --premium-gradient: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
       --btn-delete-grad: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
-      --card-radius: 20px;
-      --font-premium: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --card-radius: 16px;
+      --font-premium: 'Segoe UI', Roboto, sans-serif;
     }
  
     body { 
       background-color: var(--bg-dark-main); 
       font-family: var(--font-premium); 
       color: #e2e8f0;
+      margin: 0; padding: 0;
     }
  
     .navbar-custom { 
-      background: rgba(19, 28, 50, 0.8);
+      background: rgba(15, 20, 36, 0.8);
       backdrop-filter: blur(10px);
-      padding: 18px 0;
+      padding: 16px 0;
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
  
-    /* SUPER ELIT STATS CARD */
     .card-stats { 
       border: none; 
       border-radius: var(--card-radius); 
@@ -41,183 +41,156 @@
       border: 1px solid rgba(255,255,255,0.03);
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       position: relative;
-      overflow: hidden;
     }
     .card-stats::after {
-      content: ''; position: absolute; top:0; left:0; width: 100%; height: 4px;
-      background: var(--premium-gradient);
+      content: ''; position: absolute; bottom:0; left:0; width: 100%; height: 4px;
+      background: var(--premium-gradient); border-radius: 0 0 16px 16px;
     }
     .card-stats.success::after {
       background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
     }
     
-    /* CONTROL PANEL */
     .control-panel {
       background: var(--bg-dark-card);
       border-radius: var(--card-radius);
-      padding: 24px;
+      padding: 20px;
       border: 1px solid rgba(255,255,255,0.03);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
     .input-jumbo { 
-      padding: 15px 20px; 
-      border-radius: 12px !important; 
-      font-size: 1rem;
-      background-color: #0a0f1d !important;
+      padding: 14px 18px; 
+      border-radius: 10px !important; 
+      background-color: #060913 !important;
       border: 1px solid rgba(255,255,255,0.1) !important;
       color: #ffffff !important;
     }
     .input-jumbo:focus { border-color: var(--accent-glow) !important; box-shadow: 0 0 15px rgba(0,242,254,0.2); }
     .btn-jumbo { 
-      padding: 15px; 
-      border-radius: 12px; 
-      font-weight: 700; 
-      background: var(--premium-gradient);
-      border: none;
-      color: #0a0f1d;
-      transition: all 0.3s ease;
+      padding: 14px; border-radius: 10px; font-weight: 700; 
+      background: var(--premium-gradient); border: none; color: #ffffff;
+      transition: all 0.2s ease;
     }
-    .btn-jumbo:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,242,254,0.4); opacity: 0.9; }
+    .btn-jumbo:hover { transform: translateY(-2px); opacity: 0.9; }
  
-    /* PREMIUM LOAN CARD */
     .loan-card { 
-      background: var(--bg-dark-card); 
-      border-radius: var(--card-radius); 
-      padding: 24px; 
-      box-shadow: 0 12px 35px rgba(0,0,0,0.3); 
-      border: 1px solid rgba(255,255,255,0.03); 
-      margin-bottom: 24px; 
-      transition: all 0.3s ease;
+      background: var(--bg-dark-card); border-radius: var(--card-radius); 
+      padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+      border: 1px solid rgba(255,255,255,0.03); margin-bottom: 20px; 
     }
-    .loan-card:hover { transform: translateY(-5px); border-color: rgba(0,242,254,0.2); }
- 
     .info-title { font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
-    .info-desc { font-size: 1.25rem; font-weight: 700; color: #ffffff; }
+    .info-desc { font-size: 1.2rem; font-weight: 700; color: #ffffff; }
     
-    .progress { height: 6px; border-radius: 10px; background-color: #0a0f1d; }
+    .progress { height: 6px; border-radius: 10px; background-color: #060913; }
     .progress-bar { background: var(--premium-gradient); }
-    .progress-bar.bg-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important; }
  
-    /* ACTION GRID BUTTONS */
     .action-grid { 
-      display: grid; 
-      grid-template-columns: repeat(2, 1fr); 
-      gap: 12px; 
-      margin-top: 20px; 
-      padding-top: 20px; 
-      border-top: 1px solid rgba(255,255,255,0.05); 
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; 
+      margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); 
     }
     .btn-action-panel { 
-      padding: 12px; 
-      font-weight: 700; 
-      font-size: 0.85rem; 
-      border-radius: 10px; 
-      border: none; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 8px; 
-      transition: all 0.2s ease;
-      color: #ffffff;
+      padding: 11px; font-weight: 700; font-size: 0.85rem; border-radius: 8px; border: none; 
+      display: flex; align-items: center; justify-content: center; gap: 6px; color: #ffffff;
     }
-    .btn-action-panel:active { transform: scale(0.95); }
     
-    .btn-action-panel.pay { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: #0a0f1d; }
-    .btn-action-panel.print { background: #334155; }
-    .btn-action-panel.print:hover { background: #475569; }
-    .btn-action-panel.edit { background: #e2e8f0; color: #0a0f1d; }
+    .btn-action-panel.pay { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: #060913; }
+    .btn-action-panel.print { background: #27314f; }
+    .btn-action-panel.edit { background: #e2e8f0; color: #060913; }
     .btn-action-panel.delete { background: var(--btn-delete-grad); }
-    .btn-action-panel:disabled { background: #1e293b !important; color: #475569 !important; cursor: not-allowed; transform: none; }
+    .btn-action-panel:disabled { background: #13192e !important; color: #334155 !important; cursor: not-allowed; }
  
-    /* MODAL ELIT STYLE */
-    .modal-content {
-      background: var(--bg-dark-card) !important;
-      border: 1px solid rgba(255,255,255,0.08) !important;
-      color: #ffffff !important;
-    }
-    .form-control, .form-select {
-      background-color: #0a0f1d !important;
-      border: 1px solid rgba(255,255,255,0.1) !important;
-      color: #ffffff !important;
-    }
-    .form-control:focus, .form-select:focus {
-      border-color: var(--accent-glow) !important;
-      box-shadow: 0 0 10px rgba(0,242,254,0.2) !important;
-    }
+    .modal-content { background: var(--bg-dark-card) !important; border: 1px solid rgba(255,255,255,0.08) !important; color: #ffffff !important; }
+    .form-control, .form-select { background-color: #060913 !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #ffffff !important; }
     .btn-close { filter: invert(1); }
  
-    /* LOADING SCREEN */
     .loading-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(10,15,29,0.98); 
-      display: flex; justify-content: center; align-items: center; 
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(6,9,19,0.96); display: flex; justify-content: center; align-items: center; 
       z-index: 9999; display: none; 
+    }
+
+    /* AREA AREA KHUSUS PRINTER THERMAL (TERSEMBUNYI SAAT DI LAYAR) */
+    #thermal-print-area {
+      display: none;
+    }
+
+    /* CSS ATURAN CETAK DUAL-MODE (MEMAKSA PERANGKAT HANYA MENCETAK STRUK) */
+    @media print {
+      body * { display: none !important; } /* Sembunyikan semua element di dashboard */
+      html, body { background: #ffffff !important; color: #000000 !important; width: 58mm !important; margin: 0 !important; padding: 0 !important; }
+      #thermal-print-area { display: block !important; width: 58mm !important; } /* Tampilkan hanya area struk */
+      #thermal-print-area pre { 
+        font-family: "Courier New", Courier, monospace !important; 
+        font-size: 12pt !important; 
+        font-weight: 900 !important; 
+        line-height: 1.1 !important; 
+        white-space: pre-wrap !important;
+        margin: 0 !important;
+        padding: 2mm 1mm !important;
+      }
     }
   </style>
 </head>
 <body>
  
+  <div id="thermal-print-area"></div>
+ 
   <div id="loading" class="loading-overlay">
     <div class="text-center">
-      <div class="spinner-border text-info" role="status" style="width: 3.5rem; height: 3.5rem;"></div>
-      <p class="mt-4 fw-bold text-info" style="letter-spacing: 2px;">SECURE ENCRYPTION CONNECTING...</p>
+      <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-3 fw-bold text-info">SINKRONISASI DATACLOUD...</p>
     </div>
   </div>
  
-  <nav class="navbar navbar-custom shadow-sm mb-5">
+  <nav class="navbar navbar-custom shadow-sm mb-4">
     <div class="container">
       <span class="navbar-brand mb-0 h1 text-white fw-bold fs-4">
-        <i class="fa-solid fa-bolt text-info me-2"></i> Kiki Kredit Solution <span class="badge bg-info text-dark fs-6 ms-2 fw-bold">V3.0 ELITE</span>
+        <i class="fa-solid fa-bolt text-info me-2"></i> Kiki Kredit Solution <span class="badge bg-info text-dark fs-6 ms-2 fw-bold">V4.0 QUANTUM</span>
       </span>
     </div>
   </nav>
  
   <div class="container mb-5">
-    
-    <div class="row mb-5 g-4">
+    <div class="row mb-4 g-3">
       <div class="col-6">
-        <div class="card card-stats p-4 h-100">
+        <div class="card card-stats p-3 h-100">
           <span class="info-title">Total Outstanding Piutang</span>
-          <h2 class="fw-bold text-info mb-0 mt-2" id="statTotalPiutang" style="font-size: calc(1.3rem + 0.8vw);">Rp 0</h2>
+          <h2 class="fw-bold text-info mb-0 mt-1" id="statTotalPiutang" style="font-size: calc(1.1rem + 0.6vw);">Rp 0</h2>
         </div>
       </div>
       <div class="col-6">
-        <div class="card card-stats success p-4 h-100">
+        <div class="card card-stats success p-3 h-100">
           <span class="info-title">Konsumen Aktif</span>
-          <h2 class="fw-bold text-success mb-0 mt-2" id="statPelangganAktif" style="font-size: calc(1.3rem + 0.8vw);">0 Jiwa</h2>
+          <h2 class="fw-bold text-success mb-0 mt-1" id="statPelangganAktif" style="font-size: calc(1.1rem + 0.6vw);">0 Jiwa</h2>
         </div>
       </div>
     </div>
  
-    <div class="control-panel mb-5">
+    <div class="control-panel mb-4">
       <div class="row g-3">
         <div class="col-12 col-md-8">
           <div class="input-group">
-            <span class="input-group-text bg-transparent border-end-0 border-secondary text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-            <input type="text" id="inputCari" class="form-control input-jumbo border-start-0" placeholder="Cari data nasabah secara instant..." oninput="filterDataSistem()">
+            <span class="input-group-text bg-transparent border-end-0 border-secondary text-muted"><i class="fa-solid fa-search"></i></span>
+            <input type="text" id="inputCari" class="form-control input-jumbo border-start-0" placeholder="Cari nama, alamat atau tipe barang..." oninput="filterDataSistem()">
           </div>
         </div>
         <div class="col-12 col-md-4">
           <button class="btn btn-primary btn-jumbo w-100 shadow" onclick="bukaModalForm()">
-            <i class="fa-solid fa-plus-circle me-2"></i> Buka Kontrak Kredit Baru
+            <i class="fa-solid fa-plus-circle me-1"></i> Buka Kredit Baru
           </button>
         </div>
       </div>
     </div>
  
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h5 class="fw-bold text-white mb-0"><i class="fa-solid fa-server text-info me-2"></i> Real-time Active Database</h5>
-      <span class="badge bg-dark border border-secondary text-muted px-3 py-2 rounded-3" id="lblInfoCount">Synced: 0</span>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold text-white mb-0"><i class="fa-solid fa-server text-info me-2"></i> Database Live</h5>
+      <span class="badge bg-dark border border-secondary text-muted px-3 py-2" id="lblInfoCount">Data: 0</span>
     </div>
     
     <div id="containerDataKonsumen" class="row"></div>
- 
   </div>
  
   <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 shadow-lg">
+      <div class="modal-content rounded-4">
         <div class="modal-header border-0 pt-4 px-4">
           <h5 class="modal-title fw-bold" id="modalFormTitle">Form Berkas</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -226,45 +199,44 @@
           <div class="modal-body px-4">
             <input type="hidden" id="formRowNum">
             <div class="mb-3">
-              <label class="form-label small text-muted fw-bold">NAMA LENGKAP NASABAH</label>
-              <input type="text" id="formNama" class="form-control form-control-lg rounded-3" required>
+              <label class="form-label small text-muted fw-bold">NAMA LENGKAP KONSUMEN</label>
+              <input type="text" id="formNama" class="form-control form-control-lg" required>
             </div>
             <div class="mb-3">
-              <label class="form-label small text-muted fw-bold">ALAMAT DOMISILI KTP</label>
-              <input type="text" id="formAlamat" class="form-control form-control-lg rounded-3" required>
+              <label class="form-label small text-muted fw-bold">ALAMAT KTP</label>
+              <input type="text" id="formAlamat" class="form-control form-control-lg" required>
             </div>
             <div class="mb-3">
               <label class="form-label small text-muted fw-bold">DESKRIPSI BARANG</label>
-              <input type="text" id="formBarang" class="form-control form-control-lg rounded-3" required>
+              <input type="text" id="formBarang" class="form-control form-control-lg" required>
             </div>
             <div class="row">
               <div class="col-6 mb-3">
                 <label class="form-label small text-muted fw-bold">HARGA TOTAL (Rp)</label>
-                <input type="number" id="formTotalHarga" class="form-control form-control-lg rounded-3" required oninput="sinkronSisaUtang()">
+                <input type="number" id="formTotalHarga" class="form-control form-control-lg" required oninput="sinkronSisaUtang()">
               </div>
               <div class="col-6 mb-3">
                 <label class="form-label small text-muted fw-bold">SISA PIUTANG (Rp)</label>
-                <input type="number" id="formSisaUtang" class="form-control form-control-lg rounded-3" required>
+                <input type="number" id="formSisaUtang" class="form-control form-control-lg" required>
               </div>
             </div>
             <div class="row">
               <div class="col-6 mb-3">
-                <label class="form-label small text-muted fw-bold">SKEMA TENOR</label>
-                <select id="formTipeTenor" class="form-select form-select-lg rounded-3">
+                <label class="form-label small text-muted fw-bold">PERIODE</label>
+                <select id="formTipeTenor" class="form-select form-select-lg">
                   <option value="Bulanan">Bulanan</option>
                   <option value="Mingguan">Mingguan</option>
                   <option value="Harian">Harian</option>
                 </select>
               </div>
               <div class="col-6 mb-3">
-                <label class="form-label small text-muted fw-bold">BATAS WAKTU (TENOR)</label>
-                <input type="number" id="formTenor" class="form-control form-control-lg rounded-3" required>
+                <label class="form-label small text-muted fw-bold">TENOR (WAKTU)</label>
+                <input type="number" id="formTenor" class="form-control form-control-lg" required>
               </div>
             </div>
           </div>
           <div class="modal-footer border-0 pb-4 px-4">
-            <button type="button" class="btn btn-outline-secondary px-4 rounded-3" data-bs-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-info px-4 rounded-3 fw-bold text-dark">Simpan Otorisasi</button>
+            <button type="submit" class="btn btn-info w-100 rounded-3 fw-bold text-dark py-2">SIMPAN OTORISASI</button>
           </div>
         </form>
       </div>
@@ -273,25 +245,25 @@
  
   <div class="modal fade" id="modalBayar" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered">
-      <div class="modal-content rounded-4 shadow-lg">
+      <div class="modal-content rounded-4">
         <div class="modal-header border-0 pt-4 px-4">
-          <h5 class="modal-title fw-bold">Sistem Transaksi</h5>
+          <h5 class="modal-title fw-bold">Kasir Input</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <form id="formBayar" onsubmit="prosesBayarManual(event)">
           <div class="modal-body px-4">
             <input type="hidden" id="bayarRowNum">
             <div class="mb-3">
-              <label class="form-label small text-muted d-block mb-0">NASABAH TERKAIT</label>
+              <label class="form-label small text-muted d-block mb-0">NAMA NASABAH</label>
               <input type="text" id="bayarNama" class="form-control-plaintext fw-bold text-info fs-5 p-0" readonly>
             </div>
             <div class="mb-3">
               <label class="form-label small text-muted fw-bold">NOMINAL ANGSURAN (Rp)</label>
-              <input type="number" id="bayarNominal" class="form-control form-control-lg rounded-3 text-success fw-bold fs-4" required placeholder="0">
+              <input type="number" id="bayarNominal" class="form-control form-control-lg text-success fw-bold fs-4" required placeholder="0">
             </div>
           </div>
           <div class="modal-footer border-0 pb-4 px-4">
-            <button type="submit" class="btn btn-success w-100 rounded-3 fw-bold py-2 fs-5 text-dark">Posting & Cetak</button>
+            <button type="submit" class="btn btn-success w-100 rounded-3 fw-bold py-2 text-dark fs-5">POSTING & PRINT</button>
           </div>
         </form>
       </div>
@@ -320,20 +292,18 @@
         .then(res => res.json())
         .then(res => {
           kendaliLoading(false);
-          if (res.error) return Swal.fire("Sistem Error", res.error, "error");
-          
+          if (res.error) return Swal.fire("Error", res.error, "error");
           listPelanggan = res.pelanggan || [];
           document.getElementById('statTotalPiutang').innerText = formatRupiah(res.stats.totalPiutang);
-          document.getElementById('statPelangganAktif').innerText = res.stats.aktif + " Orang";
-          document.getElementById('lblInfoCount').innerText = "Synced: " + listPelanggan.length;
-          
+          document.getElementById('statPelangganAktif').innerText = res.stats.aktif + " Jiwa";
+          document.getElementById('lblInfoCount').innerText = "Data: " + listPelanggan.length;
           renderDataKeSistemGrid(listPelanggan);
-        }).catch(err => { kendaliLoading(false); Swal.fire("Koneksi Putus", "Gagal terhubung ke database cloud.", "error"); });
+        }).catch(() => { kendaliLoading(false); Swal.fire("Koneksi Terputus", "Gagal load cloud database.", "error"); });
     }
  
     function renderDataKeSistemGrid(dataArray) {
       const container = document.getElementById('containerDataKonsumen');
-      container.innerHTML = dataArray.length === 0 ? '<div class="col-12 text-center text-muted py-5 fs-6 card bg-transparent border-secondary rounded-4 shadow-sm">Pencarian nihil. Tidak ada data yang cocok.</div>' : '';
+      container.innerHTML = dataArray.length === 0 ? '<div class="col-12 text-center text-muted py-5 card bg-transparent border-secondary rounded-4">Pencarian tidak cocok.</div>' : '';
       
       dataArray.forEach(p => {
         const totalHarga = Number(p.total) || 1;
@@ -342,20 +312,17 @@
  
         const divCol = document.createElement('div');
         divCol.className = "col-12 col-md-6 col-lg-4";
-        
         divCol.innerHTML = `
           <div class="loan-card" id="card-row-${p.rowNum}">
-            <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex justify-content-between align-items-start mb-2">
               <div style="max-width: 70%;">
-                <span class="info-title d-block">Nama Nasabah</span>
+                <span class="info-title d-block">Nasabah</span>
                 <span class="info-desc text-truncate d-block target-nama">${p.nama}</span>
               </div>
-              <span class="badge ${p.status === 'AKTIF' ? 'bg-info text-dark' : 'bg-success text-dark'} px-3 py-2 rounded-pill fw-bold" style="font-size:0.75rem;">${p.status}</span>
+              <span class="badge ${p.status === 'AKTIF' ? 'bg-info text-dark' : 'bg-success text-dark'} px-3 py-2 rounded-pill fw-bold">${p.status}</span>
             </div>
-            
             <div class="text-muted small mb-3"><i class="fa-solid fa-location-dot text-info me-2"></i> ${p.alamat}</div>
-            
-            <div class="p-3 rounded-3 mb-3" style="font-size: 0.9rem; background-color: #0a0f1d; border: 1px solid rgba(255,255,255,0.02)">
+            <div class="p-3 rounded-3 mb-3" style="font-size: 0.9rem; background-color: #060913;">
               <div class="row g-2">
                 <div class="col-6">
                   <span class="info-title d-block">Barang</span>
@@ -366,39 +333,23 @@
                   <span class="fw-bold text-muted">${formatRupiah(p.total)}</span>
                 </div>
                 <div class="col-6 mt-2">
-                  <span class="info-title d-block">Cicilan</span>
+                  <span class="info-title d-block">Tenor</span>
                   <span class="fw-bold text-white">Ke-${p.cicilanKe} <span class="text-muted fw-normal">/ ${p.tenor}x (${p.tipe})</span></span>
                 </div>
                 <div class="col-6 mt-2">
-                  <span class="info-title d-block">Sisa Piutang</span>
+                  <span class="info-title d-block">Sisa Saku</span>
                   <span class="fw-bold text-danger d-block fs-6 target-sisa" data-raw="${p.sisa}">${formatRupiah(p.sisa)}</span>
                 </div>
               </div>
- 
               <div class="mt-3">
-                <div class="d-flex justify-content-between small text-muted mb-1 fw-bold" style="font-size: 0.7rem;">
-                  <span>RASIO RECOVERY DATA</span>
-                  <span>${persentaseTerbayar.toFixed(0)}%</span>
-                </div>
-                <div class="progress">
-                  <div class="progress-bar ${p.status === 'LUNAS' ? 'bg-success' : ''}" role="progressbar" style="width: ${persentaseTerbayar}%"></div>
-                </div>
+                <div class="progress"><div class="progress-bar" style="width: ${persentaseTerbayar}%"></div></div>
               </div>
             </div>
-            
             <div class="action-grid">
-              <button class="btn-action-panel pay" ${p.status !== 'AKTIF'?'disabled':''} onclick="bukaModalBayar(${p.rowNum}, '${p.nama}')">
-                <i class="fa-solid fa-bolt"></i> Bayar
-              </button>
-              <button class="btn-action-panel print" onclick="cetakUlangStruk(${p.rowNum})">
-                <i class="fa-solid fa-print"></i> Struk
-              </button>
-              <button class="btn-action-panel edit" onclick="bukaModalForm(${p.rowNum})">
-                <i class="fa-solid fa-sliders"></i> Kelola
-              </button>
-              <button class="btn-action-panel delete" onclick="prosesHapusData(${p.rowNum})">
-                <i class="fa-solid fa-trash-alt"></i> Hapus
-              </button>
+              <button class="btn-action-panel pay" ${p.status !== 'AKTIF'?'disabled':''} onclick="bukaModalBayar(${p.rowNum}, '${p.nama}')"><i class="fa-solid fa-wallet"></i> Bayar</button>
+              <button class="btn-action-panel print" onclick="cetakUlangStruk(${p.rowNum})"><i class="fa-solid fa-print"></i> Struk</button>
+              <button class="btn-action-panel edit" onclick="bukaModalForm(${p.rowNum})"><i class="fa-solid fa-edit"></i> Edit</button>
+              <button class="btn-action-panel delete" onclick="prosesHapusData(${p.rowNum})"><i class="fa-solid fa-trash"></i> Hapus</button>
             </div>
           </div>
         `;
@@ -407,10 +358,7 @@
     }
  
     function filterDataSistem() {
-      const input = document.getElementById('inputCari');
-      if (!input) return;
-      const kataKunci = input.value.toLowerCase().trim();
-      
+      const kataKunci = document.getElementById('inputCari').value.toLowerCase().trim();
       const hasilFilter = listPelanggan.filter(p => 
         (p.nama && p.nama.toLowerCase().includes(kataKunci)) || 
         (p.alamat && p.alamat.toLowerCase().includes(kataKunci)) ||
@@ -422,7 +370,7 @@
     function bukaModalForm(rowNum = null) {
       document.getElementById('formPelanggan').reset();
       document.getElementById('formRowNum').value = rowNum || '';
-      document.getElementById('modalFormTitle').innerText = rowNum ? "⚙️ Management Otorisasi Kredit" : "👤 Registrasi Nasabah Baru";
+      document.getElementById('modalFormTitle').innerText = rowNum ? "⚙️ Kelola Berkas Kredit" : "👤 Tambah Nasabah Baru";
       if(rowNum) {
         const p = listPelanggan.find(i => i.rowNum == rowNum);
         if(p) {
@@ -443,19 +391,13 @@
       const payload = {
         action: "simpanData",
         data: {
-          rowNum: document.getElementById('formRowNum').value, 
-          nama: document.getElementById('formNama').value,
-          alamat: document.getElementById('formAlamat').value, 
-          barang: document.getElementById('formBarang').value,
-          totalHarga: document.getElementById('formTotalHarga').value, 
-          sisaUtang: document.getElementById('formSisaUtang').value,
-          tipeTenor: document.getElementById('formTipeTenor').value, 
-          tenor: document.getElementById('formTenor').value
+          rowNum: document.getElementById('formRowNum').value, nama: document.getElementById('formNama').value,
+          alamat: document.getElementById('formAlamat').value, barang: document.getElementById('formBarang').value,
+          totalHarga: document.getElementById('formTotalHarga').value, sisaUtang: document.getElementById('formSisaUtang').value,
+          tipeTenor: document.getElementById('formTipeTenor').value, tenor: document.getElementById('formTenor').value
         }
       };
-      bootstrapModalForm.hide(); 
-      kendaliLoading(true);
-      kirimKeApi(payload);
+      bootstrapModalForm.hide(); kendaliLoading(true); kirimKeApi(payload);
     }
  
     function bukaModalBayar(rowNum, nama) {
@@ -472,50 +414,46 @@
         rowNum: document.getElementById('bayarRowNum').value,
         nominal: document.getElementById('bayarNominal').value
       };
-      bootstrapModalBayar.hide(); 
-      kendaliLoading(true);
+      bootstrapModalBayar.hide(); kendaliLoading(true);
       
       fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
-          if(res.error) { kendaliLoading(false); return Swal.fire("Gagal", res.error, "error"); }
           kendaliLoading(false);
-          
-          pemicuKertasThermal(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
+          if(res.error) return Swal.fire("Gagal", res.error, "error");
+          eksekusiPrintHalamanLangsung(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
           muatDataDashboard();
-        }).catch(() => { kendaliLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
+        }).catch(() => { kendaliLoading(false); Swal.fire("Error", "Gagal transaksi.", "error"); });
     }
  
     function cetakUlangStruk(rowNum) {
       let tglSkg = new Date().toLocaleDateString('id-ID', { year: '2-digit', month: 'numeric', day: 'numeric' });
-      
       const p = listPelanggan.find(i => i.rowNum == rowNum);
       if (p) {
-        pemicuKertasThermal(tglSkg, p.nama, p.barang, 0, p.sisa);
+        eksekusiPrintHalamanLangsung(tglSkg, p.nama, p.barang, 0, p.sisa);
         return;
       }
-      
       const kartu = document.getElementById(`card-row-${rowNum}`);
       if(kartu) {
         const nama = kartu.querySelector('.target-nama')?.innerText || "NONAME";
         const barang = kartu.querySelector('.target-barang')?.innerText || "-";
         const sisa = kartu.querySelector('.target-sisa')?.getAttribute('data-raw') || 0;
-        pemicuKertasThermal(tglSkg, nama, barang, 0, sisa);
+        eksekusiPrintHalamanLangsung(tglSkg, nama, barang, 0, sisa);
       } else {
-        Swal.fire("Gagal", "Elemen data core rusak.", "error");
+        Swal.fire("Gagal", "Data lokal tidak ditemukan.", "error");
       }
     }
  
     function buatBarisStruk(label, value) {
       const LEBAR_KERTAS = 24; 
-      const labelStr = String(label);
-      const valueStr = String(value);
+      const labelStr = String(label); const valueStr = String(value);
       const sisaSpasi = LEBAR_KERTAS - (labelStr.length + valueStr.length);
       if (sisaSpasi > 0) return labelStr + " ".repeat(sisaSpasi) + valueStr + "\n";
       return labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
     }
  
-    function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
+    // SMART QUANTUM INLINE EMBEDDED PRINTING METHOD (ANTI DIBLOKIR BROWSER)
+    function eksekusiPrintHalamanLangsung(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "RE-PRINT";
       
       let streamTeks = "";
@@ -531,88 +469,30 @@
       streamTeks += "      TERIMA KASIH      \n";
       streamTeks = streamTeks.toUpperCase();
 
-      const htmlKonten = `
-        <html>
-        <head>
-          <title>PRINT_JOB</title>
-          <style>
-            @media print {
-              @page { size: 58mm auto; margin: 0mm !important; }
-              body { margin: 0mm !important; }
-            }
-            html, body { 
-              margin: 0 !important; padding: 0 !important; background: #ffffff !important; width: 58mm !important; overflow: hidden;
-            }
-            pre { 
-              width: 58mm !important; box-sizing: border-box !important; padding: 3mm 2mm !important; 
-              font-family: "Courier New", Courier, monospace !important; font-size: 12pt !important; 
-              font-weight: 900 !important; white-space: pre-wrap !important; line-height: 1.1 !important; margin: 0 !important;
-            }
-          </style>
-        </head>
-        <body>
-          <pre>${streamTeks}</pre>
-          <script>
-            window.onload = function() {
-              window.print();
-              setTimeout(function() { window.close(); }, 300);
-            }
-          <\/script>
-        </body>
-        </html>
-      `;
-
-      // MULTI-ENGINE PRINT OTOMATIS: JALUR UTAMA IFRAME + JALUR DARURAT POP-UP WINDOW
-      try {
-        const iframe = document.createElement('iframe');
-        iframe.style.position = 'fixed'; iframe.style.bottom = '0'; iframe.style.width = '0'; iframe.style.height = '0'; iframe.style.border = 'none';
-        document.body.appendChild(iframe);
-        const doc = iframe.contentWindow.document;
-        doc.open(); doc.write(htmlKonten); doc.close();
-        setTimeout(() => {
-          iframe.contentWindow.focus();
-          iframe.contentWindow.print();
-          document.body.removeChild(iframe); 
-        }, 150);
-      } catch (e) {
-        const win = window.open("", "_blank", "width=250,height=300");
-        if(win) {
-          win.document.open(); win.document.write(htmlKonten); win.document.close();
-        } else {
-          Swal.fire("Pop-up Blocked", "Aktifkan izin pop-up browser untuk mencetak langsung.", "warning");
-        }
-      }
+      // Suntik teks ke container tersembunyi
+      const printArea = document.getElementById('thermal-print-area');
+      printArea.innerHTML = `<pre>${streamTeks}</pre>`;
+      
+      // Picu trigger cetak halaman fisik
+      setTimeout(() => {
+        window.print(); 
+      }, 50);
     }
  
     function prosesHapusData(rowNum) {
       Swal.fire({ 
-        title: "Hapus File Permanen?", 
-        text: "Data yang dihapus tidak dapat dipulihkan kembali dari sistem server cloud!", 
-        icon: "warning", 
-        showCancelButton: true, 
-        confirmButtonColor: "#ff5858", 
-        cancelButtonColor: "#475569",
-        confirmButtonText: "Otorisasi Hapus" 
+        title: "Hapus File Permanen?", text: "Data akan terhapus selamanya dari cloud server!", icon: "warning", 
+        showCancelButton: true, confirmButtonColor: "#ff5858", cancelButtonColor: "#475569", confirmButtonText: "Hapus" 
       }).then((result) => {
-        if (result.isConfirmed) {
-          kendaliLoading(true);
-          kirimKeApi({ action: "hapusData", rowNum: rowNum });
-        }
+        if (result.isConfirmed) { kendaliLoading(true); kirimKeApi({ action: "hapusData", rowNum: rowNum }); }
       });
     }
  
     function kirimKeApi(payload) {
       fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
-        .then(pesan => { 
-          kendaliLoading(false); 
-          Swal.fire("Sukses", typeof pesan === 'string' ? pesan : "Database Berhasil Dimutasi!", "success"); 
-          muatDataDashboard(); 
-        })
-        .catch(() => { 
-          kendaliLoading(false); 
-          Swal.fire("Koneksi Putus", "Sistem gagal mengirim paket data ke server.", "error"); 
-        });
+        .then(pesan => { kendaliLoading(false); Swal.fire("Sukses", "Sistem Cloud Berhasil Diperbarui!", "success"); muatDataDashboard(); })
+        .catch(() => { kendaliLoading(false); Swal.fire("Gagal", "Gagal mengirim data.", "error"); });
     }
   </script>
 </body>
