@@ -123,7 +123,7 @@
       z-index: 9999; display: none; 
     }
 
-    /* REKAYASA STRUK SUPER JITU: MONOSPACE & DOUBLE STROKE BLACK */
+    /* SETTINGAN FIX SUPER JITU UNTUK KERTAS THERMAL MINI 58MM */
     #areaStruk { display: none; }
     @media print {
       body * { display: none !important; }
@@ -132,27 +132,25 @@
         position: absolute; 
         left: 0; 
         top: 0; 
-        width: 100% !important; 
+        width: 58mm !important; /* Paksa lebar dokumen murni seukuran lebar kertas thermal roll */
         margin: 0 !important; 
-        padding: 0px 4px !important;
+        padding: 0mm 2mm !important;
         background: #ffffff !important; 
         color: #000000 !important;
         
-        /* Menggunakan font bawaan pabrik android agar lebar huruf sama rata */
         font-family: "monospace", "Courier New", Courier !important; 
-        font-size: 13pt !important; 
-        font-weight: 900 !important;
+        font-size: 14pt !important; /* Naikkan ukuran font agar cetakan terlihat besar */
+        font-weight: bold !important;
         
-        /* Trik Jitu: Burn Double Effect agar tulisan super tebal di head printer */
-        -webkit-text-stroke: 0.8px #000000;
-        text-shadow: 0.5px 0px 0px #000000;
+        /* Trik cetak tebal pekat lapis ganda */
+        -webkit-text-stroke: 1px #000000;
+        text-shadow: 0.5px 0px 0px #000000, -0.5px 0px 0px #000000;
         
-        white-space: pre-wrap !important; /* Otomatis turun baris jika kepanjangan */
-        word-wrap: break-word !important;
+        white-space: pre !important; 
         line-height: 1.2 !important;
       }
       @page { 
-        size: auto; 
+        size: 58mm auto !important; /* Kunci ukuran kertas driver printer ke 58mm kasir mini */
         margin: 0mm !important; 
       }
     }
@@ -455,9 +453,9 @@
       }
     }
 
-    /* ENGINE STRUK SUPER JITU JAMINAN AMAN DI UKURAN KERTAS MINI */
+    /* MATRIKS JITU 20 KARAKTER MAKSIMAL - PAS TENGAH DAN TIDAK AKAN TERPOTONG */
     function buatBarisStruk(label, value) {
-      const LEBAR_KERTAS = 22; // Lebar aman dipersempit agar tidak terpotong tepi kanan kertas mini
+      const LEBAR_KERTAS = 20; 
       const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
       if (sisaSpasi > 0) {
         return label + " ".repeat(sisaSpasi) + value + "\n";
@@ -467,22 +465,23 @@
 
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
-      const butcheredBarang = barang.substring(0, 15); // Amankan deskripsi barang agar tidak merusak tata letak spasi
+      const cutNama = nama.substring(0, 14);
+      const cutBarang = barang.substring(0, 14);
       const strukPre = document.getElementById('areaStruk');
       
       let streamTeks = "";
-      streamTeks += " SLIP PEMBAYARAN SAH  \n";
-      streamTeks += " KIKI KREDIT SOLUTION \n";
-      streamTeks += "======================\n"; 
+      streamTeks += " SLIP PEMBAYARAN SAH \n";
+      streamTeks += "KIKI KREDIT SOLUTION\n";
+      streamTeks += "====================\n"; 
       streamTeks += buatBarisStruk("Tgl:", tgl);
-      streamTeks += buatBarisStruk("Nama:", nama);
-      streamTeks += buatBarisStruk("Brg:", butcheredBarang);
-      streamTeks += "----------------------\n";
-      streamTeks += buatBarisStruk("BAYAR:", _nominalDisplay);
-      streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
-      streamTeks += "----------------------\n";
-      streamTeks += "   * TERIMA KASIH * \n";
-      streamTeks += " SIMPAN SEBAGAI BUKTI \n\n\n"; 
+      streamTeks += buatBarisStruk("Nma:", cutNama);
+      streamTeks += buatBarisStruk("Brg:", cutBarang);
+      streamTeks += "--------------------\n";
+      streamTeks += buatBarisStruk("BYR:", _nominalDisplay);
+      streamTeks += buatBarisStruk("SIS:", formatRupiah(sisa));
+      streamTeks += "--------------------\n";
+      streamTeks += "  * TERIMA KASIH * \n";
+      streamTeks += " BUKTI TRANSAKSI SAH \n\n\n"; 
 
       strukPre.textContent = streamTeks;
       window.print();
