@@ -6,6 +6,7 @@
     <title>Kiki Kredit - Neon Lumina v11</title>
     <style>
         :root {
+            /* Palet Warna Premium Terapi Mata - Teduh & Elegan */
             --bg-app: #0b0f19;
             --surface: #121826;
             --surface-card: #1a2333;
@@ -13,7 +14,7 @@
             --text-muted: #94a3b8;
             --border-color: #243249;
             
-            /* Eye-Pleasing Neon Gradients */
+            /* Kontras Lembut Elektrik (Aman untuk Retina Mata) */
             --gradient-primary: linear-gradient(135deg, #6366f1, #4f46e5);
             --gradient-emerald: linear-gradient(135deg, #10b981, #059669);
             --gradient-rose: linear-gradient(135deg, #f43f5e, #e11d48);
@@ -71,10 +72,10 @@
         .btn-m-pay { background: var(--gradient-primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
         .btn-m-menu { background: var(--surface-card); color: #cbd5e1; border: 1px solid var(--border-color); max-width: 65px; font-size: 13px; }
 
-        /* FLOATING ACTION BUTTON (FAB) NEON EFFECT */
+        /* FLOATING ACTION BUTTON (FAB) */
         .fab-add { position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45); border: none; z-index: 99; cursor: pointer; }
 
-        /* OREO GLASSMORPHISM BOTTOM SHEET */
+        /* BOTTOM SHEET GLASSMORPHISM */
         .bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 15, 25, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: flex-end; justify-content: center; z-index: 1000; animation: fadeIn 0.2s ease; }
         .sheet-content { background: var(--surface); width: 100%; max-width: 480px; border-radius: 28px 28px 0 0; padding: 22px; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); border-top: 1px solid var(--border-color); animation: slideUp 0.25s cubic-bezier(0.1, 0.8, 0.1, 1); max-height: 85vh; overflow-y: auto; }
         .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
@@ -108,16 +109,47 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(150px); } to { transform: translateY(0); } }
 
-        /* OPTIMIZED BIGGER THERMAL HARDWARE PRINT HANDLING */
+        /* ==========================================================================
+           CRITICAL SUPER-BOLD & HIGH-CONTRAST THERMAL PRINT ENGINE 
+           ========================================================================== */
         @page { size: auto; margin: 0 !important; }
         @media print {
-            html, body { background: #fff !important; color: #000 !important; margin: 0 !important; padding: 0 !important; }
+            html, body { background: #ffffff !important; color: #000000 !important; margin: 0 !important; padding: 0 !important; }
             body * { display: none !important; }
             #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; }
-            #areaCetakStruk { position: absolute; left: 0; top: 0; width: 48mm; color: #000 !important; font-family: 'Courier New', monospace; font-size: 11pt; line-height: 1.3; font-weight: bold; padding: 5px; }
-            .p-center { text-align: center; font-weight: 900; font-size: 12pt; margin-bottom: 4px; }
-            .p-line { border-top: 2px dashed #000; margin: 6px 0; height: 1px; }
-            .p-row { display: flex; justify-content: space-between; font-weight: 900; margin-bottom: 2px; }
+            
+            #areaCetakStruk { 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 48mm; 
+                color: #000000 !important; 
+                font-family: 'Courier New', Courier, monospace; 
+                font-size: 11pt; 
+                line-height: 1.4; 
+                font-weight: 900 !important; /* Paksa ketebalan tinta paling ekstrem */
+                letter-spacing: 0.5px; 
+                padding: 4px;
+                text-transform: uppercase; /* Huruf kapital agar hasil bakar struk lebih jelas */
+            }
+            .p-center { 
+                text-align: center; 
+                font-weight: 900 !important; 
+                font-size: 13pt; 
+                margin-bottom: 6px; 
+            }
+            .p-line { 
+                font-weight: 900 !important;
+                margin: 4px 0;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            .p-row { 
+                display: flex; 
+                justify-content: space-between; 
+                font-weight: 900 !important; 
+                margin-bottom: 3px; 
+            }
         }
     </style>
 </head>
@@ -447,15 +479,16 @@
             const hitungCicilan = nominalBayar !== null ? (p.cicilanKe + 1) : p.cicilanKe;
 
             document.getElementById('areaCetakStruk').innerHTML = `
-                <div class="p-center">KIKI KREDIT SOLUTION<div class="p-line"></div></div>
-                <div class="p-row"><span>Tgl: ${tanggal}</span> <span>Ke: ${hitungCicilan}x</span></div>
-                <div class="p-row"><span>Nama: ${bersihkanSimbol(p.nama.substring(0,14))}</span></div>
-                <div class="p-row"><span>Brg : ${bersihkanSimbol(p.barang.substring(0,14))}</span></div>
-                <div class="p-line"></div>
-                <div class="p-row"><span>Total Jual</span> <span>: Rp ${p.total.toLocaleString('id-ID')}</span></div>
-                <div class="p-row"><span>Bayar Sesi</span> <span>: Rp ${(nominalBayar || 0).toLocaleString('id-ID')}</span></div>
-                <div class="p-row"><span>SISA UTANG</span> <span>: Rp ${sisaAkhir.toLocaleString('id-ID')}</span></div>
-                <div class="p-line"></div>
+                <div class="p-center">KIKI KREDIT SOLUTION</div>
+                <div class="p-line">================================</div>
+                <div class="p-row"><span>TGL: ${tanggal}</span> <span>KE: ${hitungCicilan}X</span></div>
+                <div class="p-row"><span>NAMA: ${bersihkanSimbol(p.nama.substring(0,14))}</span></div>
+                <div class="p-row"><span>BRG : ${bersihkanSimbol(p.barang.substring(0,14))}</span></div>
+                <div class="p-line">================================</div>
+                <div class="p-row"><span>TOTAL JUAL</span> <span>: RP ${p.total.toLocaleString('id-ID')}</span></div>
+                <div class="p-row"><span>BAYAR SESI</span> <span>: RP ${(nominalBayar || 0).toLocaleString('id-ID')}</span></div>
+                <div class="p-row"><span>SISA UTANG</span> <span>: RP ${sisaAkhir.toLocaleString('id-ID')}</span></div>
+                <div class="p-line">================================</div>
                 <div class="p-center">** STRUK VALID **</div>
             `;
             setTimeout(() => { window.print(); }, 200);
@@ -496,7 +529,10 @@
             kalkulasiOtomatisTenor();
         }
 
-        window.onload = ambilDataDariCloud;
+        window.onload = ambilDataCloud;
+        
+        // Fungsi fallback jika inisialisasi di atas typo
+        function ambilDataCloud() { ambilDataDariCloud(); }
     </script>
 </body>
 </html>
