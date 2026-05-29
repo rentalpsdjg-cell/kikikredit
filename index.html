@@ -3,51 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiki Kredit Solution - Smart Dashboard v2</title>
+    <title>Kiki Kredit Solution - Smart Dashboard v4</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: #f1f5f9; color: #1e293b; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
-        
-        /* Header */
         .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #cbd5e1; padding-bottom: 15px; }
         .header-app h1 { font-size: 24px; color: #0f172a; }
-        
-        /* Stats Cards */
         .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border-top: 5px solid #2563eb; position: relative; }
         .card.aktif { border-top-color: #10b981; }
         .card h3 { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
         .card p { font-size: 26px; font-weight: 700; color: #0f172a; }
-
-        /* Form Section */
         .action-section { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
         .action-section h2 { margin-bottom: 15px; font-size: 16px; color: #334155; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 15px; }
         input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background-color: #f8fafc; transition: all 0.2s; }
         input:focus, select:focus { background-color: #fff; border-color: #2563eb; outline: 2px solid #dbeafe; }
         .smart-calc { font-size: 13px; color: #2563eb; font-weight: 600; grid-column: 1 / -1; margin-top: -5px; padding-left: 2px; }
-        
-        /* Buttons */
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
         button { padding: 10px 18px; border: none; border-radius: 6px; color: white; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
         .btn-primary { background: #2563eb; } .btn-primary:hover { background: #1d4ed8; }
         .btn-secondary { background: #64748b; } .btn-secondary:hover { background: #475569; }
         .btn-purple { background: #7c3aed; } .btn-purple:hover { background: #6d28d9; }
-
-        /* Smart Filter Section */
         .filter-section { display: flex; gap: 15px; margin-bottom: 15px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 4px rgb(0 0 0 / 0.02); flex-wrap: wrap; align-items: center; }
         .search-box { flex: 1; min-width: 200px; }
         .filter-box { width: 150px; }
-
-        /* Table & Data List */
         .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
         th { background: #0f172a; color: white; padding: 14px 16px; font-weight: 600; }
         td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
         tr:hover { background: #f8fafc; }
-        
-        /* Badges & Actions */
         .badge { padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; display: inline-block; }
         .badge.aktif-bg { background: #dcfce7; color: #16a34a; }
         .badge.lunas-bg { background: #f1f5f9; color: #64748b; }
@@ -56,10 +42,8 @@
         .btn-edit { background: #f59e0b; } .btn-edit:hover { background: #d97706; }
         .btn-delete { background: #ef4444; } .btn-delete:hover { background: #dc2626; }
         .btn-print { background: #6366f1; } .btn-print:hover { background: #4f46e5; }
-
         .loading { text-align: center; padding: 30px; font-weight: 600; color: #64748b; font-size: 15px; }
-
-        /* Media Cetak Struk Mini Kasir (Thermal 58mm) */
+        
         @media print {
             body * { display: none !important; }
             #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; }
@@ -78,23 +62,23 @@
 
     <div class="container">
         <div class="header-app">
-            <h1>Kiki Kredit Solution</h1>
-            <button class="btn-purple" onclick="ambilData()">🔄 Segarkan Data</button>
+            <h1><b>Kiki Kredit Solution</b></h1>
+            <button class="btn-purple" onclick="ambilData()"><b>Segarkan Data</b></button>
         </div>
 
         <div class="stats-container">
             <div class="card">
-                <h3>Total Sisa Piutang</h3>
-                <p id="totalPiutang">Rp 0</p>
+                <h3><b>Total Sisa Piutang</b></h3>
+                <p id="totalPiutang"><b>Rp 0</b></p>
             </div>
             <div class="card aktif">
-                <h3>Total Pelanggan Aktif</h3>
-                <p id="pelangganAktif">0 Orang</p>
+                <h3><b>Total Pelanggan Aktif</b></h3>
+                <p id="pelangganAktif"><b>0 Orang</b></p>
             </div>
         </div>
 
         <div class="action-section">
-            <h2 id="formTitle">📝 Pendaftaran Pelanggan Baru</h2>
+            <h2 id="formTitle"><b>Pendaftaran Pelanggan Baru</b></h2>
             <form id="pelangganForm" onsubmit="prosesSimpanData(event)">
                 <input type="hidden" id="rowNum">
                 <input type="hidden" id="cicilanKe" value="0">
@@ -105,49 +89,49 @@
                     <input type="text" id="barang" placeholder="Nama Barang Kredit" required>
                     <input type="number" id="totalHarga" placeholder="Total Harga (Rp)" required oninput="hitungSimulasiOtomatis()">
                     <select id="tipeTenor" onchange="hitungSimulasiOtomatis()">
-                        <option value="Bulanan">⏱️ Bulanan</option>
-                        <option value="Mingguan">⏱️ Mingguan</option>
-                        <option value="Harian">⏱️ Harian</option>
+                        <option value="Bulanan"><b>Bulanan</b></option>
+                        <option value="Mingguan"><b>Mingguan</b></option>
+                        <option value="Harian"><b>Harian</b></option>
                     </select>
                     <input type="number" id="tenor" placeholder="Tenor (Sesi Kali)" required oninput="hitungSimulasiOtomatis()">
                     <input type="number" id="sisaUtang" placeholder="Sisa Utang Awal (Rp)" required>
                     
-                    <div id="simulasiHasil" class="smart-calc">Estimasi Angsuran: Rp 0 / sesi</div>
+                    <div id="simulasiHasil" class="smart-calc"><b>Estimasi Angsuran: Rp 0 / sesi</b></div>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="btnSubmit" class="btn-primary">💾 Simpan Data</button>
-                    <button type="button" class="btn-secondary" onclick="resetForm()">❌ Batalkan / Reset</button>
+                    <button type="submit" id="btnSubmit" class="btn-primary"><b>Simpan Data</b></button>
+                    <button type="button" class="btn-secondary" onclick="resetForm()"><b>Batalkan / Reset</b></button>
                 </div>
             </form>
         </div>
 
         <div class="filter-section">
             <div class="search-box">
-                <input type="text" id="inputCari" placeholder="🔍 Cari nama pelanggan atau nama barang..." oninput="jalankanFilterSmart()">
+                <input type="text" id="inputCari" placeholder="Cari nama pelanggan atau nama barang..." oninput="jalankanFilterSmart()">
             </div>
             <div class="filter-box">
                 <select id="filterStatus" onchange="jalankanFilterSmart()">
-                    <option value="SEMUA">📁 Semua Status</option>
-                    <option value="AKTIF">🟢 Aktif</option>
-                    <option value="LUNAS">⚪ Lunas</option>
+                    <option value="SEMUA"><b>Semua Status</b></option>
+                    <option value="AKTIF"><b>Aktif</b></option>
+                    <option value="LUNAS"><b>Lunas</b></option>
                 </select>
             </div>
         </div>
 
         <div class="table-container">
-            <div id="loadingText" class="loading">Menghubungkan ke basis data Google Sheets...</div>
+            <div id="loadingText" class="loading"><b>Menghubungkan ke basis data Google Sheets...</b></div>
             <table id="pelangganTable" style="display: none;">
                 <thead>
                     <tr>
-                        <th>Pelanggan</th>
-                        <th>Alamat</th>
-                        <th>Barang</th>
-                        <th>Total Kredit</th>
-                        <th>Tenor</th>
-                        <th>Cicilan Ke</th>
-                        <th>Sisa Utang</th>
-                        <th>Status</th>
-                        <th style="width: 250px; text-align: center;">Aksi</th>
+                        <th><b>Pelanggan</b></th>
+                        <th><b>Alamat</b></th>
+                        <th><b>Barang</b></th>
+                        <th><b>Total Kredit</b></th>
+                        <th><b>Tenor</b></th>
+                        <th><b>Cicilan Ke</b></th>
+                        <th><b>Sisa Utang</b></th>
+                        <th><b>Status</b></th>
+                        <th style="width: 250px; text-align: center;"><b>Aksi</b></th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -159,7 +143,6 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbw2msfsM4iqNn9n-9cHCf-jy9Ja5FhwjF59ugSAumG3IYt6CbHp1EhlHBaFlWm-Akks/exec";
         let masterDataPelanggan = [];
 
-        // Smart Calculator: Hitung Sisa Utang & Angsuran Otomatis saat Input diisi
         function hitungSimulasiOtomatis() {
             const totalHarga = parseInt(document.getElementById('totalHarga').value) || 0;
             const tenor = parseInt(document.getElementById('tenor').value) || 0;
@@ -172,9 +155,9 @@
 
             if (totalHarga > 0 && tenor > 0) {
                 const angsuran = Math.ceil(totalHarga / tenor);
-                document.getElementById('simulasiHasil').innerText = `📊 Estimasi Angsuran: Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.toLowerCase()}`;
+                document.getElementById('simulasiHasil').innerHTML = `<b>Estimasi Angsuran: Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.toLowerCase()}</b>`;
             } else {
-                document.getElementById('simulasiHasil').innerText = `Estimasi Angsuran: Rp 0`;
+                document.getElementById('simulasiHasil').innerHTML = `<b>Estimasi Angsuran: Rp 0</b>`;
             }
         }
 
@@ -191,8 +174,8 @@
                     return;
                 }
 
-                document.getElementById('totalPiutang').innerText = "Rp " + result.stats.totalPiutang.toLocaleString('id-ID');
-                document.getElementById('pelangganAktif').innerText = result.stats.aktif + " Orang";
+                document.getElementById('totalPiutang').innerHTML = "<b>Rp " + result.stats.totalPiutang.toLocaleString('id-ID') + "</b>";
+                document.getElementById('pelangganAktif').innerHTML = "<b>" + result.stats.aktif + " Orang</b>";
                 
                 masterDataPelanggan = result.pelanggan;
                 jalankanFilterSmart();
@@ -224,7 +207,7 @@
             tbody.innerHTML = "";
             
             if(data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#64748b; padding:30px;">Tidak ada data pelanggan yang cocok.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#64748b; padding:30px;"><b>Tidak ada data pelanggan yang cocok.</b></td></tr>`;
                 return;
             }
 
@@ -233,20 +216,20 @@
                 const statusClass = p.status === "AKTIF" ? "aktif-bg" : "lunas-bg";
                 
                 tr.innerHTML = `
-                    <td><strong>${p.nama}</strong></td>
-                    <td><span style="color:#64748b; font-size:13px;">${p.alamat}</span></td>
-                    <td>${p.barang}</td>
-                    <td>Rp ${p.total.toLocaleString('id-ID')}</td>
-                    <td>${p.tenor}x (${p.tipe})</td>
-                    <td style="text-align:center; font-weight:600;">${p.cicilanKe}</td>
-                    <td style="color:${p.sisa > 0 ? '#ef4444' : '#10b981'}; font-weight:bold;">Rp ${p.sisa.toLocaleString('id-ID')}</td>
-                    <td><span class="badge ${statusClass}">${p.status}</span></td>
+                    <td><strong><b>${p.nama}</b></strong></td>
+                    <td><span style="color:#64748b; font-size:13px;"><b>${p.alamat}</b></span></td>
+                    <td><b>${p.barang}</b></td>
+                    <td><b>Rp ${p.total.toLocaleString('id-ID')}</b></td>
+                    <td><b>${p.tenor}x (${p.tipe})</b></td>
+                    <td style="text-align:center; font-weight:600;"><b>${p.cicilanKe}</b></td>
+                    <td style="color:${p.sisa > 0 ? '#ef4444' : '#10b981'}; font-weight:bold;"><b>Rp ${p.sisa.toLocaleString('id-ID')}</b></td>
+                    <td><span class="badge ${statusClass}"><b>${p.status}</b></span></td>
                     <td>
                         <div style="display:flex; gap:6px; justify-content: center;">
-                            ${p.status === "AKTIF" ? `<button class="btn-table btn-pay" onclick="bayarManual(${p.rowNum}, ${p.sisa})">💵 Bayar</button>` : ''}
-                            <button class="btn-table btn-edit" onclick="isiFormUntukEdit(${p.rowNum})">✏️ Edit</button>
-                            <button class="btn-table btn-print" onclick="cetakStrukLokal(${p.rowNum}, null, null)">🖨️ Struk</button>
-                            <button class="btn-table btn-delete" onclick="hapusData(${p.rowNum})">🗑️</button>
+                            ${p.status === "AKTIF" ? `<button class="btn-table btn-pay" onclick="bayarManual(${p.rowNum}, ${p.sisa})"><b>Bayar</b></button>` : ''}
+                            <button class="btn-table btn-edit" onclick="isiFormUntukEdit(${p.rowNum})"><b>Edit</b></button>
+                            <button class="btn-table btn-print" onclick="cetakStrukLokal(${p.rowNum}, null, null)"><b>Struk</b></button>
+                            <button class="btn-table btn-delete" onclick="hapusData(${p.rowNum})"><b>Hapus</b></button>
                         </div>
                     </td>
                 `;
@@ -271,7 +254,7 @@
 
             const btn = document.getElementById('btnSubmit');
             btn.disabled = true;
-            btn.innerText = "Memproses...";
+            btn.innerHTML = "<b>Memproses...</b>";
 
             try {
                 const response = await fetch(API_URL, {
@@ -308,12 +291,10 @@
                 if (result.error) {
                     alert("Kesalahan transaksi: " + result.error);
                 } else {
-                    // SMART POPUP CETAK STRUK LANGSUNG SETELAH BERHASIL BAYAR
                     if(confirm(`Pembayaran Berhasil!\nPelanggan: ${result.hasilBayar.nama}\nSisa Utang: Rp ${result.hasilBayar.sisa.toLocaleString('id-ID')}\n\nApakah Anda ingin mencetak Struk Pembayaran sekarang?`)) {
                         cetakStrukLokal(rowNum, nominal, result.hasilBayar.sisa);
                     }
                     
-                    // Download Backup Berkas PDF dari Server Google secara otomatis
                     const downloadLink = document.createElement('a');
                     downloadLink.href = `data:application/pdf;base64,${result.pdf}`;
                     downloadLink.download = `Slip_${result.hasilBayar.nama.replace(/\s+/g, '_')}.pdf`;
@@ -328,7 +309,6 @@
             }
         }
 
-        // FITUR UTAMA: CETAK STRUK DIRECT KE PRINTER THERMAL (58mm Kasir)
         function cetakStrukLokal(rowNum, nominalBayarSekarang = null, sisaUtangTerbaru = null) {
             const p = masterDataPelanggan.find(item => item.rowNum === rowNum);
             if(!p) return alert("Data pelanggan tidak valid!");
@@ -336,38 +316,36 @@
             const tanggalSkg = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' });
             const areaStruk = document.getElementById('areaCetakStruk');
             
-            // Konfigurasi dinamis sisa dan bayar jika dipicu setelah transaksi bayar manual
             const cetakBayar = nominalBayarSekarang !== null ? `Rp ${parseInt(nominalBayarSekarang).toLocaleString('id-ID')}` : "-";
             const cetakSisa = sisaUtangTerbaru !== null ? parseInt(sisaUtangTerbaru) : p.sisa;
             const cetakCicilan = nominalBayarSekarang !== null ? (p.cicilanKe + 1) : p.cicilanKe;
 
             areaStruk.innerHTML = `
                 <div class="print-center">
-                    <strong>SLIP NOTA RESMI</strong><br>
-                    <strong>KIKI KREDIT SOLUTION</strong>
+                    <strong><b>SLIP NOTA RESMI</b></strong><br>
+                    <strong><b>KIKI KREDIT SOLUTION</b></strong>
                     <div class="print-double"></div>
                 </div>
-                <div class="print-row"><span>Tgl Nota</span> <span>: ${tanggalSkg}</span></div>
-                <div class="print-row"><span>Nama</span> <span>: ${p.nama}</span></div>
-                <div class="print-row"><span>Alamat</span> <span>: ${p.alamat}</span></div>
+                <div class="print-row"><span><b>Tgl Nota</b></span> <span><b>: ${tanggalSkg}</b></span></div>
+                <div class="print-row"><span><b>Nama</b></span> <span><b>: ${p.nama}</b></span></div>
+                <div class="print-row"><span><b>Alamat</b></span> <span><b>: ${p.alamat}</b></span></div>
                 <div class="print-line"></div>
-                <div class="print-row"><span>Kredit Barang</span> <span>: ${p.barang}</span></div>
-                <div class="print-row"><span>Total Pokok</span> <span>: Rp ${p.total.toLocaleString('id-ID')}</span></div>
-                <div class="print-row"><span>Tenor Sesi</span> <span>: ${p.tenor}x (${p.tipe})</span></div>
-                <div class="print-row"><span>Cicilan Ke</span> <span>: ${cetakCicilan}</span></div>
+                <div class="print-row"><span><b>Kredit Barang</b></span> <span><b>: ${p.barang}</b></span></div>
+                <div class="print-row"><span><b>Total Pokok</b></span> <span><b>: Rp ${p.total.toLocaleString('id-ID')}</b></span></div>
+                <div class="print-row"><span><b>Tenor Sesi</b></span> <span><b>: ${p.tenor}x (${p.tipe})</b></span></div>
+                <div class="print-row"><span><b>Cicilan Ke</b></span> <span><b>: ${cetakCicilan}</b></span></div>
                 <div class="print-line"></div>
-                <div class="print-row"><span>Jumlah Bayar</span> <span>: ${cetakBayar}</span></div>
-                <div class="print-row" style="font-weight:bold;"><span>SISA UTANG</span> <span>: Rp ${cetakSisa.toLocaleString('id-ID')}</span></div>
-                <div class="print-row"><span>Status Akun</span> <span>: ${cetakSisa <= 0 ? 'LUNAS' : 'AKTIF'}</span></div>
+                <div class="print-row"><span><b>Jumlah Bayar</b></span> <span><b>: ${cetakBayar}</b></span></div>
+                <div class="print-row" style="font-weight:bold;"><span><b>SISA UTANG</b></span> <span><b>: Rp ${cetakSisa.toLocaleString('id-ID')}</b></span></div>
+                <div class="print-row"><span><b>Status Akun</b></span> <span><b>: ${cetakSisa <= 0 ? 'LUNAS' : 'AKTIF'}</b></span></div>
                 <div class="print-line"></div>
                 <div class="print-center" style="margin-top:10px;">
-                    *** Terima Kasih ***<br>
-                    Simpan struk ini sebagai<br>
-                    bukti transaksi yang sah.
+                    <b>*** Terima Kasih ***</b><br>
+                    <b>Simpan struk ini sebagai</b><br>
+                    <b>bukti transaksi yang sah.</b>
                 </div>
             `;
 
-            // Eksekusi print bawaan sistem operasi perangkat (Mendukung printer Bluetooth via Browser Chrome)
             window.print();
         }
 
@@ -401,8 +379,8 @@
             document.getElementById('cicilanKe').value = p.cicilanKe;
             document.getElementById('sisaUtang').value = p.sisa;
 
-            document.getElementById('formTitle').innerText = "✏️ Mode Edit Data: " + p.nama;
-            document.getElementById('btnSubmit').innerText = "Simpan Perubahan";
+            document.getElementById('formTitle').innerHTML = "<b>Mode Edit Data: " + p.nama + "</b>";
+            document.getElementById('btnSubmit').innerHTML = "<b>Simpan Perubahan</b>";
             hitungSimulasiOtomatis();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -411,8 +389,8 @@
             document.getElementById('pelangganForm').reset();
             document.getElementById('rowNum').value = "";
             document.getElementById('cicilanKe').value = "0";
-            document.getElementById('formTitle').innerText = "📝 Pendaftaran Pelanggan Baru";
-            document.getElementById('btnSubmit').innerText = "💾 Simpan Data";
+            document.getElementById('formTitle').innerHTML = "<b>Pendaftaran Pelanggan Baru</b>";
+            document.getElementById('btnSubmit').innerHTML = "<b>Simpan Data</b>";
             hitungSimulasiOtomatis();
         }
 
