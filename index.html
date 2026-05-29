@@ -126,7 +126,7 @@
       display: none; 
     }
  
-    /* STRUK DIOPTIMALKAN UNTUK HANYA 1 HALAMAN PAS */
+    /* STRUK ULTRA MINI DAN TEBAL MAKSIMAL */
     #areaStruk { display: none; }
     @media print {
       html, body {
@@ -141,23 +141,29 @@
         position: absolute; 
         left: 0; 
         top: 0; 
-        width: 100% !important; 
-        height: max-content !important; /* Tinggi fleksibel sesuai konten */
+        width: 48mm !important; /* Dipersempit untuk kecocokan kertas 58mm POS */
+        height: max-content !important; 
         margin: 0 !important; 
-        padding: 1mm 2mm !important;
+        padding: 0mm 1mm !important;
         background: #ffffff !important; 
         color: #000000 !important;
-        font-family: "Courier New", Courier, Arial, monospace !important; 
-        font-size: 12pt !important; 
+        
+        /* Font wajib bold tebal */
+        font-family: "Courier New", Courier, monospace !important; 
+        font-size: 10pt !important; /* Ukuran diperkecil agar pas dengan kertas mini */
         font-weight: 900 !important; 
-        -webkit-text-stroke: 0.5px #000000; 
+        
+        /* Kombinasi stroke + bayangan teks untuk hasil print super tebal/pekat */
+        -webkit-text-stroke: 0.6px #000000;
+        text-shadow: 0.3px 0.3px 0px #000000;
+        
         white-space: pre-wrap !important; 
-        line-height: 1.2 !important;
-        letter-spacing: 0.5px;
-        page-break-inside: avoid !important; /* Cegah pembagian ke halaman baru */
+        line-height: 1.1 !important;
+        letter-spacing: 0.2px;
+        page-break-inside: avoid !important;
       }
       @page { 
-        size: auto; 
+        size: 58mm auto; /* Memaksa browser mengatur rasio lebar thermal 58mm */
         margin: 0mm !important; 
       }
     }
@@ -506,7 +512,7 @@
     }
  
     function buatBarisStruk(label, value) {
-      const LEBAR_KERTAS = 26; 
+      const LEBAR_KERTAS = 24; // Dipersempit dari 26 ke 24 agar teks kanan tidak terpotong kertas mini
       const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
       if (sisaSpasi > 0) {
         return label + " ".repeat(sisaSpasi) + value + "\n";
@@ -519,18 +525,18 @@
       const strukPre = document.getElementById('areaStruk');
       
       let streamTeks = "";
-      streamTeks += "   SLIP PEMBAYARAN SAH    \n";
-      streamTeks += "  KIKI KREDIT SOLUTION    \n";
-      streamTeks += "==========================\n"; 
+      streamTeks += "  SLIP PEMBAYARAN SAH   \n";
+      streamTeks += " KIKI KREDIT SOLUTION   \n";
+      streamTeks += "========================\n"; 
       streamTeks += buatBarisStruk("TGL:", tgl);
       streamTeks += buatBarisStruk("NAMA:", nama);
       streamTeks += buatBarisStruk("BRG:", barang);
-      streamTeks += "--------------------------\n";
+      streamTeks += "------------------------\n";
       streamTeks += buatBarisStruk("BAYAR:", _nominalDisplay);
-      streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
-      streamTeks += "--------------------------\n";
-      streamTeks += "     * TERIMA KASIH * \n";
-      streamTeks += "BUKTI TRANSAKSI YANG VALID"; // Menghilangkan baris kosong (\n\n\n) berlebih di akhir
+      streamTeks += buatBarisStruk("SISA:", formatRupiah(sisa));
+      streamTeks += "------------------------\n";
+      streamTeks += "    * TERIMA KASIH * \n";
+      streamTeks += "STRUK ADALAH BUKTI VALID"; 
  
       strukPre.textContent = streamTeks.toUpperCase();
       window.print();
