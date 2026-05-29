@@ -61,7 +61,7 @@
       font-size: 1rem; 
     }
 
-    /* KARTU PELANGGAN (ANTI GESER LAYAR HP) */
+    /* KARTU PELANGGAN */
     .loan-card { 
       background: #ffffff; 
       border-radius: var(--card-radius); 
@@ -86,7 +86,7 @@
     /* PROGRESS BAR UTANG */
     .progress { height: 8px; border-radius: 10px; background-color: #edf2f7; }
 
-    /* GRID UTAMA MENU AKSI RAMAH JARI */
+    /* GRID UTAMA MENU AKSI */
     .action-grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
@@ -123,7 +123,7 @@
       z-index: 9999; display: none; 
     }
 
-    /* PERBAIKAN UKURAN STRUK AUTO FIT - HURUF BESAR & PAS KERTAS THERMAL */
+    /* KONTROL STRUK KERTAS THERMAL: TEKS JALAN TERUS (AUTO-WRAP) & ANTI POTONG */
     #areaStruk { display: none; }
     @media print {
       body * { display: none !important; }
@@ -132,25 +132,28 @@
         position: absolute; 
         left: 0; 
         top: 0; 
-        width: 100% !important; /* Memanfaatkan seluruh area cetak yang tersedia */
+        width: 100% !important; 
         margin: 0 !important; 
-        padding: 0mm 1mm !important;
+        padding: 0mm 2mm !important;
         background: #ffffff !important; 
         color: #000000 !important;
         
         font-family: "monospace", "Courier New", Courier !important; 
-        font-size: 16pt !important; /* Ukuran huruf dinaikkan agar pas, besar, dan mantap */
+        font-size: 15pt !important; /* Ukuran seimbang: Terbaca jelas di kertas kecil */
         font-weight: bold !important;
         
-        /* Proteksi cetak hitam super pekat */
-        -webkit-text-stroke: 1.2px #000000;
+        /* Trik cetak tebal pekat lapis ganda */
+        -webkit-text-stroke: 1px #000000;
         text-shadow: 0.5px 0px 0px #000000;
         
-        white-space: pre !important; 
+        /* Kunci utama agar semua teks masuk (Otomatis bungkus kebawah jika kepanjangan) */
+        white-space: pre-wrap !important; 
+        word-wrap: break-word !important;
+        word-break: break-word !important;
         line-height: 1.3 !important;
       }
       @page { 
-        size: auto; /* Biarkan driver printer thermal menghitung panjang kertas otomatis */
+        size: auto; 
         margin: 0mm !important; 
       }
     }
@@ -453,32 +456,52 @@
       }
     }
 
-    /* FORMAT BARIS: DIKUNCI KE 18 KARAKTER AGAR OTOMATIS MELEBAR SANGAT PAS DI STRUK KECIL */
-    function buatBarisStruk(label, value) {
+    /* ENGINE WRAPPING STRUK: AUTO TURUN BARIS JIKA MELEBIHI 18 KARAKTER, DATA UTAS MASUK SEMUA */
+    function buatBarisStrukMultiLine(label, value) {
       const LEBAR_KERTAS = 18; 
-      const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
-      if (sisaSpasi > 0) {
+      const lebarMaksValue = LEBAR_KERTAS - label.length;
+      
+      if (value.length <= lebarMaksValue) {
+        const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
         return label + " ".repeat(sisaSpasi) + value + "\n";
+      } else {
+        // Jika nilai text terlalu panjang, potong-potong per baris secara otomatis
+        let hasilBaris = "";
+        let sisaText = value;
+        let barisPertama = true;
+        
+        while (sisaText.length > 0) {
+          if (barisPertama) {
+            let chunk = sisaText.substring(0, lebarMaksValue);
+            const sisaSpasi = LEBAR_KERTAS - (label.length + chunk.length);
+            hasilBaris += label + " ".repeat(sisaSpasi) + chunk + "\n";
+            sisaText = sisaText.substring(lebarMaksValue);
+            barisPertama = false;
+          } else {
+            let chunk = sisaText.substring(0, LEBAR_KERTAS);
+            // Taruh sisa text rata kanan
+            hasilBaris += " ".repeat(LEBAR_KERTAS - chunk.length) + chunk + "\n";
+            sisaText = sisaText.substring(LEBAR_KERTAS);
+          }
+        }
+        return hasilBaris;
       }
-      return label + "\n" + " ".repeat(LEBAR_KERTAS - value.length) + value + "\n";
     }
 
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
-      const cutNama = nama.substring(0, 12);
-      const cutBarang = barang.substring(0, 12);
       const strukPre = document.getElementById('areaStruk');
       
       let streamTeks = "";
       streamTeks += "SLIP PEMBAYARAN SAH\n";
       streamTeks += "KIKI KREDIT KASIR\n";
       streamTeks += "==================\n"; 
-      streamTeks += buatBarisStruk("Tgl:", tgl);
-      streamTeks += buatBarisStruk("Nma:", cutNama);
-      streamTeks += buatBarisStruk("Brg:", cutBarang);
+      streamTeks += buatBarisStrukMultiLine("Tgl:", tgl);
+      streamTeks += buatBarisStrukMultiLine("Nma:", nama);   // Text panjang aman, otomatis turun baris
+      streamTeks += buatBarisStrukMultiLine("Brg:", barang); // Text panjang aman, otomatis turun baris
       streamTeks += "------------------\n";
-      streamTeks += buatBarisStruk("BYR:", _nominalDisplay);
-      streamTeks += buatBarisStruk("SIS:", formatRupiah(sisa));
+      streamTeks += buatBarisStrukMultiLine("BYR:", _nominalDisplay);
+      streamTeks += buatBarisStrukMultiLine("SIS:", formatRupiah(sisa));
       streamTeks += "------------------\n";
       streamTeks += " * TERIMA KASIH * \n";
       streamTeks += "SIMPAN BUKTI INI\n\n\n"; 
