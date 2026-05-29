@@ -123,7 +123,7 @@
       z-index: 9999; display: none; 
     }
 
-    /* FORMAT AREA CETAK STRUK MINI - SUPER TEBAL & AMAN KERTAS KECIL */
+    /* REKAYASA STRUK SUPER JITU: MONOSPACE & DOUBLE STROKE BLACK */
     #areaStruk { display: none; }
     @media print {
       body * { display: none !important; }
@@ -134,15 +134,22 @@
         top: 0; 
         width: 100% !important; 
         margin: 0 !important; 
-        padding: 0px 0px !important;
+        padding: 0px 4px !important;
         background: #ffffff !important; 
         color: #000000 !important;
-        font-family: "Courier New", Courier, monospace !important; 
-        font-size: 12pt !important; 
-        font-weight: bold !important;
-        -webkit-text-stroke: 0.5px #000000; /* Trik agar tulisan di kertas thermal jauh lebih hitam pekat */
-        white-space: pre !important; 
-        line-height: 1.1 !important;
+        
+        /* Menggunakan font bawaan pabrik android agar lebar huruf sama rata */
+        font-family: "monospace", "Courier New", Courier !important; 
+        font-size: 13pt !important; 
+        font-weight: 900 !important;
+        
+        /* Trik Jitu: Burn Double Effect agar tulisan super tebal di head printer */
+        -webkit-text-stroke: 0.8px #000000;
+        text-shadow: 0.5px 0px 0px #000000;
+        
+        white-space: pre-wrap !important; /* Otomatis turun baris jika kepanjangan */
+        word-wrap: break-word !important;
+        line-height: 1.2 !important;
       }
       @page { 
         size: auto; 
@@ -448,9 +455,9 @@
       }
     }
 
-    /* ENGINE STRUK MATRIX: UKURAN MAKSIMAL DIKECILKAN JADI 24 KARAKTER KANAN KIRI GA AKAN KEPOTONG */
+    /* ENGINE STRUK SUPER JITU JAMINAN AMAN DI UKURAN KERTAS MINI */
     function buatBarisStruk(label, value) {
-      const LEBAR_KERTAS = 24; 
+      const LEBAR_KERTAS = 22; // Lebar aman dipersempit agar tidak terpotong tepi kanan kertas mini
       const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
       if (sisaSpasi > 0) {
         return label + " ".repeat(sisaSpasi) + value + "\n";
@@ -460,22 +467,22 @@
 
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
+      const butcheredBarang = barang.substring(0, 15); // Amankan deskripsi barang agar tidak merusak tata letak spasi
       const strukPre = document.getElementById('areaStruk');
       
-      // Teks mengalir murni dengan lebar super kecil (24 karakter) jaminan muat di printer mana pun
       let streamTeks = "";
-      streamTeks += "  SLIP PEMBAYARAN SAH   \n";
-      streamTeks += "  KIKI KREDIT SOLUTION  \n";
-      streamTeks += "========================\n"; 
+      streamTeks += " SLIP PEMBAYARAN SAH  \n";
+      streamTeks += " KIKI KREDIT SOLUTION \n";
+      streamTeks += "======================\n"; 
       streamTeks += buatBarisStruk("Tgl:", tgl);
       streamTeks += buatBarisStruk("Nama:", nama);
-      streamTeks += buatBarisStruk("Brg:", barang);
-      streamTeks += "------------------------\n";
+      streamTeks += buatBarisStruk("Brg:", butcheredBarang);
+      streamTeks += "----------------------\n";
       streamTeks += buatBarisStruk("BAYAR:", _nominalDisplay);
       streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
-      streamTeks += "------------------------\n";
-      streamTeks += "    * TERIMA KASIH * \n";
-      streamTeks += "SIMPAN SEBAGAI BUKTI SAH\n\n\n"; 
+      streamTeks += "----------------------\n";
+      streamTeks += "   * TERIMA KASIH * \n";
+      streamTeks += " SIMPAN SEBAGAI BUKTI \n\n\n"; 
 
       strukPre.textContent = streamTeks;
       window.print();
