@@ -127,7 +127,7 @@
     }
  
     /* ==========================================================================
-       CSS PRINT FIX: LEBAR 40MM, BEBAS TERPOTONG & ANTI JATUH KE BAWAH
+       CSS PRINT REVISI: FULL CENTER, AMAN DARI POTONGAN TEPI KERTAS
        ========================================================================== */
     #areaStruk { display: none; }
     @media print {
@@ -143,22 +143,23 @@
         display: block !important;
         position: absolute; 
         left: 0; top: 0; 
-        width: 40mm !important; /* Dipersempit ke 40mm agar ruang cetak aman */
+        width: 38mm !important; /* Dipersempit ke 38mm untuk jaminan anti-potong */
         height: max-content !important; 
         margin: 0 !important; 
-        padding: 0mm 1mm !important;
+        padding: 0mm 2mm !important;
         background: #ffffff !important; 
         color: #000000 !important;
         font-family: monospace !important; 
-        font-size: 9.5pt !important; /* Penyesuaian font agar seimbang */
+        font-size: 9.5pt !important; 
         
-        /* Penebalan ekstrem anti buram */
+        /* Cetak tebal hitam pekat */
         font-weight: 900 !important; 
         -webkit-text-stroke: 0.8px #000000; 
         text-shadow: 0.4px 0.4px 0px #000000; 
         
-        white-space: pre !important; 
-        line-height: 1.1 !important;
+        white-space: pre-line !important; /* Mengaktifkan pembungkusan otomatis jika teks terlalu panjang */
+        text-align: center !important; /* Paksa seluruh teks ke tengah kertas */
+        line-height: 1.2 !important;
         page-break-inside: avoid !important;
       }
       @page { 
@@ -510,29 +511,23 @@
       }
     }
  
-    // FIX BARIS: LEBAR_KERTAS dikunci pada 22 karakter agar muat sempurna
-    function buatBarisStruk(label, value) {
-      const LEBAR_KERTAS = 22; 
-      const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
-      return sisaSpasi > 0 ? label + " ".repeat(sisaSpasi) + value + "\n" : label + "\n" + " ".repeat(LEBAR_KERTAS - value.length) + value + "\n";
-    }
- 
+    // FUNGSI BARU: Layout terpusat (Center) otomatis tanpa tabrakan sisi kanan-kiri
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- RE-PRINT -";
       const strukPre = document.getElementById('areaStruk');
       
       let teks = "";
-      teks += " SLIP PEMBAYARAN SAH  \n";
-      teks += "KIKI KREDIT SOLUTION  \n";
-      teks += "======================\n"; 
-      teks += buatBarisStruk("TGL:", tgl);
-      teks += buatBarisStruk("NAMA:", nama);
-      teks += buatBarisStruk("BRG:", barang);
-      teks += "----------------------\n";
-      teks += buatBarisStruk("BAYAR:", _nominalDisplay);
-      teks += buatBarisStruk("SISA:", formatRupiah(sisa));
-      teks += "----------------------\n";
-      teks += "   * TERIMA KASIH * \n";
+      teks += "SLIP PEMBAYARAN SAH\n";
+      teks += "KIKI KREDIT SOLUTION\n";
+      teks += "====================\n"; 
+      teks += `TANGGAL: ${tgl}\n`;
+      teks += `NAMA: ${nama}\n`;
+      teks += `BARANG: ${barang}\n`;
+      teks += "--------------------\n";
+      teks += `JUMLAH BAYAR:\n${_nominalDisplay}\n\n`;
+      teks += `SISA PIUTANG:\n${formatRupiah(sisa)}\n`;
+      teks += "--------------------\n";
+      teks += "* TERIMA KASIH *\n";
       teks += "BUKTI TRANSAKSI YANG SAH"; 
  
       strukPre.textContent = teks.toUpperCase();
