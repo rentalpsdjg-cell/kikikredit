@@ -3,112 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution - v3.2 Anti-Gagal Print</title>
-  
+  <title>Kiki Kredit Solution - Anti-Gagal Print Edition</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-  
   <style>
-    :root {
-      --premium-dark: #0f172a;
-      --premium-blue: #2563eb;
-      --premium-green: #10b981;
-      --surface-card: #ffffff;
-      --font-premium: 'Inter', system-ui, -apple-system, sans-serif;
-    }
- 
-    body { 
-      background-color: #f8fafc; 
-      font-family: var(--font-premium); 
-      color: #334155;
-    }
- 
-    .navbar-custom { 
-      background: linear-gradient(135deg, var(--premium-dark) 0%, #1e293b 100%); 
-      padding: 18px 0;
-      border-bottom: 4px solid var(--premium-blue);
-    }
- 
-    .card-stats { 
-      border: none; 
-      border-radius: 16px; 
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); 
-      background: var(--surface-card);
-      border-top: 5px solid var(--premium-blue);
-      transition: all 0.25s;
-    }
-    .card-stats.success { border-top-color: var(--premium-green); }
+    body { background-color: #f4f6f9; font-family: system-ui, -apple-system, sans-serif; }
+    .navbar-custom { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; }
+    .card-stats { border: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .table-container { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .badge-aktif { background-color: #e3f2fd; color: #0d6efd; }
+    .badge-lunas { background-color: #e8f5e9; color: #2e7d32; }
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
     
-    .control-panel {
-      background: var(--surface-card);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.02);
-      border: 1px solid #edf2f7;
-    }
-    .input-jumbo { 
-      padding: 16px 20px; 
-      border-radius: 12px !important; 
-      font-size: 1rem;
-      border: 2px solid #e2e8f0; 
-    }
-    .input-jumbo:focus { border-color: var(--premium-blue); box-shadow: 0 0 0 4px rgba(37,99,235,0.15); }
-    .btn-jumbo { padding: 16px; border-radius: 12px; font-weight: 700; }
- 
-    .loan-card { 
-      background: var(--surface-card); 
-      border-radius: 16px; 
-      padding: 24px; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.02); 
-      border: 1px solid #e2e8f0; 
-      margin-bottom: 24px; 
-    }
- 
-    .info-title { font-size: 0.72rem; color: #64748b; text-transform: uppercase; font-weight: 800; letter-spacing: 0.8px; }
-    .info-desc { font-size: 1.15rem; font-weight: 700; color: #0f172a; }
-    .progress { height: 10px; border-radius: 100px; background-color: #f1f5f9; }
- 
-    .action-grid { 
-      display: grid; 
-      grid-template-columns: repeat(2, 1fr); 
-      gap: 12px; 
-      margin-top: 20px; 
-      padding-top: 16px; 
-      border-top: 2px dashed #f1f5f9; 
-    }
-    .btn-action-panel { 
-      padding: 12px; font-weight: 700; font-size: 0.88rem; border-radius: 12px; border: none; 
-      display: flex; align-items: center; justify-content: center; gap: 8px; 
-    }
-    
-    .btn-action-panel.pay { background-color: #10b981; color: #ffffff; }
-    .btn-action-panel.print { background-color: #64748b; color: #ffffff; }
-    .btn-action-panel.edit { background-color: #f59e0b; color: #ffffff; }
-    .btn-action-panel.delete { background-color: #ef4444; color: #ffffff; }
-    .btn-action-panel:disabled { background-color: #f1f5f9 !important; color: #94a3b8 !important; }
- 
-    .loading-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(15, 23, 42, 0.9); 
-      display: flex; justify-content: center; align-items: center; 
-      z-index: 9999; display: none; backdrop-filter: blur(5px);
-    }
-
-    .smart-cash-btn {
-      font-size: 0.85rem; padding: 8px 16px; border-radius: 10px; border: 2px solid #10b981;
-      background: #fff; color: #10b981; font-weight: 700;
-    }
-    .smart-cash-btn:hover { background: #10b981; color: #fff; }
-
-    /* PANEL PREVIEW STRUK EMULATOR DI LAYAR (ANTI-GAGAL) */
+    /* PANEL POP-UP EMERGENCY PREVIEW STRUK */
     .struk-preview-box {
       background: #fff; border: 2px dashed #cbd5e1; font-family: 'Courier New', Courier, monospace;
       padding: 15px; font-size: 11pt; font-weight: bold; line-height: 1.3; color: #000;
       text-align: left; white-space: pre-wrap; max-width: 100%; margin: 0 auto;
     }
 
-    /* MATRIKS PRINTER GULUNG DESKTOP PC */
+    /* DRIVER MATRIKS PRINT UTK DESKTOP FALLBACK */
     #areaStrukDesktop { display: none; }
     @media print {
       body * { display: none !important; }
@@ -123,121 +38,116 @@
   </style>
 </head>
 <body>
- 
+
   <div id="loading" class="loading-overlay">
-    <div class="text-center text-white">
-      <div class="spinner-border text-info" role="status" style="width: 4rem; height: 4rem;"></div>
-      <p class="mt-4 fw-bold fs-5 text-light">Mengeksekusi Cloud Script Engine v3.2...</p>
+    <div class="text-center">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-2 fw-bold">Menghubungkan ke Server...</p>
     </div>
   </div>
- 
+
   <nav class="navbar navbar-custom shadow-sm mb-4">
-    <div class="container">
-      <span class="navbar-brand mb-0 h1 text-white fw-bold fs-4">
-        <i class="fa-solid fa-shield-heart text-warning me-2"></i> Kiki Kredit <span class="badge bg-primary fs-6 ms-2">v3.2 Anti-Gagal Print</span>
+    <div class="container d-flex justify-content-between align-items-center">
+      <span class="navbar-brand mb-0 h1 text-white">
+        <i class="fa-solid fa-wallet me-2"></i> Kiki Kredit Solution
       </span>
       <button id="btnHardwareDirect" class="btn btn-warning btn-sm fw-bold rounded-pill px-3 shadow" onclick="hubungkanPrinterDirectBluetooth()">
         <i class="fa-solid fa-link me-1"></i> Hubungkan Thermal Bluetooth
       </button>
     </div>
   </nav>
- 
+
   <div class="container mb-5">
-    <div class="row mb-4 g-3">
-      <div class="col-6">
-        <div class="card card-stats p-4 h-100">
-          <span class="info-title">Global Outstanding Balance</span>
-          <h2 class="fw-bold text-primary mb-0 mt-1" id="statTotalPiutang" style="font-size: calc(1.3rem + 0.6vw);">Rp 0</h2>
-        </div>
-      </div>
-      <div class="col-6">
-        <div class="card card-stats success p-4 h-100">
-          <span class="info-title">Nasabah Aktif Finansial</span>
-          <h2 class="fw-bold text-success mb-0 mt-1" id="statPelangganAktif" style="font-size: calc(1.3rem + 0.6vw);">0 Jiwa</h2>
-        </div>
-      </div>
-    </div>
- 
-    <div class="control-panel mb-4">
-      <div class="row g-3">
-        <div class="col-12 col-md-8">
-          <div class="input-group">
-            <span class="input-group-text bg-light border-end-0 px-3"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-            <input type="text" id="inputCari" class="form-control input-jumbo border-start-0" placeholder="Ketik nama, wilayah domisili, atau nama barang..." oninput="filterDataSistem()">
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <div class="card card-stats bg-white p-4 d-flex flex-row align-items-center justify-content-between">
+          <div>
+            <h6 class="text-muted text-uppercase mb-1" style="font-size: 0.8rem;">Total Piutang Aktif</h6>
+            <h3 class="fw-bold text-primary mb-0" id="statTotalPiutang">Rp 0</h3>
           </div>
+          <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary"><i class="fa-solid fa-money-bill-wave fa-2xl"></i></div>
         </div>
-        <div class="col-12 col-md-4">
-          <button class="btn btn-primary btn-jumbo w-100 shadow-sm" onclick="bukaModalForm()">
-            <i class="fa-solid fa-user-plus me-1"></i> Buka Akad Kredit Baru
-          </button>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="card card-stats bg-white p-4 d-flex flex-row align-items-center justify-content-between">
+          <div>
+            <h6 class="text-muted text-uppercase mb-1" style="font-size: 0.8rem;">Pelanggan Aktif</h6>
+            <h3 class="fw-bold text-success mb-0" id="statPelangganAktif">0 Orang</h3>
+          </div>
+          <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success"><i class="fa-solid fa-users fa-2xl"></i></div>
         </div>
       </div>
     </div>
- 
+
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-folder-open text-muted me-2"></i> File Kolektif Terdaftar</h5>
-      <span class="badge bg-secondary px-3 py-2 rounded-3" id="lblInfoCount">Data Ter-Load: 0</span>
+      <h4 class="fw-bold text-secondary mb-0"><i class="fa-solid fa-list me-2"></i> Manajer Kredit</h4>
+      <button class="btn btn-primary" onclick="bukaModalForm()"><i class="fa-solid fa-user-plus me-1"></i> Tambah Baru</button>
     </div>
-    
-    <div id="containerDataKonsumen" class="row"></div>
+
+    <div class="table-container">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Nama</th>
+              <th>Alamat</th>
+              <th>Barang</th>
+              <th>Total</th>
+              <th>Tenor</th>
+              <th>Cicilan</th>
+              <th>Sisa Utang</th>
+              <th>Status</th>
+              <th class="text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabelPelanggan"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
- 
+
   <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
-        <div class="modal-header border-bottom-0 pt-4 px-4">
-          <h5 class="modal-title fw-bold text-dark" id="modalFormTitle">Form Berkas</h5>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="modalFormTitle">Form Pelanggan</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <form id="formPelanggan" onsubmit="prosesSimpanData(event)">
-          <div class="modal-body px-4">
+          <div class="modal-body">
             <input type="hidden" id="formRowNum">
-            <div class="mb-3"><label class="form-label fw-bold small text-muted">Nama Lengkap Konsumen</label><input type="text" id="formNama" class="form-control form-control-lg rounded-3" required></div>
-            <div class="mb-3"><label class="form-label fw-bold small text-muted">Alamat Domisili KTP</label><input type="text" id="formAlamat" class="form-control form-control-lg rounded-3" required></div>
-            <div class="mb-3"><label class="form-label fw-bold small text-muted">Deskripsi Barang Kredit</label><input type="text" id="formBarang" class="form-control form-control-lg rounded-3" required></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Nama</label><input type="text" id="formNama" class="form-control" required></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Alamat</label><input type="text" id="formAlamat" class="form-control" required></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Barang</label><input type="text" id="formBarang" class="form-control" required></div>
             <div class="row">
-              <div class="col-6 mb-3"><label class="form-label fw-bold small text-muted">Harga Kontrak (Rp)</label><input type="number" id="formTotalHarga" class="form-control form-control-lg rounded-3" required oninput="sinkronSisaUtang()"></div>
-              <div class="col-6 mb-3"><label class="form-label fw-bold small text-muted">Sisa Pokok (Rp)</label><input type="number" id="formSisaUtang" class="form-control form-control-lg rounded-3" required></div>
+              <div class="col-6 mb-3"><label class="form-label fw-semibold">Total Harga</label><input type="number" id="formTotalHarga" class="form-control" required oninput="sinkronSisaUtang()"></div>
+              <div class="col-6 mb-3"><label class="form-label fw-semibold">Sisa Utang</label><input type="number" id="formSisaUtang" class="form-control" required></div>
             </div>
             <div class="row">
               <div class="col-6 mb-3">
-                <label class="form-label fw-bold small text-muted">Skema Periode</label>
-                <select id="formTipeTenor" class="form-select form-select-lg rounded-3"><option value="Bulanan">Bulanan</option><option value="Mingguan">Mingguan</option><option value="Harian">Harian</option></select>
+                <label class="form-label fw-semibold">Tipe</label>
+                <select id="formTipeTenor" class="form-select"><option value="Bulanan">Bulanan</option><option value="Mingguan">Mingguan</option><option value="Harian">Harian</option></select>
               </div>
-              <div class="col-6 mb-3"><label class="form-label fw-bold small text-muted">Batas Tenor (X)</label><input type="number" id="formTenor" class="form-control form-control-lg rounded-3" required></div>
+              <div class="col-6 mb-3"><label class="form-label fw-semibold">Tenor (kali)</label><input type="number" id="formTenor" class="form-control" required></div>
             </div>
           </div>
-          <div class="modal-footer border-top-0 pb-4 px-4"><button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-primary px-4 rounded-3 fw-bold">Otorisasi Data</button></div>
+          <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-primary">Simpan</button></div>
         </form>
       </div>
     </div>
   </div>
- 
+
   <div class="modal fade" id="modalBayar" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 390px;">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
-        <div class="modal-header border-bottom-0 pt-4 px-4">
-          <h5 class="modal-title fw-bold text-dark">Validasi Loket Kasir</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title fw-bold">Bayar</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
         <form id="formBayar" onsubmit="prosesBayarManual(event)">
-          <div class="modal-body px-4">
+          <div class="modal-body">
             <input type="hidden" id="bayarRowNum">
-            <div class="mb-3">
-              <label class="form-label small text-muted d-block mb-0">Atas Nama Nasabah</label>
-              <input type="text" id="bayarNama" class="form-control-plaintext fw-bold text-primary fs-5 p-0" readonly>
-            </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold small text-muted">Nominal Setoran Angsuran (Rp)</label>
-              <input type="number" id="bayarNominal" class="form-control form-control-lg rounded-3 text-success fw-bold fs-3" required placeholder="0">
-            </div>
-            <div class="mb-2"><span class="small text-muted fw-bold"><i class="fa-solid fa-bolt text-warning"></i> QUICK-CASH SMART:</span></div>
-            <div class="d-flex flex-wrap gap-2 mb-2" id="smartCashContainer"></div>
+            <div class="mb-2"><label class="form-label text-muted">Pelanggan</label><input type="text" id="bayarNama" class="form-control-plaintext fw-bold text-primary p-0" readonly></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Nominal Pembayaran (Rp)</label><input type="number" id="bayarNominal" class="form-control form-control-lg" required></div>
           </div>
-          <div class="modal-footer border-top-0 pb-4 px-4">
-            <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Tutup</button>
-            <button type="submit" class="btn btn-success w-100 rounded-3 fw-bold py-3 shadow-sm">Posting Transaksi</button>
-          </div>
+          <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-success">Bayar</button></div>
         </form>
       </div>
     </div>
@@ -245,209 +155,124 @@
 
   <div class="modal fade" id="modalPreviewStruk" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" style="max-width: 360px;">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
-        <div class="modal-header bg-light rounded-top-4 py-3">
-          <h6 class="modal-title fw-bold text-dark mb-0"><i class="fa-solid fa-print text-success me-2"></i>Struk Terposting Safely</h6>
+      <div class="modal-content">
+        <div class="modal-header bg-light py-2">
+          <h6 class="modal-title fw-bold text-dark mb-0"><i class="fa-solid fa-print text-success me-2"></i>Struk Transaksi Selesai</h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="muatDataDashboard()"></button>
         </div>
         <div class="modal-body text-center bg-light px-3 py-3">
           <div class="struk-preview-box mb-3" id="isiStrukLayar"></div>
-          <p class="small text-muted mb-0 fw-medium">Printer bermasalah? Anda dapat mengambil gambar/screenshot layar ini atau tekan cetak ulang di bawah.</p>
+          <p class="small text-muted mb-0">Printer macet atau kertas habis? Silakan ambil gambar screenshot layar ini atau kirim ulang instruksi cetak.</p>
         </div>
-        <div class="modal-footer d-grid gap-2 border-top-0 pt-0 pb-4 px-3">
-          <button type="button" class="btn btn-primary fw-bold rounded-3 py-2" onclick="pemicuUlangPrintSaja()">
-            <i class="fa-solid fa-rotate me-2"></i>Kirim Perintah Cetak Lagi
+        <div class="modal-footer d-grid gap-2 border-top-0 pt-0 pb-3">
+          <button type="button" class="btn btn-primary btn-sm fw-bold" onclick="pemicuUlangPrintSaja()">
+            <i class="fa-solid fa-rotate-right me-1"></i>Kirim Ulang Sinyal Cetak
           </button>
-          <button type="button" class="btn btn-outline-secondary btn-sm fw-bold rounded-3" data-bs-dismiss="modal" onclick="muatDataDashboard()">
-            Selesai & Sinkron Tabel
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="muatDataDashboard()">
+            Selesai & Muat Ulang Tabel
           </button>
         </div>
       </div>
     </div>
   </div>
- 
+
   <pre id="areaStrukDesktop"></pre>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- 
+
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzeWIBiIVGYMmLNi-OLD2TkhbX1ab1LDpY4uMTjEGEojHRjtiu1ElqO72bnZWYHoug/exec";
- 
+
     let listPelanggan = [];
     let directBluetoothCharacteristic = null; 
-    let memoriBufferStrukTerakhir = ""; // Fitur Anti-Gagal: Penyimpan cadangan teks struk
-    
+    let memoriBufferStrukTerakhir = ""; 
+
     const bootstrapModalForm = new bootstrap.Modal(document.getElementById('modalForm'));
     const bootstrapModalBayar = new bootstrap.Modal(document.getElementById('modalBayar'));
     const bootstrapModalStruk = new bootstrap.Modal(document.getElementById('modalPreviewStruk'));
- 
+
     document.addEventListener("DOMContentLoaded", muatDataDashboard);
- 
-    function tunukkanLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
+
+    function tunjukkanLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
     function formatRupiah(angka) { return "Rp " + Number(angka).toLocaleString('id-ID'); }
     function sinkronSisaUtang() { if(!document.getElementById('formRowNum').value) document.getElementById('formSisaUtang').value = document.getElementById('formTotalHarga').value; }
- 
+
     function muatDataDashboard() {
-      tunukkanLoading(true);
+      tunjukkanLoading(true);
       fetch(`${API_URL}?action=ambilData`)
         .then(res => res.json())
         .then(res => {
-          tunukkanLoading(false);
-          if (res.error) return Swal.fire("Sistem Error", res.error, "error");
+          tunjukkanLoading(false);
+          if (res.error) return Swal.fire("Error", res.error, "error");
           
-          listPelanggan = res.pelanggan || [];
+          listPelanggan = res.pelanggan;
           document.getElementById('statTotalPiutang').innerText = formatRupiah(res.stats.totalPiutang);
           document.getElementById('statPelangganAktif').innerText = res.stats.aktif + " Orang";
-          document.getElementById('lblInfoCount').innerText = "Data Ter-Load: " + listPelanggan.length;
           
-          renderDataKeSistemGrid(listPelanggan);
-        }).catch(() => { tunukkanLoading(false); Swal.fire("Koneksi Putus", "Gagal memproses konektivitas API.", "error"); });
+          const tbody = document.getElementById('tabelPelanggan');
+          tbody.innerHTML = listPelanggan.length === 0 ? '<tr><td colspan="9" class="text-center text-muted">Tidak ada data.</td></tr>' : '';
+          
+          listPelanggan.forEach(p => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td class="fw-bold">${p.nama}</td>
+              <td><small>${p.alamat}</small></td>
+              <td>${p.barang}</td>
+              <td>${formatRupiah(p.total)}</td>
+              <td><small>${p.tenor}x (${p.tipe})</small></td>
+              <td class="text-center">${p.cicilanKe}</td>
+              <td class="fw-bold text-danger">${formatRupiah(p.sisa)}</td>
+              <td><span class="badge ${p.status === 'AKTIF' ? 'badge-aktif' : 'badge-lunas'}">${p.status}</span></td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-success me-1" ${p.status !== 'AKTIF'?'disabled':''} onclick="bukaModalBayar(${p.rowNum}, '${p.nama}')" title="Bayar Angsuran"><i class="fa-solid fa-hand-holding-dollar"></i></button>
+                <button class="btn btn-sm btn-dark me-1" onclick="cetakUlangStruk(${p.rowNum})" title="Cetak Struk"><i class="fa-solid fa-print"></i></button>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="bukaModalForm(${p.rowNum})" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick="prosesHapusData(${p.rowNum})" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+              </td>`;
+            tbody.appendChild(tr);
+          });
+        }).catch(err => { tunukkanLoading(false); Swal.fire("Error", "Gagal load data. Pastikan API Apps Script Aktif.", "error"); });
     }
- 
-    function renderDataKeSistemGrid(dataArray) {
-      const container = document.getElementById('containerDataKonsumen');
-      container.innerHTML = dataArray.length === 0 ? '<div class="col-12 text-center text-muted py-5 card bg-white border rounded-4 shadow-sm">Pencarian nihil, berkas tidak ditemukan.</div>' : '';
-      
-      dataArray.forEach(p => {
-        const totalHarga = Number(p.total) || 1;
-        const sisaUtang = Number(p.sisa) || 0;
-        const persentaseTerbayar = Math.min(100, Math.max(0, ((totalHarga - sisaUtang) / totalHarga) * 100));
- 
-        const divCol = document.createElement('div');
-        divCol.className = "col-12 col-md-6 col-lg-4";
-        
-        divCol.innerHTML = `
-          <div class="loan-card">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <div style="max-width: 70%;">
-                <span class="info-title d-block">Nama Nasabah</span>
-                <span class="info-desc text-truncate d-block">${p.nama}</span>
-              </div>
-              <span class="badge ${p.status === 'AKTIF' ? 'bg-primary' : 'bg-success'} px-3 py-2 rounded-pill fw-bold" style="font-size:0.75rem;">${p.status}</span>
-            </div>
-            
-            <div class="text-muted small mb-3 text-truncate"><i class="fa-solid fa-map-location-dot text-danger me-1"></i> ${p.alamat}</div>
-            
-            <div class="p-3 bg-light rounded-3 mb-3" style="font-size: 0.9rem;">
-              <div class="row g-2">
-                <div class="col-6">
-                  <span class="info-title d-block">Barang</span>
-                  <span class="fw-bold text-dark text-truncate d-block">${p.barang}</span>
-                </div>
-                <div class="col-6">
-                  <span class="info-title d-block">Nilai Kontrak</span>
-                  <span class="fw-bold text-muted d-block">${formatRupiah(p.total)}</span>
-                </div>
-                <div class="col-6 mt-2">
-                  <span class="info-title d-block">Tenor Skema</span>
-                  <span class="fw-bold text-dark">Ke-${p.cicilanKe} <span class="text-muted fw-normal">/ ${p.tenor}x (${p.tipe})</span></span>
-                </div>
-                <div class="col-6 mt-2">
-                  <span class="info-title d-block">Sisa Saldo</span>
-                  <span class="fw-bold text-danger d-block fs-6">${formatRupiah(p.sisa)}</span>
-                </div>
-              </div>
-              <div class="mt-3">
-                <div class="d-flex justify-content-between small text-muted mb-1 fw-bold" style="font-size: 0.68rem;">
-                  <span>PROGRESS RECOVERY</span>
-                  <span>${persentaseTerbayar.toFixed(0)}%</span>
-                </div>
-                <div class="progress">
-                  <div class="progress-bar ${p.status === 'LUNAS' ? 'bg-success' : 'bg-primary'}" role="progressbar" style="width: ${persentaseTerbayar}%"></div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="action-grid">
-              <button class="btn-action-panel pay" ${p.status !== 'AKTIF'?'disabled':''} onclick="bukaModalBayar(${p.rowNum}, '${p.nama}', ${p.sisa})">
-                <i class="fa-solid fa-cash-register"></i> Setor
-              </button>
-              <button class="btn-action-panel print" onclick="cetakUlangStruk(${p.rowNum})">
-                <i class="fa-solid fa-print"></i> Struk
-              </button>
-              <button class="btn-action-panel edit" onclick="bukaModalForm(${p.rowNum})">
-                <i class="fa-solid fa-sliders"></i> Edit
-              </button>
-              <button class="btn-action-panel delete" onclick="prosesHapusData(${p.rowNum})">
-                <i class="fa-solid fa-trash"></i> Hapus
-              </button>
-            </div>
-          </div>
-        `;
-        container.appendChild(divCol);
-      });
-    }
- 
-    function filterDataSistem() {
-      const kataKunci = document.getElementById('inputCari').value.toLowerCase().trim();
-      const hasilFilter = listPelanggan.filter(p => 
-        (p.nama && p.nama.toLowerCase().includes(kataKunci)) || 
-        (p.alamat && p.alamat.toLowerCase().includes(kataKunci)) ||
-        (p.barang && p.barang.toLowerCase().includes(kataKunci))
-      );
-      renderDataKeSistemGrid(hasilFilter);
-    }
- 
+
     function bukaModalForm(rowNum = null) {
       document.getElementById('formPelanggan').reset();
       document.getElementById('formRowNum').value = rowNum || '';
-      document.getElementById('modalFormTitle').innerText = rowNum ? "⚙️ Perbarui Kontrak" : "👤 Konsumen Baru";
+      document.getElementById('modalFormTitle').innerText = rowNum ? "Edit Pelanggan" : "Tambah Pelanggan";
       if(rowNum) {
         const p = listPelanggan.find(i => i.rowNum === rowNum);
         if(p) {
-          document.getElementById('formNama').value = p.nama;
-          document.getElementById('formAlamat').value = p.alamat;
-          document.getElementById('formBarang').value = p.barang;
-          document.getElementById('formTotalHarga').value = p.total;
-          document.getElementById('formSisaUtang').value = p.sisa;
-          document.getElementById('formTipeTenor').value = p.tipe;
+          document.getElementById('formNama').value = p.nama; document.getElementById('formAlamat').value = p.alamat;
+          document.getElementById('formBarang').value = p.barang; document.getElementById('formTotalHarga').value = p.total;
+          document.getElementById('formSisaUtang').value = p.sisa; document.getElementById('formTipeTenor').value = p.tipe;
           document.getElementById('formTenor').value = p.tenor;
         }
       }
       bootstrapModalForm.show();
     }
- 
+
     function prosesSimpanData(e) {
       e.preventDefault();
       const payload = {
         action: "simpanData",
         data: {
-          rowNum: document.getElementById('formRowNum').value, 
-          nama: document.getElementById('formNama').value,
-          alamat: document.getElementById('formAlamat').value, 
-          barang: document.getElementById('formBarang').value,
-          totalHarga: document.getElementById('formTotalHarga').value, 
-          sisaUtang: document.getElementById('formSisaUtang').value,
-          tipeTenor: document.getElementById('formTipeTenor').value, 
-          tenor: document.getElementById('formTenor').value
+          rowNum: document.getElementById('formRowNum').value, nama: document.getElementById('formNama').value,
+          alamat: document.getElementById('formAlamat').value, barang: document.getElementById('formBarang').value,
+          totalHarga: document.getElementById('formTotalHarga').value, sisaUtang: document.getElementById('formSisaUtang').value,
+          tipeTenor: document.getElementById('formTipeTenor').value, tenor: document.getElementById('formTenor').value
         }
       };
       bootstrapModalForm.hide(); tunukkanLoading(true);
       irimKeApi(payload);
     }
- 
-    function bukaModalBayar(rowNum, nama, sisa) {
+
+    function bukaModalBayar(rowNum, nama) {
       document.getElementById('formBayar').reset();
       document.getElementById('bayarRowNum').value = rowNum;
       document.getElementById('bayarNama').value = nama;
-      
-      const smartCashContainer = document.getElementById('smartCashContainer');
-      smartCashContainer.innerHTML = '';
-      
-      let nominalPintasan = [50000, 100000, 150000, 200000];
-      nominalPintasan.forEach(amt => {
-        if(amt < sisa) {
-          smartCashContainer.innerHTML += `<button type="button" class="smart-cash-btn" onclick="isiSmartCash(${amt})">${amt/1000}K</button>`;
-        }
-      });
-      smartCashContainer.innerHTML += `<button type="button" class="smart-cash-btn bg-success text-white border-0" onclick="isiSmartCash(${sisa})">Lunas (${sisa/1000}K)</button>`;
-      
       bootstrapModalBayar.show();
     }
 
-    function isiSmartCash(nominal) { document.getElementById('bayarNominal').value = nominal; }
- 
     function prosesBayarManual(e) {
       e.preventDefault();
       const payload = {
@@ -463,11 +288,20 @@
           if(res.error) { tunukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
           tunukkanLoading(false);
           
-          // GENERATE STRUK AMAN -> TAMPILKAN POP-UP FIRST UNTUK JAMINAN ANTI-GAGAL
+          // Jalankan fallback cetak thermal anti-gagal secara real-time
           buatLayoutTeksStranstaksi(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
-        }).catch(() => { tunukkanLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
+
+          // Backup unduhan file PDF bawaan system Anda
+          try {
+            const a = document.createElement("a");
+            a.href = "data:application/pdf;base64," + res.pdf;
+            a.download = "Slip_" + res.hasilBayar.nama.replace(/\s+/g, '_') + ".pdf";
+            a.click();
+          } catch(errPdf) { console.log("Unduhan PDF dilewati."); }
+
+        }).catch(() => { tunukkanLoading(false); Swal.fire("Error", "Gagal memproses transaksi.", "error"); });
     }
- 
+
     function cetakUlangStruk(rowNum) {
       const p = listPelanggan.find(i => i.rowNum === rowNum);
       if (p) {
@@ -476,7 +310,7 @@
         buatLayoutTeksStranstaksi(tglSkg, p.nama, p.barang, 0, p.sisa);
       }
     }
- 
+
     function buatBarisStruk(label, value) {
       const LEBAR_KERTAS = 26; 
       const labelStr = String(label);
@@ -485,7 +319,7 @@
       if (sisaSpasi > 0) return labelStr + " ".repeat(sisaSpasi) + valueStr + "\n";
       return labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
     }
- 
+
     /* WEB BLUETOOTH API DRIVER */
     async function hubungkanPrinterDirectBluetooth() {
       try {
@@ -502,16 +336,14 @@
         
         const btnHW = document.getElementById("btnHardwareDirect");
         btnHW.className = "btn btn-success btn-sm fw-bold rounded-pill px-3 shadow";
-        btnHW.innerHTML = `<i class="fa-solid fa-circle-check me-1"></i> Printer Aktif`;
-        Swal.fire("Printer Terkoneksi", "Direct Bluetooth Driver siap dijalankan.", "success");
+        btnHW.innerHTML = `<i class="fa-solid fa-circle-check me-1"></i> Printer Active`;
+        Swal.fire("Printer Konek", "Hardware terpasang langsung ke web.", "success");
       } catch (err) {
-        Swal.fire("Sistem Router", "Bluetooth dilewati, beralih ke engine otomatis.", "info");
+        Swal.fire("Sistem Router", "Bluetooth ditutup. Fallback print siap digunakan.", "info");
       }
     }
 
-    /* =========================================================
-       🔥 ANTI-GAGAL ENGINE: BUILDER DATA & EMERGENCY POPUP
-       ========================================================= */
+    /* ENGINE UTAMA: PEMBUAT TEXT STRUK GULUNG REVENUE */
     function buatLayoutTeksStranstaksi(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
       
@@ -529,22 +361,15 @@
       streamTeks += "     * TERIMA KASIH * \n";
       streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n\n";
 
-      // Simpan salinan ke memori buffer (Anti-Mati Listrik / Macet)
       memoriBufferStrukTerakhir = streamTeks;
-
-      // Suntik data ke pop-up layar visual kassa
       document.getElementById('isiStrukLayar').textContent = streamTeks;
       
-      // Munculkan layar backup pengaman kasir
       bootstrapModalStruk.show();
-
-      // Jalankan trigger pengiriman sinyal kertas secara paralel
       eksekusiKirimKeMesinPrinter(streamTeks);
     }
 
-    /* 🔥 PILOT AUTOMATIC ROUTER PRINTING MULTI-DRIVER */
+    /* MULTI-ROUTER ENGINE AUTOMATIC PRINTER ROUTING */
     async function eksekusiKirimKeMesinPrinter(teksStruk) {
-      // Jalur 1: Direct Bluetooth Hardware
       if (directBluetoothCharacteristic) {
         try {
           let encoder = new TextEncoder();
@@ -552,56 +377,43 @@
           await directBluetoothCharacteristic.writeValue(dataUint8);
           return;
         } catch (e) {
-          console.log("Direct gagal, beralih ke Driver Android...");
+          console.log("Direct hardware terputus, mengalihkan sistem...");
         }
       }
 
-      // Jalur 2: Android RawBT Protocol Link
       const isAndroid = /Android/i.test(navigator.userAgent);
       if (isAndroid) {
         const rawbtUrl = "rawbt://base64," + btoa(unescape(encodeURIComponent(teksStruk)));
         window.location.href = rawbtUrl;
       } else {
-        // Jalur 3: Windows / Mac Micro HTML Driver Layout
         const areaStruk = document.getElementById('areaStrukDesktop');
         areaStruk.textContent = teksStruk;
         window.print();
       }
     }
 
-    // Tombol trigger ulang cetak manual dari pop-up apabila kertas slip macet
     function pemicuUlangPrintSaja() {
       if(memoriBufferStrukTerakhir) {
         eksekusiKirimKeMesinPrinter(memoriBufferStrukTerakhir);
       } else {
-        Swal.fire("Kosong", "Tidak ada data transaksi di dalam memori buffer.", "warning");
+        Swal.fire("Kosong", "Tidak ada riwayat memori buffer.", "warning");
       }
     }
- 
+
     function prosesHapusData(rowNum) {
-      Swal.fire({ 
-        title: "Konfirmasi Hapus?", text: "Data hilang permanen dari cloud database!", icon: "warning", 
-        showCancelButton: true, confirmButtonColor: "#ef4444", cancelButtonColor: "#64748b", confirmButtonText: "Ya, Eksekusi!" 
-      }).then((result) => {
+      Swal.fire({ title: "Hapus permanen?", text: "Data tidak bisa dikembalikan!", icon: "warning", showCancelButton: true, confirmButtonColor: "#d33", confirmButtonText: "Ya, Hapus!" }).then((result) => {
         if (result.isConfirmed) {
-          tunukkanLoading(true);
+          tunjukkanLoading(true);
           irimKeApi({ action: "hapusData", rowNum: rowNum });
         }
       });
     }
- 
+
     function irimKeApi(payload) {
       fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
-        .then(pesan => { 
-          tunukkanLoading(false); 
-          Swal.fire("Berhasil", "Sinkronisasi Cloud Selesai!", "success"); 
-          muatDataDashboard(); 
-        })
-        .catch(() => { 
-          tunukkanLoading(false); 
-          Swal.fire("Kesalahan Server", "Gagal memproses data ke cloud.", "error"); 
-        });
+        .then(pesan => { tunukkanLoading(false); Swal.fire("Berhasil", typeof pesan === 'string' ? pesan : "Selesai!", "success"); muatDataDashboard(); })
+        .catch(() => { tunukkanLoading(false); Swal.fire("Error", "Gagal mengirim data ke server.", "error"); });
     }
   </script>
 </body>
