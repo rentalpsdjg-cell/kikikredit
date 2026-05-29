@@ -44,11 +44,33 @@
         .btn-print { background: #6366f1; }
         .loading { text-align: center; padding: 20px; font-weight: 600; color: #64748b; }
         
-        /* FORMAT PRINT SUPER COCOK UNTUK PRINTER THERMAL KECIL */
+        /* PERBAIKAN TOTAL SISI PRINT - MENGHAPUS RUANG PUTIH KOSONG */
+        @page {
+            size: auto;
+            margin: 0mm; /* Membuang margin kertas atas bawah kiri kanan browser */
+        }
         @media print {
+            html, body {
+                background: #fff;
+                margin: 0;
+                padding: 0;
+                height: auto; /* Memaksa printer memotong kertas saat teks habis */
+            }
             body * { display: none !important; }
             #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; }
-            #areaCetakStruk { position: absolute; left: 0; top: 0; width: 48mm; padding: 0; margin: 0; background: white; color: black; font-family: 'Courier New', monospace; font-size: 8pt; line-height: 1.1; }
+            #areaCetakStruk { 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 44mm; /* Disesuaikan agar pas di area cetak paling aman tanpa margin */
+                padding: 2mm; 
+                margin: 0; 
+                background: white; 
+                color: black; 
+                font-family: 'Courier New', monospace; 
+                font-size: 8pt; 
+                line-height: 1.1; 
+            }
             .print-center { text-align: center; font-weight: bold; }
             .print-line { border-top: 1px dashed #000; margin: 3px 0; display: block !important; height: 1px; }
             .print-double { border-top: 2px double #000; margin: 3px 0; display: block !important; height: 2px; }
@@ -275,7 +297,6 @@
             }
         }
 
-        /* STRUK KATA SUPER SINGKAT AGAR TIDAK TERPOTONG ATAU TURUN BARIS */
         function cetakStrukLokal(rowNum, nominalBayarSekarang = null, sisaUtangTerbaru = null) {
             const p = masterDataPelanggan.find(item => item.rowNum === rowNum);
             if(!p) return alert("Data tidak ada!");
