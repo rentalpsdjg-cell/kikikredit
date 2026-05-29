@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution - Ultra POS v5.0</title>
+  <title>Kiki Kredit Solution - Ultra POS v5.2</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -32,7 +32,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
  
-    /* DASHBOARD CARD STATS COCOK UNTUK MOBILE */
+    /* DASHBOARD CARD STATS */
     .card-stats { 
       border: none; 
       border-radius: var(--card-radius); 
@@ -142,7 +142,7 @@
     <nav class="navbar navbar-custom mb-4">
       <div class="container">
         <span class="navbar-brand mb-0 h1 text-white fw-bold fs-4">
-          <i class="fa-solid fa-bolt text-warning me-2"></i> Kiki Kredit <span class="badge bg-primary fs-6 ms-2 fw-bold">v5.0 Engine PRO</span>
+          <i class="fa-solid fa-bolt text-warning me-2"></i> Kiki Kredit <span class="badge bg-primary fs-6 ms-2 fw-bold">v5.2 PRO PAS</span>
         </span>
       </div>
     </nav>
@@ -440,9 +440,9 @@
       return sisaSpasi > 0 ? labelStr + " ".repeat(sisaSpasi) + valueStr + "\n" : labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
     }
  
-    /* ========================================================
-       🔥 ENGINE CANGGIH v5.0: IFRAME SILUMAN (100% TEBAL & 1 HALAMAN PAS)
-       ======================================================== */
+    /* =========================================================================
+       🔥 REVISI FINAL PAS v5.2: FONT KECIL PAS 58MM, ANTI-WRAP & 1 HALAMAN SHAPE
+       ========================================================================= */
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
       
@@ -458,13 +458,11 @@
       streamTeks += buatBarisStruk("SISA :", formatRupiah(sisa));
       streamTeks += "--------------------------\n";
       streamTeks += "     * TERIMA KASIH * \n";
-      streamTeks += "BUKTI TRANSAKSI YANG VALID"; // Bersih tanpa enter sisa, pas 1 halaman pendek
+      streamTeks += "BUKTI TRANSAKSI YANG VALID"; 
  
-      // Hapus iframe lama jika masih tersisa di memory
       const sisaIframe = document.getElementById('siluman-printer-engine');
       if (sisaIframe) sisaIframe.remove();
  
-      // Buat iframe baru
       const iframe = document.createElement('iframe');
       iframe.id = 'siluman-printer-engine';
       iframe.style.position = 'absolute';
@@ -483,26 +481,28 @@
                 background: #ffffff !important;
                 color: #000000 !important;
                 font-family: "Courier New", Courier, monospace !important;
-                font-size: 13pt !important;
-                font-weight: 900 !important;
+                font-size: 10pt !important; /* Diubah ke 10pt agar pas di lebar kertas 58mm */
+                font-weight: 900 !important; /* Ketebalan maksimal */
                 -webkit-font-smoothing: none !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                width: 280px !important;
+                width: 58mm !important;
               }
               @page {
-                size: 280px auto;
+                size: 58mm auto; /* Kunci ukuran kertas thermal 58mm, tinggi otomatis */
                 margin: 0mm !important;
               }
             }
-            body { margin: 0; padding: 4px; background: #fff; }
+            body { margin: 0; padding: 2mm; background: #fff; }
             pre { 
               font-family: "Courier New", monospace; 
-              font-size: 13pt; 
+              font-size: 10pt; 
               font-weight: 900; 
               color: #000000; 
-              line-height: 1.3;
+              line-height: 1.2;
               margin: 0;
+              white-space: pre !important; /* Cegah teks otomatis patah ke bawah */
+              word-break: keep-all !important;
             }
           </style>
         </head>
@@ -513,7 +513,6 @@
       `);
       doc.close();
  
-      // Eksekusi cetak langsung dari core iframe tanpa interupsi dashboard utama
       setTimeout(() => {
         iframe.contentWindow.focus();
         iframe.contentWindow.print();
