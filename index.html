@@ -2,117 +2,112 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiki Kredit Compact Smart v9</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kiki Kredit Mobile v10</title>
     <style>
         :root {
-            --bg-app: #f8fafc;
+            --bg-app: #f6f8fb;
             --surface: #ffffff;
-            --text-dark: #0f172a;
-            --text-gray: #64748b;
+            --text-dark: #1e293b;
+            --text-gray: #94a3b8;
             --primary: #4f46e5;
-            --primary-hover: #4338ca;
+            --primary-light: #eef2ff;
             --success: #10b981;
+            --success-light: #dcfce7;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --border-color: #e2e8f0;
-            --radius-md: 8px;
-            --radius-lg: 12px;
+            --border-color: #f1f5f9;
+            --shadow-sm: 0 2px 8px rgba(148, 163, 184, 0.08);
+            --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.15);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-app); color: var(--text-dark); padding: 16px; font-size: 13px; }
-        .container { max-width: 1400px; margin: 0 auto; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-app); color: var(--text-dark); font-size: 14px; padding-bottom: 80px; }
+        .container { padding: 16px; max-width: 480px; margin: 0 auto; }
+
+        /* Top Bar Modern */
+        .app-bar { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 14px 16px; border-radius: 16px; box-shadow: var(--shadow-sm); margin-bottom: 16px; }
+        .app-bar h1 { font-size: 16px; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 6px; }
+        .sync-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 700; background: var(--success-light); color: var(--success); }
+        .btn-sync-icon { background: var(--primary-light); color: var(--primary); border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; }
+
+        /* Dashboard Horizontal Scroll / Mini Card Widgets */
+        .stats-scroller { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 4px; scrollbar-width: none; }
+        .stats-scroller::-webkit-scrollbar { display: none; }
+        .stat-bubble { background: var(--surface); padding: 12px 16px; border-radius: 14px; min-width: 130px; flex: 1; box-shadow: var(--shadow-sm); border: 1px solid #f8fafc; }
+        .stat-bubble h3 { font-size: 10px; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+        .stat-bubble p { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+
+        /* Filter & Search Bar */
+        .search-container { display: flex; gap: 8px; margin-bottom: 16px; }
+        .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 12px; font-size: 13px; color: var(--text-dark); box-shadow: var(--shadow-sm); outline: none; }
+        .filter-select { background: var(--surface); border: 1px solid var(--border-color); padding: 0 10px; border-radius: 12px; font-size: 13px; color: var(--text-dark); box-shadow: var(--shadow-sm); outline: none; font-weight: 600; }
+
+        /* Modern Customer Cards (Pengganti Tabel Besar) */
+        .cards-feed { display: flex; flex-direction: column; gap: 12px; }
+        .customer-card { background: var(--surface); padding: 16px; border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid #f8fafc; position: relative; overflow: hidden; }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .cust-name { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+        .cust-address { font-size: 11px; color: var(--text-gray); margin-top: 1px; }
+        .status-tag { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase; }
+        .tag-aktif { background: var(--success-light); color: var(--success); }
+        .tag-lunas { background: #f1f5f9; color: #475569; }
         
-        /* Top Navigation Bar Mini */
-        .app-header { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 12px 18px; border-radius: var(--radius-lg); box-shadow: 0 1px 2px rgba(0,0,0,0.02); margin-bottom: 16px; border: 1px solid var(--border-color); }
-        .app-header h1 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-        .status-pill { font-size: 10px; background: #eef2ff; color: var(--primary); padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+        .card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 12px; }
+        .info-label { font-size: 10px; color: var(--text-gray); text-transform: uppercase; }
+        .info-val { font-size: 12px; font-weight: 600; color: var(--text-dark); }
+        .info-val.danger { color: var(--danger); font-weight: 700; }
 
-        /* Dashboard & Form Layout Grid split (Mencegah Layar Memanjang) */
-        .main-layout { display: grid; grid-template-columns: 340px 1fr; gap: 16px; align-items: start; }
-        @media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } }
+        .card-actions { display: flex; gap: 6px; }
+        .btn-mobile { flex: 1; padding: 10px; border: none; border-radius: 10px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; }
+        .btn-m-pay { background: var(--primary); color: white; }
+        .btn-m-menu { background: #f1f5f9; color: #475569; max-width: 50px; font-size: 14px; }
 
-        /* Left Column: Form & Stats Container */
-        .side-panel { display: flex; flex-direction: column; gap: 16px; }
-        
-        .metrics-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .metric-card { background: var(--surface); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
-        .metric-card.full { grid-column: span 2; }
-        .metric-card h3 { font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.02em; }
-        .metric-card p { font-size: 16px; font-weight: 700; }
+        /* FLOATING ACTION BUTTON (FAB) */
+        .fab-add { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4); border: none; z-index: 99; cursor: pointer; }
 
-        /* Compact Form Design */
-        .form-card { background: var(--surface); padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
-        .form-card h2 { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-        .form-flex { display: flex; flex-direction: column; gap: 10px; }
-        
-        .input-box { display: flex; flex-direction: column; gap: 2px; }
-        .input-box label { font-size: 10px; font-weight: 600; color: var(--text-gray); text-transform: uppercase; }
-        input, select { width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 12px; font-weight: 500; background-color: #f8fafc; color: var(--text-dark); transition: all 0.15s; }
-        input:focus, select:focus { background-color: var(--surface); border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.08); }
-        
-        .live-calc-banner { background: #f5f3ff; padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary); display: flex; justify-content: space-between; font-weight: 600; color: var(--primary); font-size: 11px; }
+        /* MODERN BOTTOM SHEET MODAL (Formulir & Pilihan Bayar) */
+        .bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); display: none; align-items: flex-end; justify-content: center; z-index: 1000; animation: fadeIn 0.2s ease; }
+        .sheet-content { background: var(--surface); width: 100%; max-width: 480px; border-radius: 24px 24px 0 0; padding: 20px; box-shadow: var(--shadow-md); animation: slideUp 0.2s cubic-bezier(0.1, 0.7, 0.1, 1); max-height: 90vh; overflow-y: auto; }
+        .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); }
+        .sheet-header h3 { font-size: 15px; font-weight: 700; }
+        .btn-close-sheet { background: none; border: none; font-size: 18px; color: var(--text-gray); cursor: pointer; }
 
-        .btn-container { display: flex; gap: 6px; margin-top: 4px; }
-        button { padding: 8px 14px; border: none; border-radius: 6px; color: white; font-weight: 600; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s; }
-        button:active { transform: scale(0.98); }
-        .btn-indigo { background: var(--primary); width: 100%; justify-content: center; }
-        .btn-indigo:hover { background: var(--primary-hover); }
-        .btn-slate { background: var(--text-gray); }
-        .btn-refresh { background: #7c3aed; padding: 6px 12px; font-size: 12px; }
+        /* Form Controls */
+        .form-flex { display: flex; flex-direction: column; gap: 12px; }
+        .input-group { display: flex; flex-direction: column; gap: 4px; }
+        .input-group label { font-size: 11px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; }
+        .input-group input, .input-group select { background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; font-size: 13px; color: var(--text-dark); outline: none; width: 100%; }
+        .input-group input:focus { border-color: var(--primary); background: var(--surface); }
+        .live-banner { background: #f5f3ff; padding: 10px 14px; border-radius: 8px; border-left: 3px solid var(--primary); font-size: 12px; font-weight: 700; color: var(--primary); text-align: center; }
 
-        /* Right Column: Search Controls & Data Table */
-        .data-panel { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-        .search-filter-bar { display: flex; gap: 10px; width: 100%; }
-        .search-input-wrapper { flex: 1; }
+        /* Smart Pay Quick Buttons Grid */
+        .pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+        .btn-coin { background: #f8fafc; border: 1px solid var(--border-color); padding: 12px 8px; border-radius: 10px; font-weight: 700; font-size: 13px; color: #334155; text-align: center; }
+        .btn-coin:disabled { opacity: 0.3; }
+        .btn-coin-lunas { grid-column: span 3; background: var(--text-dark); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 13px; text-align: center; margin-top: 4px; }
 
-        /* Compact Table Design */
-        .table-holder { overflow-x: auto; width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-md); }
-        table { width: 100%; border-collapse: collapse; min-width: 850px; }
-        th { background: #0f172a; color: white; padding: 10px 12px; font-weight: 600; text-align: left; font-size: 11px; text-transform: uppercase; }
-        td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); font-size: 12px; vertical-align: middle; }
-        .row-hover:hover { background-color: #f8fafc; }
-        
-        .status-tag { padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; text-transform: uppercase; }
-        .tag-active { background: #dcfce7; color: #16a34a; }
-        .tag-done { background: #f1f5f9; color: #475569; }
+        /* Menu Opsi Lainnya Sheet */
+        .opt-row { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
+        .opt-edit { background: #fffbeb; color: var(--warning); }
+        .opt-print { background: #eef2ff; color: #6366f1; }
+        .opt-del { background: #fee2e2; color: var(--danger); }
 
-        .action-flex { display: flex; gap: 4px; }
-        .btn-action { padding: 4px 8px; font-size: 11px; border-radius: 4px; font-weight: 700; color: white; border: none; }
-        .btn-action-pay { background: var(--success); }
-        .btn-action-print { background: #6366f1; }
-        .btn-action-edit { background: var(--warning); }
-        .btn-action-del { background: #fff; color: var(--danger); border: 1px solid #fee2e2; }
-        .btn-action-del:hover { background: #fee2e2; }
-
-        /* SMART POP-UP OVERLAY MODAL (Solusi agar tidak memanjang) */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); display: none; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.15s ease; }
-        .modal-content { background: var(--surface); padding: 20px; border-radius: var(--radius-lg); width: 100%; max-width: 400px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid var(--border-color); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
-        .modal-header h3 { font-size: 13px; font-weight: 700; }
-        .modal-grid-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-        .btn-quick-money { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; font-size: 12px; padding: 8px; border-radius: 6px; font-weight: 600; }
-        .btn-quick-money:hover:not(:disabled) { background: #eff6ff; border-color: var(--primary); color: var(--primary); }
-        .btn-quick-money:disabled { opacity: 0.35; cursor: not-allowed; }
-        .btn-quick-lunas { background: #0f172a; color: white; border: none; font-size: 12px; padding: 10px; border-radius: 6px; grid-column: span 2; font-weight: 700; width: 100%; text-align: center; margin-top: 4px; }
-        .btn-quick-lunas:hover { background: #1e293b; }
-        
-        .loader-text { text-align: center; padding: 30px; font-weight: 600; color: var(--text-gray); }
+        .loader { text-align: center; padding: 30px; font-weight: 700; color: var(--text-gray); font-size: 12px; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
 
-        /* PRINTER THERMAL STRICT MANAGEMENT */
+        /* THERMAL HARDWARE PRINT OVERRIDES */
         @page { size: auto; margin: 0 !important; }
         @media print {
-            html, body { background: transparent !important; margin: 0 !important; padding: 0 !important; height: auto !important; }
+            html, body { background: transparent !important; margin: 0 !important; padding: 0 !important; }
             body * { display: none !important; }
-            #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; background: transparent !important; }
-            #areaCetakStruk { position: absolute; left: 0; top: 0; width: 44mm; padding: 0 !important; margin: 0 !important; color: #000 !important; font-family: 'Courier New', monospace; font-size: 8pt; line-height: 1.1; }
-            .print-center { text-align: center; font-weight: bold; }
-            .print-line { border-top: 1px dashed #000; margin: 3px 0; display: block !important; height: 1px; }
-            .print-double { border-top: 2px double #000; margin: 3px 0; display: block !important; height: 2px; }
-            .print-row { display: flex !important; justify-content: space-between; font-weight: bold; }
+            #areaCetakStruk, #areaCetakStruk * { display: block !important; visibility: visible !important; }
+            #areaCetakStruk { position: absolute; left: 0; top: 0; width: 44mm; color: #000 !important; font-family: 'Courier New', monospace; font-size: 8pt; line-height: 1.1; }
+            .p-center { text-align: center; font-weight: bold; }
+            .p-line { border-top: 1px dashed #000; margin: 3px 0; height: 1px; }
+            .p-row { display: flex; justify-content: space-between; font-weight: bold; }
         }
     </style>
 </head>
@@ -120,133 +115,114 @@
 
     <div id="areaCetakStruk" style="display: none;"></div>
 
-    <div id="smartPayModal" class="modal-overlay" onclick="tutupModalBayar()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <h3 id="modalTargetNama">💸 Pembayaran Instan</h3>
-                <button style="background:none; color:var(--text-gray); font-size:16px; padding:0;" onclick="tutupModalBayar()">✕</button>
+    <button class="fab-add" onclick="bukaFormTambah()">＋</button>
+
+    <div id="paySheet" class="bottom-sheet" onclick="tutupSheet('paySheet')">
+        <div class="sheet-content" onclick="event.stopPropagation()">
+            <div class="sheet-header">
+                <h3 id="paySheetNama">💸 Bayar Kilat</h3>
+                <button class="btn-close-sheet" onclick="tutupSheet('paySheet')">✕</button>
             </div>
-            <div style="margin-bottom: 12px; font-size:12px; color:var(--text-gray);">
-                Sisa Tagihan Akun: <strong id="modalTargetSisa" style="color:var(--danger)">Rp 0</strong>
+            <p style="font-size:12px; color:var(--text-gray); margin-bottom:12px;">Sisa Tagihan Akun: <strong id="paySheetSisa" style="color:var(--danger)">Rp 0</strong></p>
+            <div class="pay-grid" id="payButtonContainer"></div>
+        </div>
+    </div>
+
+    <div id="actionSheet" class="bottom-sheet" onclick="tutupSheet('actionSheet')">
+        <div class="sheet-content" onclick="event.stopPropagation()">
+            <div class="sheet-header">
+                <h3 id="actionSheetTitle">Opsi Manajemen</h3>
+                <button class="btn-close-sheet" onclick="tutupSheet('actionSheet')">✕</button>
             </div>
-            <div class="modal-grid-buttons" id="modalButtonContainer">
+            <div id="actionOptionsContainer"></div>
+        </div>
+    </div>
+
+    <div id="formSheet" class="bottom-sheet" onclick="tutupSheet('formSheet')">
+        <div class="sheet-content" onclick="event.stopPropagation()">
+            <div class="sheet-header">
+                <h3 id="formTitle">📝 Tambah Pelanggan Baru</h3>
+                <button class="btn-close-sheet" onclick="tutupSheet('formSheet')">✕</button>
+            </div>
+            <form id="pelangganForm" class="form-flex" onsubmit="simpanDataKeSistem(event)">
+                <input type="hidden" id="rowNum">
+                <input type="hidden" id="cicilanKe" value="0">
+                
+                <div class="input-group">
+                    <label>Nama Pelanggan</label>
+                    <input type="text" id="nama" placeholder="Nama lengkap" required oninput="kapitalisasiSmart(this)">
                 </div>
+                <div class="input-group">
+                    <label>Alamat Tinggal</label>
+                    <input type="text" id="alamat" placeholder="Alamat lengkap" required oninput="kapitalisasiSmart(this)">
+                </div>
+                <div class="input-group">
+                    <label>Nama Barang Pembiayaan</label>
+                    <input type="text" id="barang" placeholder="Nama & tipe barang" required oninput="kapitalisasiSmart(this)">
+                </div>
+                <div class="input-group">
+                    <label>Harga Jual Total (Rp)</label>
+                    <input type="number" id="totalHarga" placeholder="Nominal angka" required oninput="kalkulasiOtomatisTenor()">
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="input-group">
+                        <label>Siklus</label>
+                        <select id="tipeTenor" onchange="kalkulasiOtomatisTenor()">
+                            <option value="Bulanan">🗓️ Bulanan</option>
+                            <option value="Mingguan">⏳ Mingguan</option>
+                            <option value="Harian">☀️ Harian</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Tenor (Sesi)</label>
+                        <input type="number" id="tenor" placeholder="Kali" required oninput="kalkulasiOtomatisTenor()">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Sisa Penyesuaian Utang (Rp)</label>
+                    <input type="number" id="sisaUtang" required>
+                </div>
+                <div id="textAngsuran" class="live-banner">Angsuran: Rp 0</div>
+                <button type="submit" id="btnSubmit" class="btn-mobile btn-m-pay" style="padding:14px; font-size:13px;">💾 <b>Simpan Data Pelanggan</b></button>
+            </form>
         </div>
     </div>
 
     <div class="container">
-        <div class="app-header">
-            <h1>⚡ Kiki Kredit Compact <span id="syncIndicator" class="status-pill">Sinkron</span></h1>
-            <button class="btn-refresh" onclick="ambilDataDariCloud()">🔄 <b>Sinkron Cloud</b></button>
+        <div class="app-bar">
+            <h1>⚡ Kiki Kredit Mobile</h1>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span id="syncIndicator" class="sync-badge">Sinkron</span>
+                <button class="btn-sync-icon" onclick="ambilDataDariCloud()">🔄</button>
+            </div>
         </div>
 
-        <div class="main-layout">
-            
-            <div class="side-panel">
-                <div class="metrics-mini">
-                    <div class="metric-card full">
-                        <h3>Total Sisa Piutang</h3>
-                        <p id="totalPiutang" style="color: var(--danger)">Rp 0</p>
-                    </div>
-                    <div class="metric-card">
-                        <h3>Aktif</h3>
-                        <p id="pelangganAktif">0 Org</p>
-                    </div>
-                    <div class="metric-card">
-                        <h3>Lunas</h3>
-                        <p id="rasioPelunasan">0%</p>
-                    </div>
-                </div>
-
-                <div class="form-card">
-                    <h2 id="formTitle">📝 Formulir Pelanggan</h2>
-                    <form id="pelangganForm" class="form-flex" onsubmit="simpanDataKeSistem(event)">
-                        <input type="hidden" id="rowNum">
-                        <input type="hidden" id="cicilanKe" value="0">
-                        
-                        <div class="input-box">
-                            <label>Nama Pelanggan</label>
-                            <input type="text" id="nama" placeholder="Nama lengkap" required oninput="kapitalisasiSmart(this)">
-                        </div>
-                        <div class="input-box">
-                            <label>Alamat Rumah</label>
-                            <input type="text" id="alamat" placeholder="Alamat rumah" required oninput="kapitalisasiSmart(this)">
-                        </div>
-                        <div class="input-box">
-                            <label>Nama Barang</label>
-                            <input type="text" id="barang" placeholder="Nama tipe barang" required oninput="kapitalisasiSmart(this)">
-                        </div>
-                        <div class="input-box">
-                            <label>Harga Jual Pembiayaan (Rp)</label>
-                            <input type="number" id="totalHarga" placeholder="Angka nominal" required oninput="kalkulasiOtomatisTenor()">
-                        </div>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                            <div class="input-box">
-                                <label>Siklus</label>
-                                <select id="tipeTenor" onchange="kalkulasiOtomatisTenor()">
-                                    <option value="Bulanan">Bulanan</option>
-                                    <option value="Mingguan">Mingguan</option>
-                                    <option value="Harian">Harian</option>
-                                </select>
-                            </div>
-                            <div class="input-box">
-                                <label>Tenor (Sesi)</label>
-                                <input type="number" id="tenor" placeholder="Kali" required oninput="kalkulasiOtomatisTenor()">
-                            </div>
-                        </div>
-                        <div class="input-box">
-                            <label>Sisa Penyesuaian Saldo (Rp)</label>
-                            <input type="number" id="sisaUtang" placeholder="Otomatis mengikuti harga" required>
-                        </div>
-                        
-                        <div id="simulasiHasil" class="live-calc-banner">
-                            <span>Angsuran: <b id="textAngsuran">Rp 0</b></span>
-                        </div>
-                        
-                        <div class="btn-container">
-                            <button type="submit" id="btnSubmit" class="btn-indigo">💾 <b>Simpan Rekor</b></button>
-                            <button type="button" class="btn-slate" onclick="resetFormulir()">🧹</button>
-                        </div>
-                    </form>
-                </div>
+        <div class="stats-scroller">
+            <div class="stat-bubble">
+                <h3>Total Piutang</h3>
+                <p id="totalPiutang" style="color:var(--danger)">Rp 0</p>
             </div>
-
-            <div class="data-panel">
-                <div class="search-filter-bar">
-                    <div class="search-input-wrapper">
-                        <input type="text" id="inputCari" placeholder="🔍 Masukkan kata kunci untuk menyaring data pelanggan..." oninput="jalankanPencarianLokal()">
-                    </div>
-                    <div style="width: 120px;">
-                        <select id="filterStatus" onchange="jalankanPencarianLokal()">
-                            <option value="SEMUA">🌐 Semua</option>
-                            <option value="AKTIF">🟢 Aktif</option>
-                            <option value="LUNAS">⚪ Lunas</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="table-holder">
-                    <div id="loadingText" class="loader-text">⏳ Sinkronisasi data sistem...</div>
-                    <table id="pelangganTable" style="display: none;">
-                        <thead>
-                            <tr>
-                                <th>Pelanggan</th>
-                                <th>Alamat</th>
-                                <th>Barang</th>
-                                <th>Total Pokok</th>
-                                <th>Tenor</th>
-                                <th>Ke</th>
-                                <th>Sisa Piutang</th>
-                                <th>Status</th>
-                                <th style="text-align: center;">Tindakan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                </div>
+            <div class="stat-bubble">
+                <h3>Aktif</h3>
+                <p id="pelangganAktif">0 Org</p>
             </div>
-
+            <div class="stat-bubble">
+                <h3>Kelancaran</h3>
+                <p id="rasioPelunasan">0%</p>
+            </div>
         </div>
+
+        <div class="search-container">
+            <input type="text" id="inputCari" class="search-input" placeholder="🔍 Cari Nama, Alamat, atau Barang..." oninput="jalankanPencarianLokal()">
+            <select id="filterStatus" class="filter-select" onchange="jalankanPencarianLokal()">
+                <option value="SEMUA">🌐 Semua</option>
+                <option value="AKTIF">🟢 Aktif</option>
+                <option value="LUNAS">⚪ Lunas</option>
+            </select>
+        </div>
+
+        <div id="loadingText" class="loader">⏳ Menghubungkan ke Cloud Server...</div>
+        <div id="cardsFeed" class="cards-feed"></div>
     </div>
 
     <script>
@@ -276,25 +252,27 @@
 
             if (totalHarga > 0 && tenor > 0) {
                 const angsuran = Math.ceil(totalHarga / tenor);
-                document.getElementById('textAngsuran').innerText = `Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.toLowerCase()}`;
+                document.getElementById('textAngsuran').innerText = `Angsuran: Rp ${angsuran.toLocaleString('id-ID')} / ${tipeTenor.toLowerCase()}`;
             } else {
-                document.getElementById('textAngsuran').innerText = `Rp 0`;
+                document.getElementById('textAngsuran').innerText = `Angsuran: Rp 0`;
             }
         }
 
+        function bukaSheet(id) { document.getElementById(id).style.display = "flex"; }
+        function tutupSheet(id) { document.getElementById(id).style.display = "none"; }
+
         async function ambilDataDariCloud() {
             const ind = document.getElementById('syncIndicator');
-            ind.innerText = "🔄 Memuat...";
-            ind.style.background = "#fffbeb"; ind.style.color = "#d97706";
+            ind.innerText = "Memuat..."; ind.style.background = "#fffbeb"; ind.style.color = "#d97706";
             document.getElementById('loadingText').style.display = "block";
-            document.getElementById('pelangganTable').style.display = "none";
+            document.getElementById('cardsFeed').innerHTML = "";
 
             try {
                 const response = await fetch(`${API_URL}?action=ambilData`);
                 const result = await response.json();
                 
-                document.getElementById('totalPiutang').innerHTML = "<b>Rp " + result.stats.totalPiutang.toLocaleString('id-ID') + "</b>";
-                document.getElementById('pelangganAktif').innerHTML = "<b>" + result.stats.aktif + " Org</b>";
+                document.getElementById('totalPiutang').innerText = "Rp " + result.stats.totalPiutang.toLocaleString('id-ID');
+                document.getElementById('pelangganAktif').innerText = result.stats.aktif + " Org";
                 
                 const total = result.pelanggan.length;
                 const lunas = result.pelanggan.filter(x => x.status === "LUNAS").length;
@@ -303,14 +281,11 @@
                 cacheDataLokal = result.pelanggan;
                 jalankanPencarianLokal();
 
-                ind.innerText = "🟢 Sinkron";
-                ind.style.background = "#dcfce7"; ind.style.color = "#16a34a";
+                ind.innerText = "Sinkron"; ind.style.background = "var(--success-light)"; ind.style.color = "var(--success)";
             } catch (err) {
-                ind.innerText = "🔴 Gagal";
-                ind.style.background = "#fee2e2"; ind.style.color = "#ef4444";
+                ind.innerText = "Gagal"; ind.style.background = "#fee2e2"; ind.style.color = "var(--danger)";
             } finally {
                 document.getElementById('loadingText').style.display = "none";
-                document.getElementById('pelangganTable').style.display = "table";
             }
         }
 
@@ -323,102 +298,119 @@
                 const cocokStatus = (status === "SEMUA" || p.status === status);
                 return cocokTeks && cocokStatus;
             });
-            buatRenderTabel(terfilter);
+            buatRenderCards(terfilter);
         }
 
-        function buatRenderTabel(data) {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = "";
+        function buatRenderCards(data) {
+            const feed = document.getElementById('cardsFeed');
+            feed.innerHTML = "";
+
+            if(data.length === 0) {
+                feed.innerHTML = `<div class="loader">Data tidak cocok / kosong.</div>`;
+                return;
+            }
 
             data.forEach(p => {
-                const tr = document.createElement('tr');
-                tr.className = "row-hover";
-                tr.innerHTML = `
-                    <td><strong>${p.nama}</strong></td>
-                    <td><span style="color:var(--text-gray); font-size:11px;">${p.alamat}</span></td>
-                    <td><span>${p.barang}</span></td>
-                    <td><b>Rp ${p.total.toLocaleString('id-ID')}</b></td>
-                    <td><b>${p.tenor}x</b></td>
-                    <td style="text-align:center;"><b>${p.cicilanKe}</b></td>
-                    <td style="color:${p.sisa > 0 ? 'var(--danger)' : 'var(--success)'}; font-weight:700;">Rp ${p.sisa.toLocaleString('id-ID')}</td>
-                    <td><span class="status-tag ${p.status === 'AKTIF' ? 'tag-active' : 'tag-done'}">${p.status}</span></td>
-                    <td>
-                        <div class="action-flex">
-                            ${p.status === "AKTIF" ? `<button class="btn-action btn-action-pay" onclick="bukaModalBayarSmart(${p.rowNum})">💸 Bayar</button>` : ''}
-                            <button class="btn-action btn-action-print" onclick="printStrukKasir(${p.rowNum}, null, null)">🖨️</button>
-                            <button class="btn-action btn-action-edit" onclick="isiDataKeFormulir(${p.rowNum})">✏️</button>
-                            <button class="btn-action btn-action-del" onclick="hapusBarisPelanggan(${p.rowNum})">🗑️</button>
+                const card = document.createElement('div');
+                card.className = "customer-card";
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div>
+                            <div class="cust-name">${p.nama}</div>
+                            <div class="cust-address">📍 ${p.alamat}</div>
                         </div>
-                    </td>
+                        <span class="status-tag ${p.status === 'AKTIF' ? 'tag-aktif' : 'tag-lunas'}">${p.status}</span>
+                    </div>
+                    <div class="card-body">
+                        <div><div class="info-label">Barang</div><div class="info-val">${p.barang}</div></div>
+                        <div><div class="info-label">Total Jual</div><div class="info-val">Rp ${p.total.toLocaleString('id-ID')}</div></div>
+                        <div><div class="info-label">Sesi Cicilan</div><div class="info-val">${p.cicilanKe} / ${p.tenor}x (${p.tipe[0]})</div></div>
+                        <div><div class="info-label">Sisa Utang</div><div class="info-val ${p.sisa > 0 ? 'danger' : ''}">Rp ${p.sisa.toLocaleString('id-ID')}</div></div>
+                    </div>
+                    <div class="card-actions">
+                        ${p.status === 'AKTIF' ? `<button class="btn-mobile btn-m-pay" onclick="bukaModalBayarSmart(${p.rowNum})">💸 Bayar Sesi</button>` : ''}
+                        <button class="btn-mobile btn-m-menu" onclick="bukaMenuOpsiLainnya(${p.rowNum})">⚡ Menu</button>
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                feed.appendChild(card);
             });
         }
 
-        // CONTROL POP-UP MODAL OVERLAY SMART COIN BUTTONS
         function bukaModalBayarSmart(rowNum) {
             const p = cacheDataLokal.find(x => x.rowNum === rowNum);
             if(!p) return;
 
-            document.getElementById('modalTargetNama').innerText = `💸 Bayar: ${p.nama}`;
-            document.getElementById('modalTargetSisa').innerText = `Rp ${p.sisa.toLocaleString('id-ID')}`;
+            document.getElementById('paySheetNama').innerText = `💸 Bayar: ${p.nama}`;
+            document.getElementById('paySheetSisa').innerText = `Rp ${p.sisa.toLocaleString('id-ID')}`;
 
-            const container = document.getElementById('modalButtonContainer');
+            const container = document.getElementById('payButtonContainer');
             container.innerHTML = "";
 
             const listNominal = [50000, 100000, 150000, 200000, 300000, 500000];
             listNominal.forEach(nominal => {
                 const btn = document.createElement('button');
-                btn.className = "btn-quick-money";
-                btn.innerText = `💵 ${(nominal/1000)}K`;
+                btn.className = "btn-coin";
+                btn.innerText = `${(nominal/1000)}K`;
                 if(p.sisa < nominal) btn.disabled = true;
                 btn.setAttribute("onclick", `eksekusiBayarOtomatis(${p.rowNum}, ${nominal}, ${p.sisa})`);
                 container.appendChild(btn);
             });
 
             const btnLunas = document.createElement('button');
-            btnLunas.className = "btn-quick-lunas";
+            btnLunas.className = "btn-coin-lunas";
             btnLunas.innerText = `🎯 Bayar Sisa Lunas (Rp ${p.sisa.toLocaleString('id-ID')})`;
             btnLunas.setAttribute("onclick", `eksekusiBayarOtomatis(${p.rowNum}, ${p.sisa}, ${p.sisa})`);
             container.appendChild(btnLunas);
 
-            document.getElementById('smartPayModal').style.display = "flex";
+            bukaSheet('paySheet');
         }
 
-        function tutupModalBayar() {
-            document.getElementById('smartPayModal').style.display = "none";
+        function bukaMenuOpsiLainnya(rowNum) {
+            const p = cacheDataLokal.find(x => x.rowNum === rowNum);
+            if(!p) return;
+
+            document.getElementById('actionSheetTitle').innerText = `${p.nama}`;
+            const container = document.getElementById('actionOptionsContainer');
+            container.innerHTML = `
+                <div class="opt-row opt-edit" onclick="tutupSheet('actionSheet'); isiDataKeFormulir(${p.rowNum});">✏️ Edit Profil & Piutang</div>
+                <div class="opt-row opt-print" onclick="tutupSheet('actionSheet'); printStrukKasir(${p.rowNum}, null, null);">🖨️ Cetak Ulang Struk Kasir</div>
+                <div class="opt-row opt-del" onclick="tutupSheet('actionSheet'); hapusBarisPelanggan(${p.rowNum});">🗑️ Hapus Rekor Pelanggan</div>
+            `;
+            bukaSheet('actionSheet');
+        }
+
+        function bukaFormTambah() {
+            resetFormulir();
+            bukaSheet('formSheet');
         }
 
         async function eksekusiBayarOtomatis(rowNum, nominal, maksimalSisa) {
-            if (nominal <= 0 || nominal > maksimalSisa) return alert("Penyimpangan aturan keuangan.");
-            tutupModalBayar();
+            tutupSheet('paySheet');
+            document.getElementById('loadingText').style.display = "block";
 
             try {
-                document.getElementById('loadingText').style.display = "block";
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "bayarManual", rowNum: rowNum, nominal: nominal }) });
                 const result = await response.json();
                 
-                if (result.error) {
-                    alert("Error: " + result.error);
-                } else {
-                    if(confirm(`Berhasil Dibayar Rp ${nominal.toLocaleString('id-ID')}! Cetak struk thermal?`)) {
-                        printStrukKasir(rowNum, nominal, result.hasilBayar.sisa);
-                    }
-                    const link = document.createElement('a'); link.href = `data:application/pdf;base64,${result.pdf}`; link.download = `Nota_${result.hasilBayar.nama}.pdf`; link.click();
-                    ambilDataDariCloud();
+                if (result.error) return alert(result.error);
+                
+                if(confirm(`Berhasil Masuk Rp ${nominal.toLocaleString('id-ID')}! Cetak nota thermal?`)) {
+                    printStrukKasir(rowNum, nominal, result.hasilBayar.sisa);
                 }
+                const link = document.createElement('a'); link.href = `data:application/pdf;base64,${result.pdf}`; link.download = `Nota_${result.hasilBayar.nama}.pdf`; link.click();
+                ambilDataDariCloud();
             } catch (err) {
-                alert("Gangguan koneksi pembayaran data.");
-            } finally {
-                document.getElementById('loadingText').style.display = "none";
+                alert("Gangguan konektivitas.");
             }
         }
 
         async function simpanDataKeSistem(e) {
             e.preventDefault();
-            const rowNum = document.getElementById('rowNum').value;
+            tutupSheet('formSheet');
+            document.getElementById('loadingText').style.display = "block";
+
             const payload = {
-                rowNum: rowNum ? parseInt(rowNum) : 0,
+                rowNum: parseInt(document.getElementById('rowNum').value || 0),
                 nama: bersihkanSimbol(document.getElementById('nama').value),
                 alamat: bersihkanSimbol(document.getElementById('alamat').value),
                 barang: bersihkanSimbol(document.getElementById('barang').value),
@@ -429,57 +421,43 @@
                 sisaUtang: parseInt(document.getElementById('sisaUtang').value)
             };
 
-            const btn = document.getElementById('btnSubmit');
-            btn.disabled = true; btn.innerHTML = "⏳ Memproses...";
-
             try {
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "simpanData", data: payload }) });
                 alert(await response.json());
-                resetFormulir();
                 ambilDataDariCloud();
-            } catch (err) {
-                alert("Komunikasi awan bermasalah.");
-            } finally {
-                btn.disabled = false;
-            }
+            } catch (err) { alert("Error Server."); }
         }
 
         function printStrukKasir(rowNum, nominalBayar = null, sisaBaru = null) {
             const p = cacheDataLokal.find(x => x.rowNum === rowNum);
-            if(!p) return alert("Rekor data salah.");
+            if(!p) return;
 
             const tanggal = new Date().toLocaleDateString('id-ID', { year: '2-digit', month: '2-digit', day: '2-digit' });
-            const containerStruk = document.getElementById('areaCetakStruk');
-            const nominalBayarText = nominalBayar !== null ? `Rp ${parseInt(nominalBayar).toLocaleString('id-ID')}` : "-";
             const sisaAkhir = sisaBaru !== null ? parseInt(sisaBaru) : p.sisa;
             const hitungCicilan = nominalBayar !== null ? (p.cicilanKe + 1) : p.cicilanKe;
 
-            containerStruk.innerHTML = `
-                <div class="print-center">
-                    <strong><b>KIKI KREDIT SOLUTION</b></strong>
-                    <div class="print-double"></div>
-                </div>
-                <div class="print-row"><span><b>Tgl: ${tanggal}</b></span> <span><b>Ke: ${hitungCicilan}x</b></span></div>
-                <div class="print-row"><span><b>Nama: ${bersihkanSimbol(p.nama.substring(0,14))}</b></span></div>
-                <div class="print-row"><span><b>Brg : ${bersihkanSimbol(p.barang.substring(0,14))}</b></span></div>
-                <div class="print-line"></div>
-                <div class="print-row"><span><b>Total Pokok</b></span> <span><b>: Rp ${p.total.toLocaleString('id-ID')}</b></span></div>
-                <div class="print-row"><span><b>Bayar Sesi</b></span> <span><b>: ${nominalBayarText}</b></span></div>
-                <div class="print-row"><span><b>SISA UTANG</b></span> <span><b>: Rp ${sisaAkhir.toLocaleString('id-ID')}</b></span></div>
-                <div class="print-row"><span><b>Status</b></span> <span><b>: ${sisaAkhir <= 0 ? 'LUNAS' : 'AKTIF'}</b></span></div>
-                <div class="print-line"></div>
-                <div class="print-center" style="margin-top:4px;"><b>** STRUK VALID **</b></div>
+            document.getElementById('areaCetakStruk').innerHTML = `
+                <div class="p-center"><strong>KIKI KREDIT SOLUTION</strong><div class="p-line"></div></div>
+                <div class="p-row"><span>Tgl: ${tanggal}</span> <span>Ke: ${hitungCicilan}x</span></div>
+                <div class="p-row"><span>Nama: ${bersihkanSimbol(p.nama.substring(0,14))}</span></div>
+                <div class="p-row"><span>Brg : ${bersihkanSimbol(p.barang.substring(0,14))}</span></div>
+                <div class="p-line"></div>
+                <div class="p-row"><span>Total Jual</span> <span>: Rp ${p.total.toLocaleString('id-ID')}</span></div>
+                <div class="p-row"><span>Bayar Sesi</span> <span>: Rp ${(nominalBayar || 0).toLocaleString('id-ID')}</span></div>
+                <div class="p-row"><span>SISA UTANG</span> <span>: Rp ${sisaAkhir.toLocaleString('id-ID')}</span></div>
+                <div class="p-line"></div>
+                <div class="p-center">** STRUK VALID **</div>
             `;
             setTimeout(() => { window.print(); }, 200);
         }
 
         async function hapusBarisPelanggan(rowNum) {
-            if(!confirm("Hapus permanen data pelanggan ini?")) return;
+            if(!confirm("Hapus data pelanggan ini?")) return;
+            document.getElementById('loadingText').style.display = "block";
             try {
-                const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "hapusData", rowNum: rowNum }) });
-                alert(await response.json());
+                await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "hapusData", rowNum: rowNum }) });
                 ambilDataDariCloud();
-            } catch (err) { alert("Penghapusan ditolak cloud."); }
+            } catch (err) { alert("Gagal."); }
         }
 
         function isiDataKeFormulir(rowNum) {
@@ -495,20 +473,16 @@
             document.getElementById('cicilanKe').value = p.cicilanKe;
             document.getElementById('sisaUtang').value = p.sisa;
             
-            document.getElementById('formTitle').innerHTML = "✏️ Edit: " + p.nama;
-            document.getElementById('btnSubmit').innerHTML = "🔄 <b>Perbarui Data</b>";
-            
+            document.getElementById('formTitle').innerText = "✏️ Ubah Data Pelanggan";
             kalkulasiOtomatisTenor();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            document.getElementById('nama').focus();
+            bukaSheet('formSheet');
         }
 
         function resetFormulir() {
             document.getElementById('pelangganForm').reset();
             document.getElementById('rowNum').value = "";
             document.getElementById('cicilanKe').value = "0";
-            document.getElementById('formTitle').innerHTML = "📝 Formulir Pelanggan";
-            document.getElementById('btnSubmit').innerHTML = "💾 <b>Simpan Rekor</b>";
+            document.getElementById('formTitle').innerText = "📝 Tambah Pelanggan Baru";
             kalkulasiOtomatisTenor();
         }
 
