@@ -3,130 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiki Kredit Solution - Dashboard Management</title>
+    <title>Kiki Kredit Solution - Smart Dashboard</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f6f9; color: #333; padding: 20px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: #f8fafc; color: #1e293b; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
-        h1 { margin-bottom: 20px; color: #2c3e50; text-align: center; }
+        
+        /* Header */
+        .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+        .header-app h1 { font-size: 24px; color: #0f172a; }
         
         /* Stats Cards */
-        .stats-container { display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
-        .card { flex: 1; min-width: 250px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #3498db; }
-        .card.aktif { border-left-color: #2ecc71; }
-        .card h3 { font-size: 14px; color: #7f8c8d; text-transform: uppercase; margin-bottom: 5px; }
-        .card p { font-size: 24px; font-weight: bold; color: #2c3e50; }
+        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border-top: 4px solid #3b82f6; position: relative; }
+        .card.aktif { border-top-color: #10b981; }
+        .card h3 { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .card p { font-size: 26px; font-weight: 700; color: #0f172a; }
 
-        /* Form & Actions */
-        .action-section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .action-section h2 { margin-bottom: 15px; font-size: 18px; color: #2c3e50; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
-        button { padding: 10px 15px; border: none; border-radius: 5px; background: #3498db; color: white; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        button:hover { background: #2980b9; }
-        button.btn-clear { background: #95a5a6; }
-        button.btn-clear:hover { background: #7f8c8d; }
-
-        /* Table Style */
-        .table-container { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
-        th { background: #2c3e50; color: white; padding: 12px 15px; }
-        td { padding: 12px 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
-        tr:hover { background: #f9f9f9; }
+        /* Form Section */
+        .action-section { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
+        .action-section h2 { margin-bottom: 15px; font-size: 16px; color: #334155; display: flex; align-items: center; gap: 8px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background-color: #f8fafc; transition: all 0.2s; }
+        input:focus, select:focus { background-color: #fff; border-color: #3b82f6; outline: 2px solid #dbeafe; }
         
-        /* Badges */
-        .badge { padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; display: inline-block; }
-        .badge.aktif-bg { background: #e8f5e9; color: #2ecc71; }
-        .badge.lunas-bg { background: #ebeff5; color: #95a5a6; }
+        /* Buttons */
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        button { padding: 10px 18px; border: none; border-radius: 6px; color: white; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-primary { background: #3b82f6; } .btn-primary:hover { background: #2563eb; }
+        .btn-secondary { background: #64748b; } .btn-secondary:hover { background: #475569; }
+        .btn-purple { background: #8b5cf6; } .btn-purple:hover { background: #7c3aed; }
 
-        /* Action Buttons Table */
-        .btn-table { padding: 5px 10px; font-size: 12px; margin-right: 5px; }
-        .btn-pay { background: #2ecc71; } .btn-pay:hover { background: #27ae60; }
-        .btn-edit { background: #f39c12; } .btn-edit:hover { background: #d35400; }
-        .btn-delete { background: #e74c3c; } .btn-delete:hover { background: #c0392b; }
+        /* Smart Filter Section */
+        .filter-section { display: flex; gap: 15px; margin-bottom: 15px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 4px rgb(0 0 0 / 0.02); flex-wrap: wrap; align-items: center; }
+        .search-box { flex: 1; min-width: 200px; }
+        .filter-box { width: 150px; }
 
-        /* Loading Overlay */
-        .loading { text-align: center; padding: 20px; font-weight: bold; color: #7f8c8d; }
+        /* Table & Data List */
+        .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th { background: #0f172a; color: white; padding: 14px 16px; font-weight: 600; }
+        td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        tr:hover { background: #f8fafc; }
+        
+        /* Badges & Actions */
+        .badge { padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .badge.aktif-bg { background: #dcfce7; color: #16a34a; }
+        .badge.lunas-bg { background: #f1f5f9; color: #64748b; }
+        .btn-table { padding: 6px 10px; font-size: 12px; border-radius: 4px; }
+        .btn-pay { background: #10b981; } .btn-pay:hover { background: #059669; }
+        .btn-edit { background: #f59e0b; } .btn-edit:hover { background: #d97706; }
+        .btn-delete { background: #ef4444; } .btn-delete:hover { background: #dc2626; }
+        .btn-print { background: #6366f1; } .btn-print:hover { background: #4f46e5; }
+
+        .loading { text-align: center; padding: 30px; font-weight: 600; color: #64748b; font-size: 15px; }
+
+        /* Media Cetak Struk Mini Kasir (Thermal 58mm) */
+        @media print {
+            body * { visibility: hidden; }
+            #areaCetakStruk, #areaCetakStruk * { visibility: visible; }
+            #areaCetakStruk { position: absolute; left: 0; top: 0; width: 52mm; padding: 2mm; background: white; color: black; font-family: 'Courier New', Courier, monospace; font-size: 9pt; line-height: 1.2; }
+            .print-center { text-align: center; }
+            .print-line { border-top: 1px dashed black; margin: 5px 0; }
+            .print-double { border-top: 2px double black; margin: 5px 0; }
+            .print-row { display: flex; justify-content: space-between; }
+        }
     </style>
 </head>
 <body>
 
+    <div id="areaCetakStruk" style="display: none;"></div>
+
     <div class="container">
-        <h1>Kiki Kredit Solution - Panel Utama</h1>
+        <div class="header-app">
+            <h1>Kiki Kredit Solution</h1>
+            <button class="btn-purple" onclick="ambilData()">🔄 Segarkan Data</button>
+        </div>
 
         <div class="stats-container">
             <div class="card">
-                <h3>Total Piutang (Aktif)</h3>
+                <h3>Total Sisa Piutang</h3>
                 <p id="totalPiutang">Rp 0</p>
             </div>
             <div class="card aktif">
-                <h3>Pelanggan Aktif</h3>
+                <h3>Total Pelanggan Aktif</h3>
                 <p id="pelangganAktif">0 Orang</p>
             </div>
         </div>
 
         <div class="action-section">
-            <h2 id="formTitle">Pendaftaran / Kemas Kini Pelanggan</h2>
+            <h2 id="formTitle">📝 Pendaftaran Pelanggan Baru</h2>
             <form id="pelangganForm" onsubmit="prosesSimpanData(event)">
                 <input type="hidden" id="rowNum">
                 <input type="hidden" id="cicilanKe" value="0">
                 
                 <div class="form-grid">
-                    <input type="text" id="nama" placeholder="Nama Penuh Pelanggan" required>
-                    <input type="text" id="alamat" placeholder="Alamat" required>
+                    <input type="text" id="nama" placeholder="Nama Lengkap" required>
+                    <input type="text" id="alamat" placeholder="Alamat Rumah" required>
                     <input type="text" id="barang" placeholder="Nama Barang Kredit" required>
                     <input type="number" id="totalHarga" placeholder="Total Harga (Rp)" required oninput="setSisaSamaTotal()">
                     <select id="tipeTenor">
-                        <option value="Bulanan">Bulanan</option>
-                        <option value="Mingguan">Mingguan</option>
-                        <option value="Harian">Harian</option>
+                        <option value="Bulanan">⏱️ Bulanan</option>
+                        <option value="Mingguan">⏱️ Mingguan</option>
+                        <option value="Harian">⏱️ Harian</option>
                     </select>
-                    <input type="number" id="tenor" placeholder="Tenor (Sesi / Kali)" required>
-                    <input type="number" id="sisaUtang" placeholder="Sisa Utang (Rp)" required>
+                    <input type="number" id="tenor" placeholder="Tenor (Kali Cicil)" required>
+                    <input type="number" id="sisaUtang" placeholder="Sisa Utang Awal (Rp)" required>
                 </div>
-                <button type="submit" id="btnSubmit">Daftar Pelanggan Baru</button>
-                <button type="button" class="btn-clear" onclick="resetForm()">Batal / Kosongkan</button>
-                <button type="button" style="background:#8e44ad;" onclick="ambilData()">Refresh Data</button>
+                <div class="btn-group">
+                    <button type="submit" id="btnSubmit" class="btn-primary">💾 Daftarkan Pelanggan</button>
+                    <button type="button" class="btn-secondary" onclick="resetForm()">❌ Batalkan / Reset</button>
+                </div>
             </form>
         </div>
 
-        <h2>Senarai Data Pelanggan</h2>
-        <div class="table-container" style="margin-top: 15px;">
-            <div id="loadingText" class="loading">Memuatkan data dari Google Sheets...</div>
+        <div class="filter-section">
+            <div class="search-box">
+                <input type="text" id="inputCari" placeholder="🔍 Cari nama pelanggan atau barang..." oninput="jalankanFilterSmart()">
+            </div>
+            <div class="filter-box">
+                <select id="filterStatus" onchange="jalankanFilterSmart()">
+                    <option value="SEMUA">📁 Semua Status</option>
+                    <option value="AKTIF">🟢 Aktif</option>
+                    <option value="LUNAS">⚪ Lunas</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div id="loadingText" class="loading">Menghubungkan ke basis data Google Sheets...</div>
             <table id="pelangganTable" style="display: none;">
                 <thead>
                     <tr>
-                        <th>Nama</th>
+                        <th>Pelanggan</th>
                         <th>Alamat</th>
                         <th>Barang</th>
-                        <th>Total Harga</th>
+                        <th>Total Pinjaman</th>
                         <th>Tenor</th>
-                        <th>Cicilan Ke</th>
+                        <th>Cicilan Ke-</th>
                         <th>Sisa Utang</th>
                         <th>Status</th>
-                        <th>Tindakan</th>
+                        <th style="width: 240px;">Aksi Pintar</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
-                    </tbody>
+                <tbody id="tableBody"></tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // URL API Google Apps Script anda
         const API_URL = "https://script.google.com/macros/s/AKfycbw2msfsM4iqNn9n-9cHCf-jy9Ja5FhwjF59ugSAumG3IYt6CbHp1EhlHBaFlWm-Akks/exec";
-        let cachePelanggan = [];
+        let masterDataPelanggan = [];
 
-        // Isikan automatik nilai sisa utang sama dengan total harga untuk pelanggan baru
         function setSisaSamaTotal() {
             const rowNum = document.getElementById('rowNum').value;
-            if (!rowNum) { // Hanya jika daftar pelanggan baharu
+            if (!rowNum) {
                 document.getElementById('sisaUtang').value = document.getElementById('totalHarga').value;
             }
         }
 
-        // 1. Fungsi Ambil Data (GET)
         async function ambilData() {
             document.getElementById('loadingText').style.display = "block";
             document.getElementById('pelangganTable').style.display = "none";
@@ -136,33 +171,44 @@
                 const result = await response.json();
                 
                 if (result.error) {
-                    alert("Ralat Sistem: " + result.error);
+                    alert("Gagal memuat: " + result.error);
                     return;
                 }
 
-                // Kemas kini kad statistik
                 document.getElementById('totalPiutang').innerText = "Rp " + result.stats.totalPiutang.toLocaleString('id-ID');
                 document.getElementById('pelangganAktif').innerText = result.stats.aktif + " Orang";
                 
-                cachePelanggan = result.pelanggan;
-                renderTable(result.pelanggan);
+                masterDataPelanggan = result.pelanggan;
+                jalankanFilterSmart();
                 
             } catch (err) {
                 console.error(err);
-                alert("Gagal menyambung ke server Google Apps Script.");
+                alert("Koneksi gagal! Pastikan Apps Script Anda sudah di-deploy dengan benar.");
             } finally {
                 document.getElementById('loadingText').style.display = "none";
                 document.getElementById('pelangganTable').style.display = "table";
             }
         }
 
-        // Fungsi papar data ke dalam jadual HTML
-        function renderTable(data) {
+        function jalankanFilterSmart() {
+            const kataKunci = document.getElementById('inputCari').value.toLowerCase().trim();
+            const statusDipilih = document.getElementById('filterStatus').value;
+
+            const dataTerfilter = masterDataPelanggan.filter(p => {
+                const cocokKataKunci = p.nama.toLowerCase().includes(kataKunci) || p.barang.toLowerCase().includes(kataKunci);
+                const cocokStatus = (statusDipilih === "SEMUA") || (p.status === statusDipilih);
+                return cocokKataKunci && cocokStatus;
+            });
+
+            renderTabelHtml(dataTerfilter);
+        }
+
+        function renderTabelHtml(data) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = "";
             
             if(data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Tiada data pelanggan dijumpai.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#94a3b8; padding:30px;">Tidak ada data pelanggan yang cocok.</td></tr>`;
                 return;
             }
 
@@ -172,29 +218,30 @@
                 
                 tr.innerHTML = `
                     <td><strong>${p.nama}</strong></td>
-                    <td>${p.alamat}</td>
+                    <td><span style="color:#64748b; font-size:13px;">${p.alamat}</span></td>
                     <td>${p.barang}</td>
                     <td>Rp ${p.total.toLocaleString('id-ID')}</td>
-                    <td>${p.tenor} (${p.tipe})</td>
-                    <td style="text-align:center;">${p.cicilanKe}</td>
-                    <td style="color:${p.sisa > 0 ? '#e74c3c' : '#2ecc71'}; font-weight:bold;">Rp ${p.sisa.toLocaleString('id-ID')}</td>
+                    <td>${p.tenor}x (${p.tipe})</td>
+                    <td style="text-align:center; font-weight:600;">${p.cicilanKe}</td>
+                    <td style="color:${p.sisa > 0 ? '#ef4444' : '#10b981'}; font-weight:bold;">Rp ${p.sisa.toLocaleString('id-ID')}</td>
                     <td><span class="badge ${statusClass}">${p.status}</span></td>
                     <td>
-                        ${p.status === "AKTIF" ? `<button class="btn-table btn-pay" onclick="bayarManual(${p.rowNum})">Bayar</button>` : ''}
-                        <button class="btn-table btn-edit" onclick="pilihEdit(${p.rowNum})">Edit</button>
-                        <button class="btn-table btn-delete" onclick="hapusData(${p.rowNum})">Hapus</button>
+                        <div style="display:flex; gap:4px;">
+                            ${p.status === "AKTIF" ? `<button class="btn-table btn-pay" onclick="bayarManual(${p.rowNum}, ${p.sisa})">💵 Bayar</button>` : ''}
+                            <button class="btn-table btn-edit" onclick="isiFormUntukEdit(${p.rowNum})">✏️</button>
+                            <button class="btn-table btn-print" onclick="cetakStrukLokal(${p.rowNum})">🖨️ Struk</button>
+                            <button class="btn-table btn-delete" onclick="hapusData(${p.rowNum})">🗑️</button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // 2. Fungsi Simpan / Kemas Kini Data (POST)
         async function prosesSimpanData(e) {
             e.preventDefault();
-            
             const rowNum = document.getElementById('rowNum').value;
-            const dataPayload = {
+            const payload = {
                 rowNum: rowNum ? parseInt(rowNum) : 0,
                 nama: document.getElementById('nama').value,
                 alamat: document.getElementById('alamat').value,
@@ -206,73 +253,101 @@
                 sisaUtang: parseInt(document.getElementById('sisaUtang').value)
             };
 
-            const submitBtn = document.getElementById('btnSubmit');
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Memproses...";
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.innerText = "Menyimpan...";
 
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "simpanData", data: dataPayload })
+                    body: JSON.stringify({ action: "simpanData", data: payload })
                 });
-                const msg = await response.json();
-                alert(msg);
+                const responseMessage = await response.json();
+                alert(responseMessage);
                 resetForm();
                 ambilData();
             } catch (err) {
-                console.error(err);
-                alert("Gagal menyimpan data.");
+                alert("Gagal melakukan operasi penyimpanan data.");
             } finally {
-                submitBtn.disabled = false;
+                btn.disabled = false;
             }
         }
 
-        // 3. Fungsi Bayar Manual (POST) + Auto Download Slip PDF
-        async function bayarManual(rowNum) {
-            const nominal = prompt("Masukkan Nominal Pembayaran (Rp):");
-            if (nominal === null || nominal.trim() === "") return;
-            if (isNaN(nominal) || parseInt(nominal) <= 0) return alert("Nominal tidak sah!");
+        async function bayarManual(rowNum, sisaUtangMaksimal) {
+            const inputNominal = prompt(`Masukkan nilai pembayaran tunai (Maksimal Rp ${sisaUtangMaksimal.toLocaleString('id-ID')}):`);
+            if (inputNominal === null || inputNominal.trim() === "") return;
+            
+            const nominal = parseInt(inputNominal);
+            if (isNaN(nominal) || nominal <= 0) return alert("Nominal pembayaran salah!");
+            if (nominal > sisaUtangMaksimal) return alert("Jumlah pembayaran melampaui sisa utang berjalan!");
 
             try {
                 document.getElementById('loadingText').style.display = "block";
-                
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        action: "bayarManual",
-                        rowNum: rowNum,
-                        nominal: parseInt(nominal)
-                    })
+                    body: JSON.stringify({ action: "bayarManual", rowNum: rowNum, nominal: nominal })
                 });
                 const result = await response.json();
 
                 if (result.error) {
-                    alert("Ralat Bayar: " + result.error);
+                    alert("Kesalahan transaksi: " + result.error);
                 } else {
-                    alert(`Bayaran Berjaya!\nNama: ${result.hasilBayar.nama}\nSisa Utang Terkini: Rp ${result.hasilBayar.sisa.toLocaleString('id-ID')}`);
+                    alert(`Pembayaran Terverifikasi!\nPelanggan: ${result.hasilBayar.nama}\nSisa Kredit: Rp ${result.hasilBayar.sisa.toLocaleString('id-ID')}`);
                     
-                    // PROSES AUTO-DOWNLOAD SLIP PDF BERASASKAN BASE64
-                    const base64Pdf = result.pdf;
+                    // SMART AUTO DOWNLOAD PDF BERDASARKAN SYSTEM BASE64 GAS
                     const downloadLink = document.createElement('a');
-                    downloadLink.href = `data:application/pdf;base64,${base64Pdf}`;
+                    downloadLink.href = `data:application/pdf;base64,${result.pdf}`;
                     downloadLink.download = `Slip_${result.hasilBayar.nama.replace(/\s+/g, '_')}.pdf`;
-                    document.body.appendChild(downloadLink);
                     downloadLink.click();
-                    document.body.removeChild(downloadLink);
                     
-                    ambilData(); // Segarkan semula jadual & statistik
+                    ambilData();
                 }
             } catch (err) {
-                console.error(err);
-                alert("Ralat ketika memproses pembayaran.");
+                alert("Kegagalan memproses sistem pembayaran jarak jauh.");
             } finally {
                 document.getElementById('loadingText').style.display = "none";
             }
         }
 
-        // 4. Fungsi Hapus Data (POST)
+        // FITUR BARU: CETAK STRUK DIRECT KE PRINTER KASIR (THERMAL 58mm)
+        function cetakStrukLokal(rowNum) {
+            const p = masterDataPelanggan.find(item => item.rowNum === rowNum);
+            if(!p) return alert("Data tidak ditemukan!");
+
+            const tanggalSkg = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            const areaStruk = document.getElementById('areaCetakStruk');
+            
+            // Generate Template Nota Thermal Minimalis
+            areaStruk.innerHTML = `
+                <div class="print-center">
+                    <strong>STRUK TRANSAKSI KREDIT</strong><br>
+                    <strong>KIKI KREDIT SOLUTION</strong>
+                    <div class="print-double"></div>
+                </div>
+                <div class="print-row"><span>Tgl Nota</span> <span>: ${tanggalSkg}</span></div>
+                <div class="print-row"><span>Nama</span> <span>: ${p.nama}</span></div>
+                <div class="print-row"><span>Alamat</span> <span>: ${p.alamat}</span></div>
+                <div class="print-line"></div>
+                <div class="print-row"><span>Kredit Barang</span> <span>: ${p.barang}</span></div>
+                <div class="print-row"><span>Total Pokok</span> <span>: Rp ${p.total.toLocaleString('id-ID')}</span></div>
+                <div class="print-row"><span>Cicilan Ke</span> <span>: ${p.cicilanKe} / ${p.tenor} kali</span></div>
+                <div class="print-line"></div>
+                <div class="print-row" style="font-weight:bold;"><span>SISA UTANG</span> <span>: Rp ${p.sisa.toLocaleString('id-ID')}</span></div>
+                <div class="print-row"><span>Status Akun</span> <span>: ${p.status}</span></div>
+                <div class="print-line"></div>
+                <div class="print-center" style="margin-top:10px;">
+                    *** Simpan struk ini sebagai ***<br>
+                    bukti pembayaran sah resmi.<br>
+                    Terima Kasih
+                </div>
+            `;
+
+            // Memicu jendela cetak bawaan browser perangkat/Hp
+            window.print();
+        }
+
         async function hapusData(rowNum) {
-            if(!confirm("Adakah anda pasti mahu memadamkan data baris ini secara kekal?")) return;
+            if(!confirm("Hapus records pelanggan pada baris ini secara permanen?")) return;
 
             try {
                 const response = await fetch(API_URL, {
@@ -283,14 +358,12 @@
                 alert(msg);
                 ambilData();
             } catch (err) {
-                console.error(err);
-                alert("Gagal memadam data.");
+                alert("Kesalahan sistem dalam menghapus baris data.");
             }
         }
 
-        // Helper: Pilih data untuk dimasukkan ke borang (Edit Mode)
-        function pilihEdit(rowNum) {
-            const p = cachePelanggan.find(item => item.rowNum === rowNum);
+        function isiFormUntukEdit(rowNum) {
+            const p = masterDataPelanggan.find(item => item.rowNum === rowNum);
             if(!p) return;
 
             document.getElementById('rowNum').value = p.rowNum;
@@ -303,21 +376,19 @@
             document.getElementById('cicilanKe').value = p.cicilanKe;
             document.getElementById('sisaUtang').value = p.sisa;
 
-            document.getElementById('formTitle').innerText = "Kemas Kini Data: " + p.nama;
-            document.getElementById('btnSubmit').innerText = "Simpan Kemas Kini";
+            document.getElementById('formTitle').innerText = "✏️ Mode Edit Data: " + p.nama;
+            document.getElementById('btnSubmit').innerText = "Simpan Perubahan";
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Helper: Reset Borang ke asal
         function resetForm() {
             document.getElementById('pelangganForm').reset();
             document.getElementById('rowNum').value = "";
             document.getElementById('cicilanKe').value = "0";
-            document.getElementById('formTitle').innerText = "Pendaftaran / Kemas Kini Pelanggan";
-            document.getElementById('btnSubmit').innerText = "Daftar Pelanggan Baru";
+            document.getElementById('formTitle').innerText = "📝 Pendaftaran Pelanggan Baru";
+            document.getElementById('btnSubmit').innerText = "Daftarkan Pelanggan";
         }
 
-        // Muat data automatik semasa halaman dibuka pertama kali
         window.onload = ambilData;
     </script>
 </body>
