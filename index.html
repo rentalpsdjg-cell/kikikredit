@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution - Ultra POS v5.2</title>
+  <title>Kiki Kredit Solution - Ultra POS v5.5</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -127,10 +127,44 @@
       display: flex; justify-content: center; align-items: center; 
       z-index: 9999; display: none; 
     }
+
+    /* AREA STRUK HIDDEN JIKA PADA MODE WEB UTAMA */
+    #printable-receipt-area {
+      display: none;
+    }
+
+    /* CSS UTAMA UNTUK FILTER CETAK TOTAL */
+    @media print {
+      body * {
+        display: none !important;
+      }
+      html, body {
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 58mm !important;
+      }
+      #printable-receipt-area {
+        display: block !important;
+        width: 58mm !important;
+      }
+      #printable-receipt-area pre {
+        font-family: "Courier New", Courier, monospace !important;
+        font-size: 10pt !important;
+        font-weight: 900 !important;
+        line-height: 1.2 !important;
+        color: #000000 !important;
+        white-space: pre !important;
+        margin: 0 !important;
+        padding: 2mm !important;
+      }
+    }
   </style>
 </head>
 <body>
  
+  <div id="printable-receipt-area"><pre id="receipt-text-target"></pre></div>
+
   <div id="app-body-wrapper">
     <div id="loading" class="loading-overlay">
       <div class="bg-white p-4 rounded-4 shadow-lg text-center" style="max-width: 280px;">
@@ -142,7 +176,7 @@
     <nav class="navbar navbar-custom mb-4">
       <div class="container">
         <span class="navbar-brand mb-0 h1 text-white fw-bold fs-4">
-          <i class="fa-solid fa-bolt text-warning me-2"></i> Kiki Kredit <span class="badge bg-primary fs-6 ms-2 fw-bold">v5.2 PRO PAS</span>
+          <i class="fa-solid fa-bolt text-warning me-2"></i> Kiki Kredit <span class="badge bg-primary fs-6 ms-2 fw-bold">v5.5 Auto-Print</span>
         </span>
       </div>
     </nav>
@@ -441,7 +475,7 @@
     }
  
     /* =========================================================================
-       🔥 REVISI FINAL PAS v5.2: FONT KECIL PAS 58MM, ANTI-WRAP & 1 HALAMAN SHAPE
+       🔥 ENGINE TERBARU v5.5: DIRECT INJECTOR PRINT (ANTI-BLOKIR DI HP ANDROID/IOS)
        ========================================================================= */
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
@@ -460,63 +494,14 @@
       streamTeks += "     * TERIMA KASIH * \n";
       streamTeks += "BUKTI TRANSAKSI YANG VALID"; 
  
-      const sisaIframe = document.getElementById('siluman-printer-engine');
-      if (sisaIframe) sisaIframe.remove();
- 
-      const iframe = document.createElement('iframe');
-      iframe.id = 'siluman-printer-engine';
-      iframe.style.position = 'absolute';
-      iframe.style.width = '0px';
-      iframe.style.height = '0px';
-      iframe.style.border = 'none';
-      document.body.appendChild(iframe);
- 
-      const doc = iframe.contentWindow.document;
-      doc.write(`
-        <html>
-        <head>
-          <style>
-            @media print {
-              html, body {
-                background: #ffffff !important;
-                color: #000000 !important;
-                font-family: "Courier New", Courier, monospace !important;
-                font-size: 10pt !important; /* Diubah ke 10pt agar pas di lebar kertas 58mm */
-                font-weight: 900 !important; /* Ketebalan maksimal */
-                -webkit-font-smoothing: none !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 58mm !important;
-              }
-              @page {
-                size: 58mm auto; /* Kunci ukuran kertas thermal 58mm, tinggi otomatis */
-                margin: 0mm !important;
-              }
-            }
-            body { margin: 0; padding: 2mm; background: #fff; }
-            pre { 
-              font-family: "Courier New", monospace; 
-              font-size: 10pt; 
-              font-weight: 900; 
-              color: #000000; 
-              line-height: 1.2;
-              margin: 0;
-              white-space: pre !important; /* Cegah teks otomatis patah ke bawah */
-              word-break: keep-all !important;
-            }
-          </style>
-        </head>
-        <body>
-          <pre>${streamTeks}</pre>
-        </body>
-        </html>
-      `);
-      doc.close();
- 
+      // Menyuntikkan teks langsung ke area cetak siluman
+      document.getElementById("receipt-text-target").textContent = streamTeks;
+      
+      // Menjalankan perintah cetak terisolasi. CSS Media Print akan menyembunyikan 
+      // seluruh dashboard utama secara otomatis saat jendela printer sistem HP muncul.
       setTimeout(() => {
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-      }, 150);
+        window.print();
+      }, 50);
     }
  
     function prosesHapusData(rowNum) {
