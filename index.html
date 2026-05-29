@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiki Kredit Solution - V3.0 Ultimate Super-Engine</title>
+  <title>Kiki Kredit Solution - v3.2 Anti-Gagal Print</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -15,7 +15,7 @@
       --premium-blue: #2563eb;
       --premium-green: #10b981;
       --surface-card: #ffffff;
-      --font-premium: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-premium: 'Inter', system-ui, -apple-system, sans-serif;
     }
  
     body { 
@@ -30,19 +30,16 @@
       border-bottom: 4px solid var(--premium-blue);
     }
  
-    /* DAMPINGI STATISTIK GRID METEOR */
     .card-stats { 
       border: none; 
       border-radius: 16px; 
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); 
       background: var(--surface-card);
       border-top: 5px solid var(--premium-blue);
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s;
     }
-    .card-stats:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); }
     .card-stats.success { border-top-color: var(--premium-green); }
     
-    /* PANEL UTAMA JUMBO */
     .control-panel {
       background: var(--surface-card);
       border-radius: 16px;
@@ -55,18 +52,10 @@
       border-radius: 12px !important; 
       font-size: 1rem;
       border: 2px solid #e2e8f0; 
-      font-weight: 500;
     }
     .input-jumbo:focus { border-color: var(--premium-blue); box-shadow: 0 0 0 4px rgba(37,99,235,0.15); }
-    
-    .btn-jumbo { 
-      padding: 16px; 
-      border-radius: 12px; 
-      font-weight: 700; 
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
-    }
+    .btn-jumbo { padding: 16px; border-radius: 12px; font-weight: 700; }
  
-    /* KARTU NASABAH ULTRA SCANNABLE */
     .loan-card { 
       background: var(--surface-card); 
       border-radius: 16px; 
@@ -74,16 +63,12 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.02); 
       border: 1px solid #e2e8f0; 
       margin-bottom: 24px; 
-      transition: all 0.2s ease;
     }
-    .loan-card:hover { border-color: #cbd5e1; box-shadow: 0 12px 30px rgba(0,0,0,0.04); }
  
     .info-title { font-size: 0.72rem; color: #64748b; text-transform: uppercase; font-weight: 800; letter-spacing: 0.8px; }
     .info-desc { font-size: 1.15rem; font-weight: 700; color: #0f172a; }
-    
-    .progress { height: 10px; border-radius: 100px; background-color: #f1f5f9; overflow: hidden; }
+    .progress { height: 10px; border-radius: 100px; background-color: #f1f5f9; }
  
-    /* TOMBOL GRIDS INTERAKTIF */
     .action-grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
@@ -93,58 +78,44 @@
       border-top: 2px dashed #f1f5f9; 
     }
     .btn-action-panel { 
-      padding: 12px; 
-      font-weight: 700; 
-      font-size: 0.88rem; 
-      border-radius: 12px; 
-      border: none; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 8px; 
-      transition: all 0.1s ease;
+      padding: 12px; font-weight: 700; font-size: 0.88rem; border-radius: 12px; border: none; 
+      display: flex; align-items: center; justify-content: center; gap: 8px; 
     }
-    .btn-action-panel:active { transform: scale(0.95); }
     
     .btn-action-panel.pay { background-color: #10b981; color: #ffffff; }
     .btn-action-panel.print { background-color: #64748b; color: #ffffff; }
     .btn-action-panel.edit { background-color: #f59e0b; color: #ffffff; }
     .btn-action-panel.delete { background-color: #ef4444; color: #ffffff; }
-    .btn-action-panel:disabled { background-color: #f1f5f9 !important; color: #94a3b8 !important; cursor: not-allowed; }
+    .btn-action-panel:disabled { background-color: #f1f5f9 !important; color: #94a3b8 !important; }
  
-    /* LOADING OVERLAY MODERN */
     .loading-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
       background: rgba(15, 23, 42, 0.9); 
       display: flex; justify-content: center; align-items: center; 
-      z-index: 9999; display: none; 
-      backdrop-filter: blur(5px);
+      z-index: 9999; display: none; backdrop-filter: blur(5px);
     }
 
     .smart-cash-btn {
-      font-size: 0.85rem;
-      padding: 8px 16px;
-      border-radius: 10px;
-      border: 2px solid #10b981;
-      background: #fff;
-      color: #10b981;
-      font-weight: 700;
-      transition: all 0.15s;
+      font-size: 0.85rem; padding: 8px 16px; border-radius: 10px; border: 2px solid #10b981;
+      background: #fff; color: #10b981; font-weight: 700;
     }
     .smart-cash-btn:hover { background: #10b981; color: #fff; }
 
-    /* LAYOUT PRINTER GULUNG (DESKTOP DRIVER FALLBACK) */
-    #areaStrukDesktop { display: none; }
+    /* PANEL PREVIEW STRUK EMULATOR DI LAYAR (ANTI-GAGAL) */
+    .struk-preview-box {
+      background: #fff; border: 2px dashed #cbd5e1; font-family: 'Courier New', Courier, monospace;
+      padding: 15px; font-size: 11pt; font-weight: bold; line-height: 1.3; color: #000;
+      text-align: left; white-space: pre-wrap; max-width: 100%; margin: 0 auto;
+    }
 
+    /* MATRIKS PRINTER GULUNG DESKTOP PC */
+    #areaStrukDesktop { display: none; }
     @media print {
       body * { display: none !important; }
       #areaStrukDesktop { 
-        display: block !important;
-        position: absolute; left: 0; top: 0; width: 54mm !important; 
-        margin: 0 !important; padding: 0mm 2mm 5mm 2mm !important;
-        background: #ffffff !important; color: #000000 !important;
-        font-family: 'Courier New', Courier, monospace !important; 
-        font-size: 10pt !important; font-weight: bold !important;
+        display: block !important; position: absolute; left: 0; top: 0; width: 54mm !important; 
+        margin: 0 !important; padding: 0mm 2mm 5mm 2mm !important; background: #fff !important; color: #000 !important;
+        font-family: 'Courier New', Courier, monospace !important; font-size: 10pt !important; font-weight: bold !important;
         white-space: pre-wrap !important; line-height: 1.4 !important;
       }
       @page { size: 58mm auto; margin: 0mm !important; }
@@ -156,14 +127,14 @@
   <div id="loading" class="loading-overlay">
     <div class="text-center text-white">
       <div class="spinner-border text-info" role="status" style="width: 4rem; height: 4rem;"></div>
-      <p class="mt-4 fw-bold fs-5 text-light">Mengeksekusi Cloud Script Engine v3.0...</p>
+      <p class="mt-4 fw-bold fs-5 text-light">Mengeksekusi Cloud Script Engine v3.2...</p>
     </div>
   </div>
  
   <nav class="navbar navbar-custom shadow-sm mb-4">
     <div class="container">
       <span class="navbar-brand mb-0 h1 text-white fw-bold fs-4">
-        <i class="fa-solid fa-server text-warning me-2"></i> Kiki Kredit <span class="badge bg-primary fs-6 ms-2">v3.0 Ultimate-Print</span>
+        <i class="fa-solid fa-shield-heart text-warning me-2"></i> Kiki Kredit <span class="badge bg-primary fs-6 ms-2">v3.2 Anti-Gagal Print</span>
       </span>
       <button id="btnHardwareDirect" class="btn btn-warning btn-sm fw-bold rounded-pill px-3 shadow" onclick="hubungkanPrinterDirectBluetooth()">
         <i class="fa-solid fa-link me-1"></i> Hubungkan Thermal Bluetooth
@@ -172,7 +143,6 @@
   </nav>
  
   <div class="container mb-5">
-    
     <div class="row mb-4 g-3">
       <div class="col-6">
         <div class="card card-stats p-4 h-100">
@@ -210,14 +180,13 @@
     </div>
     
     <div id="containerDataKonsumen" class="row"></div>
- 
   </div>
  
   <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content rounded-4 border-0 shadow-lg">
         <div class="modal-header border-bottom-0 pt-4 px-4">
-          <h5 class="modal-title fw-bold text-dark" id="modalFormTitle">Form Manunggal Berkas</h5>
+          <h5 class="modal-title fw-bold text-dark" id="modalFormTitle">Form Berkas</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <form id="formPelanggan" onsubmit="prosesSimpanData(event)">
@@ -267,9 +236,32 @@
           </div>
           <div class="modal-footer border-top-0 pb-4 px-4">
             <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Tutup</button>
-            <button type="submit" class="btn btn-success w-100 rounded-3 fw-bold py-3 shadow-sm">Posting + Auto Print v3.0</button>
+            <button type="submit" class="btn btn-success w-100 rounded-3 fw-bold py-3 shadow-sm">Posting Transaksi</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalPreviewStruk" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 360px;">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-header bg-light rounded-top-4 py-3">
+          <h6 class="modal-title fw-bold text-dark mb-0"><i class="fa-solid fa-print text-success me-2"></i>Struk Terposting Safely</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="muatDataDashboard()"></button>
+        </div>
+        <div class="modal-body text-center bg-light px-3 py-3">
+          <div class="struk-preview-box mb-3" id="isiStrukLayar"></div>
+          <p class="small text-muted mb-0 fw-medium">Printer bermasalah? Anda dapat mengambil gambar/screenshot layar ini atau tekan cetak ulang di bawah.</p>
+        </div>
+        <div class="modal-footer d-grid gap-2 border-top-0 pt-0 pb-4 px-3">
+          <button type="button" class="btn btn-primary fw-bold rounded-3 py-2" onclick="pemicuUlangPrintSaja()">
+            <i class="fa-solid fa-rotate me-2"></i>Kirim Perintah Cetak Lagi
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm fw-bold rounded-3" data-bs-dismiss="modal" onclick="muatDataDashboard()">
+            Selesai & Sinkron Tabel
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -283,9 +275,12 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbzeWIBiIVGYMmLNi-OLD2TkhbX1ab1LDpY4uMTjEGEojHRjtiu1ElqO72bnZWYHoug/exec";
  
     let listPelanggan = [];
-    let directBluetoothCharacteristic = null; // Menyimpan memori hardware bluetooth printer
+    let directBluetoothCharacteristic = null; 
+    let memoriBufferStrukTerakhir = ""; // Fitur Anti-Gagal: Penyimpan cadangan teks struk
+    
     const bootstrapModalForm = new bootstrap.Modal(document.getElementById('modalForm'));
     const bootstrapModalBayar = new bootstrap.Modal(document.getElementById('modalBayar'));
+    const bootstrapModalStruk = new bootstrap.Modal(document.getElementById('modalPreviewStruk'));
  
     document.addEventListener("DOMContentLoaded", muatDataDashboard);
  
@@ -353,7 +348,6 @@
                   <span class="fw-bold text-danger d-block fs-6">${formatRupiah(p.sisa)}</span>
                 </div>
               </div>
- 
               <div class="mt-3">
                 <div class="d-flex justify-content-between small text-muted mb-1 fw-bold" style="font-size: 0.68rem;">
                   <span>PROGRESS RECOVERY</span>
@@ -398,7 +392,7 @@
     function bukaModalForm(rowNum = null) {
       document.getElementById('formPelanggan').reset();
       document.getElementById('formRowNum').value = rowNum || '';
-      document.getElementById('modalFormTitle').innerText = rowNum ? "⚙️ Perbarui Kontrak Manajemen" : "👤 Daftarkan Konsumen Baru";
+      document.getElementById('modalFormTitle').innerText = rowNum ? "⚙️ Perbarui Kontrak" : "👤 Konsumen Baru";
       if(rowNum) {
         const p = listPelanggan.find(i => i.rowNum === rowNum);
         if(p) {
@@ -469,8 +463,8 @@
           if(res.error) { tunukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
           tunukkanLoading(false);
           
-          pemicuKertasThermal(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
-          muatDataDashboard();
+          // GENERATE STRUK AMAN -> TAMPILKAN POP-UP FIRST UNTUK JAMINAN ANTI-GAGAL
+          buatLayoutTeksStranstaksi(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
         }).catch(() => { tunukkanLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
     }
  
@@ -479,7 +473,7 @@
       if (p) {
         let opsi = { year: '2-digit', month: 'numeric', day: 'numeric' };
         let tglSkg = new Date().toLocaleDateString('id-ID', opsi);
-        pemicuKertasThermal(tglSkg, p.nama, p.barang, 0, p.sisa);
+        buatLayoutTeksStranstaksi(tglSkg, p.nama, p.barang, 0, p.sisa);
       }
     }
  
@@ -492,9 +486,7 @@
       return labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
     }
  
-    /* =========================================================
-       🔥 ENGINE KONEKSI HARDWARE DIRECT BLUETOOTH (WEB BLUETOOTH API)
-       ========================================================= */
+    /* WEB BLUETOOTH API DRIVER */
     async function hubungkanPrinterDirectBluetooth() {
       try {
         const device = await navigator.bluetooth.requestDevice({
@@ -510,18 +502,17 @@
         
         const btnHW = document.getElementById("btnHardwareDirect");
         btnHW.className = "btn btn-success btn-sm fw-bold rounded-pill px-3 shadow";
-        btnHW.innerHTML = `<i class="fa-solid fa-circle-check me-1"></i> Printer Active v3.0`;
-        
-        Swal.fire("Koneksi Sukses!", "Hardware Thermal Printer sukses terhubung langsung ke Web App.", "success");
+        btnHW.innerHTML = `<i class="fa-solid fa-circle-check me-1"></i> Printer Aktif`;
+        Swal.fire("Printer Terkoneksi", "Direct Bluetooth Driver siap dijalankan.", "success");
       } catch (err) {
-        Swal.fire("Sistem Router", "Bluetooth Direct dilewati. Menggunakan sistem fallback smart print.", "info");
+        Swal.fire("Sistem Router", "Bluetooth dilewati, beralih ke engine otomatis.", "info");
       }
     }
 
     /* =========================================================
-       🔥 DRIVER UTAMANYA: V3.0 ULTIMATE MULTI-ROUTER PRINT ROUTER
+       🔥 ANTI-GAGAL ENGINE: BUILDER DATA & EMERGENCY POPUP
        ========================================================= */
-    async function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
+    function buatLayoutTeksStranstaksi(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
       
       let streamTeks = "";
@@ -538,40 +529,59 @@
       streamTeks += "     * TERIMA KASIH * \n";
       streamTeks += "BUKTI TRANSAKSI YANG VALID\n\n\n\n";
 
-      // JALUR 1: Jika Web Terhubung Direct Bluetooth Hardware
+      // Simpan salinan ke memori buffer (Anti-Mati Listrik / Macet)
+      memoriBufferStrukTerakhir = streamTeks;
+
+      // Suntik data ke pop-up layar visual kassa
+      document.getElementById('isiStrukLayar').textContent = streamTeks;
+      
+      // Munculkan layar backup pengaman kasir
+      bootstrapModalStruk.show();
+
+      // Jalankan trigger pengiriman sinyal kertas secara paralel
+      eksekusiKirimKeMesinPrinter(streamTeks);
+    }
+
+    /* 🔥 PILOT AUTOMATIC ROUTER PRINTING MULTI-DRIVER */
+    async function eksekusiKirimKeMesinPrinter(teksStruk) {
+      // Jalur 1: Direct Bluetooth Hardware
       if (directBluetoothCharacteristic) {
         try {
           let encoder = new TextEncoder();
-          let dataUint8 = encoder.encode(streamTeks);
+          let dataUint8 = encoder.encode(teksStruk);
           await directBluetoothCharacteristic.writeValue(dataUint8);
-          return; // Selesai jika direct berhasil
+          return;
         } catch (e) {
-          console.log("Direct gagal, melempar ke fallback smartphone driver...");
+          console.log("Direct gagal, beralih ke Driver Android...");
         }
       }
 
-      // JALUR 2: Menggunakan Android RawBT Protocol Link
+      // Jalur 2: Android RawBT Protocol Link
       const isAndroid = /Android/i.test(navigator.userAgent);
       if (isAndroid) {
-        const rawbtUrl = "rawbt://base64," + btoa(unescape(encodeURIComponent(streamTeks)));
+        const rawbtUrl = "rawbt://base64," + btoa(unescape(encodeURIComponent(teksStruk)));
         window.location.href = rawbtUrl;
       } else {
-        // JALUR 3: Menggunakan CSS System Print Micro PC Desktop 58mm
+        // Jalur 3: Windows / Mac Micro HTML Driver Layout
         const areaStruk = document.getElementById('areaStrukDesktop');
-        areaStruk.textContent = streamTeks;
+        areaStruk.textContent = teksStruk;
         window.print();
+      }
+    }
+
+    // Tombol trigger ulang cetak manual dari pop-up apabila kertas slip macet
+    function pemicuUlangPrintSaja() {
+      if(memoriBufferStrukTerakhir) {
+        eksekusiKirimKeMesinPrinter(memoriBufferStrukTerakhir);
+      } else {
+        Swal.fire("Kosong", "Tidak ada data transaksi di dalam memori buffer.", "warning");
       }
     }
  
     function prosesHapusData(rowNum) {
       Swal.fire({ 
-        title: "Konfirmasi Hapus Data?", 
-        text: "Data yang dihapus dari cloud tidak dapat dikembalikan!", 
-        icon: "warning", 
-        showCancelButton: true, 
-        confirmButtonColor: "#ef4444", 
-        cancelButtonColor: "#64748b",
-        confirmButtonText: "Ya, Eksekusi!" 
+        title: "Konfirmasi Hapus?", text: "Data hilang permanen dari cloud database!", icon: "warning", 
+        showCancelButton: true, confirmButtonColor: "#ef4444", cancelButtonColor: "#64748b", confirmButtonText: "Ya, Eksekusi!" 
       }).then((result) => {
         if (result.isConfirmed) {
           tunukkanLoading(true);
@@ -585,12 +595,12 @@
         .then(res => res.json())
         .then(pesan => { 
           tunukkanLoading(false); 
-          Swal.fire("Berhasil", typeof pesan === 'string' ? pesan : "Sinkronisasi Cloud Berhasil!", "success"); 
+          Swal.fire("Berhasil", "Sinkronisasi Cloud Selesai!", "success"); 
           muatDataDashboard(); 
         })
         .catch(() => { 
           tunukkanLoading(false); 
-          Swal.fire("Kesalahan Server", "Gagal memproses mutasi ke cloud.", "error"); 
+          Swal.fire("Kesalahan Server", "Gagal memproses data ke cloud.", "error"); 
         });
     }
   </script>
