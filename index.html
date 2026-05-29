@@ -117,7 +117,6 @@
       z-index: 9999; display: none; 
     }
 
-    /* Smart Badge Quick Cash Buttons */
     .smart-cash-btn {
       font-size: 0.8rem;
       padding: 6px 12px;
@@ -412,7 +411,6 @@
       irimKeApi(payload);
     }
  
-    /* SMART FEATURE: Menghadirkan Tombol Pintasan Uang Otomatis */
     function bukaModalBayar(rowNum, nama, sisa) {
       document.getElementById('formBayar').reset();
       document.getElementById('bayarRowNum').value = rowNum;
@@ -421,14 +419,12 @@
       const smartCashContainer = document.getElementById('smartCashContainer');
       smartCashContainer.innerHTML = '';
       
-      // Kumpulan pintasan pintar
       let nominalPintasan = [50000, 100000, 150000, 200000];
       nominalPintasan.forEach(amt => {
         if(amt < sisa) {
           smartCashContainer.innerHTML += `<button type="button" class="smart-cash-btn" onclick="isiSmartCash(${amt})">${amt/1000}K</button>`;
         }
       });
-      // Selalu munculkan opsi Lunas Otomatis
       smartCashContainer.innerHTML += `<button type="button" class="smart-cash-btn btn-success text-white border-0" onclick="isiSmartCash(${sisa})">Lunas (${sisa/1000}K)</button>`;
       
       bootstrapModalBayar.show();
@@ -453,7 +449,7 @@
           if(res.error) { tunukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
           tunukkanLoading(false);
           
-          // SMART FEATURE: Otomatis memicu cetak begitu kasir selesai posting data
+          // AKTIF 100%: Memicu cetak langsung otomatis setelah cloud sukses menerima data
           pemicuKertasThermal(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
           muatDataDashboard();
         }).catch(() => { tunukkanLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
@@ -479,7 +475,7 @@
       return labelStr + "\n" + " ".repeat(LEBAR_KERTAS - valueStr.length) + valueStr + "\n";
     }
  
-    /* ENGINE SMART POS v7.0: DIRECT SANDBOX INJECTION */
+    /* 🔥 ENGINE MODE AGRESIF: INSTANT IFRAME GENERATOR FOR SILENT PRINT */
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
       
@@ -488,7 +484,6 @@
       streamTeks += "  KIKI KREDIT SOLUTION    \n";
       streamTeks += "==========================\n"; 
       streamTeks += buatBarisStruk("Tgl:", tgl);
-      // Smart Character Limiter (.substring) agar layout thermal 58mm tidak rusak
       streamTeks += buatBarisStruk("Nama:", nama.substring(0, 20));
       streamTeks += buatBarisStruk("Brg:", barang.substring(0, 20));
       streamTeks += "--------------------------\n";
@@ -541,10 +536,11 @@
       `);
       doc.close();
  
+      // Jeda dipangkas ke 10 milidetik agar eksekusi cetak langsung instan terjadi
       setTimeout(() => {
         iframe.contentWindow.focus();
         iframe.contentWindow.print();
-      }, 250);
+      }, 10);
     }
  
     function prosesHapusData(rowNum) {
