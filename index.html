@@ -127,12 +127,13 @@
     }
  
     /* ==========================================================================
-       CSS PRINT REVISI FINAL: AUTO PAS KERTAS & FULL CENTER 
+       CSS PRINT PROTEKSI: LOCK TOTAL SATU HALAMAN ANTI-TEMBUS 2 HALAMAN
        ========================================================================== */
     #areaStruk { display: none; }
     @media print {
       html, body {
-        height: max-content !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
         overflow: hidden !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -147,25 +148,28 @@
         justify-content: flex-start !important;
         position: absolute; 
         left: 0; top: 0; 
-        width: 100% !important; /* Biarkan browser mengatur auto pas lebar printer */
+        width: 100% !important; 
         max-width: 58mm !important;
-        height: max-content !important; 
+        height: auto !important; 
+        max-height: 100vh !important;
         margin: 0 auto !important; 
-        padding: 2mm 4mm !important; /* Padding kanan-kiri yang aman */
+        padding: 1mm 4mm !important; 
         box-sizing: border-box !important;
         background: #ffffff !important; 
         color: #000000 !important;
         font-family: 'Courier New', Courier, monospace !important; 
-        font-size: 3.2vw !important; /* Ukuran dinamis berbasis lebar viewport cetak */
-        
-        /* Cetak super tebal */
+        font-size: 3vw !important; /* Dikecilkan sedikit agar menghemat ruang vertikal */
         font-weight: 900 !important; 
-        -webkit-text-stroke: 0.5px #000000;
+        -webkit-text-stroke: 0.4px #000000;
         
         text-align: center !important; 
-        line-height: 1.3 !important;
-        word-break: break-word !important; /* Paksa patah kalimat jika terlalu panjang */
+        line-height: 1.2 !important;
+        word-break: break-word !important; 
+        
+        /* Proteksi keras anti penambahan lembar baru */
         page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
       }
       
       .struk-line {
@@ -175,7 +179,7 @@
       }
       
       @page { 
-        size: auto; /* Membiarkan printer kasir menghitung panjang secara otomatis */
+        size: 58mm auto;
         margin: 0mm !important; 
       }
     }
@@ -523,28 +527,25 @@
       }
     }
  
-    // RENDERING STRUK AUTO PAS FULL CENTER
+    // FORMAT 1 HALAMAN STRICT LOCK
     function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
       const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- RE-PRINT -";
       const strukContainer = document.getElementById('areaStruk');
       
-      // Mengubah baris teks menjadi objek HTML terpisah agar flexbox center bekerja maksimal
       let isiStruk = `
-        <div class="struk-line">SLIP PEMBAYARAN SAH</div>
-        <div class="struk-line">KIKI KREDIT SOLUTION</div>
+        <div class="struk-line" style="font-weight: bold;">SLIP PEMBAYARAN SAH</div>
+        <div class="struk-line" style="font-weight: bold;">KIKI KREDIT SOLUTION</div>
         <div class="struk-line">====================</div>
-        <div class="struk-line">TANGGAL: ${tgl}</div>
+        <div class="struk-line">TGL: ${tgl}</div>
         <div class="struk-line">NAMA: ${nama}</div>
-        <div class="struk-line">BARANG: ${barang}</div>
+        <div class="struk-line">BRG: ${barang}</div>
         <div class="struk-line">--------------------</div>
-        <div class="struk-line">JUMLAH BAYAR:</div>
-        <div class="struk-line" style="font-size: 1.2em;">${_nominalDisplay}</div>
-        <div class="struk-line"></div>
+        <div class="struk-line">BAYAR:</div>
+        <div class="struk-line" style="font-size: 1.1em; font-weight: bold;">${_nominalDisplay}</div>
         <div class="struk-line">SISA PIUTANG:</div>
-        <div class="struk-line" style="font-size: 1.2em;">${formatRupiah(sisa)}</div>
+        <div class="struk-line" style="font-size: 1.1em; font-weight: bold;">${formatRupiah(sisa)}</div>
         <div class="struk-line">--------------------</div>
-        <div class="struk-line">* TERIMA KASIH *</div>
-        <div class="struk-line">BUKTI TRANSAKSI YANG SAH</div>
+        <div class="struk-line" style="font-size: 0.9em;">* TERIMA KASIH *</div>
       `;
  
       strukContainer.innerHTML = isiStruk.toUpperCase();
