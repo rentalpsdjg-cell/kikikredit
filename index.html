@@ -127,7 +127,7 @@
                 line-height: 1.15; 
                 font-weight: 900 !important; 
                 letter-spacing: 0.2px; 
-                padding: 0px 2px 5px 2px; /* Ditambahkan sedikit padding bawah tipis untuk pisau printer */
+                padding: 0px 2px 5px 2px; 
                 margin: 0 !important;
                 text-transform: uppercase; 
             }
@@ -477,15 +477,15 @@
             const hitungCicilan = nominalBayar !== null ? (p.cicilanKe + 1) : p.cicilanKe;
 
             document.getElementById('areaCetakStruk').innerHTML = `
-                <div class="p-center">KIKI KREDIT SOLUTION</div>
+                <div class="p-center">KIKI KREDIT MITRA MANDIRI</div>
                 <div class="p-line">======================</div>
                 <div class="p-row"><span>TGL: ${tanggal}</span> <span>KE: ${hitungCicilan}X</span></div>
                 <div class="p-row"><span>NAMA: ${bersihkanSimbol(p.nama.substring(0,14))}</span></div>
                 <div class="p-row"><span>BRG : ${bersihkanSimbol(p.barang.substring(0,14))}</span></div>
                 <div class="p-line">======================</div>
-                <div class="p-row"><span>TOT JUAL</span> <span>: RP ${p.total.toLocaleString('id-ID')}</span></div>
-                <div class="p-row"><span>BYR SESI</span> <span>: RP ${(nominalBayar || 0).toLocaleString('id-ID')}</span></div>
-                <div class="p-row"><span>SISA UTG</span> <span>: RP ${sisaAkhir.toLocaleString('id-ID')}</span></div>
+                <div class="p-row"><span>HARGA JUAL</span> <span>: RP ${p.total.toLocaleString('id-ID')}</span></div>
+                <div class="p-row"><span>ANGSURAN</span> <span>: RP ${(nominalBayar || 0).toLocaleString('id-ID')}</span></div>
+                <div class="p-row"><span>SISA PIUTANG</span> <span>: RP ${sisaAkhir.toLocaleString('id-ID')}</span></div>
             `;
             setTimeout(() => { window.print(); }, 200);
         }
