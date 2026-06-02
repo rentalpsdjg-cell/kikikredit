@@ -1,306 +1,542 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <base target="_top">
   <meta charset="UTF-8">
-  <title>BILLING PS DODI JAYA</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kiki Kredit Solution - Premium POS</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  
   <style>
-    body { background-color: #f0f2f5; font-family: sans-serif; padding: 15px; }
-    .card-ps { border: none; border-radius: 15px; transition: 0.3s; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    .timer { font-size: 2.2rem; font-weight: bold; color: #d63031; font-family: monospace; letter-spacing: 2px; }
-    .status-badge { font-size: 0.8rem; padding: 5px 15px; border-radius: 50px; font-weight: bold; }
-    .jajanan-section { background: #fff9db; padding: 12px; border-radius: 10px; border: 2px dashed #f59f00; margin-top: 15px; }
-    .list-jajanan-lokal { font-size: 0.85rem; color: #d63031; margin-top: 5px; font-weight: bold; }
-    .ts-wrapper { background: #fff; border-radius: 5px; }
+    :root {
+      --primary-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      --card-radius: 16px;
+      --font-main: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body { 
+      background-color: #f4f7f6; 
+      font-family: var(--font-main); 
+      color: #333333;
+    }
+
+    .navbar-custom { 
+      background: var(--primary-gradient); 
+      padding: 16px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* CARD STATISTIK UTAMA */
+    .card-stats { 
+      border: none; 
+      border-radius: var(--card-radius); 
+      box-shadow: 0 6px 15px rgba(0,0,0,0.03); 
+      background: #ffffff;
+      border-left: 5px solid #0d6efd;
+      transition: all 0.2s;
+    }
+    .card-stats.success { border-left-color: #198754; }
+    
+    /* PANEL KONTROL & PENCARIAN */
+    .control-panel {
+      background: #ffffff;
+      border-radius: var(--card-radius);
+      padding: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    .input-jumbo { 
+      padding: 14px 18px; 
+      border-radius: 10px !important; 
+      font-size: 1rem; 
+      border: 2px solid #e2e8f0; 
+    }
+    .input-jumbo:focus { border-color: #203a43; box-shadow: none; }
+    .btn-jumbo { 
+      padding: 14px; 
+      border-radius: 10px; 
+      font-weight: 700; 
+      font-size: 1rem; 
+    }
+
+    /* KARTU PELANGGAN (ANTI GESER LAYAR HP) */
+    .loan-card { 
+      background: #ffffff; 
+      border-radius: var(--card-radius); 
+      padding: 20px; 
+      box-shadow: 0 8px 20px rgba(0,0,0,0.04); 
+      border: 1px solid #edf2f7; 
+      margin-bottom: 20px; 
+      position: relative;
+      overflow: hidden;
+    }
+    .loan-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: #0d6efd;
+    }
+    .loan-card.lunas::before { background: #198754; }
+
+    .info-title { font-size: 0.75rem; color: #718096; text-uppercase: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+    .info-desc { font-size: 1rem; font-weight: 600; color: #1a202c; }
+    
+    /* PROGRESS BAR UTANG */
+    .progress { height: 8px; border-radius: 10px; background-color: #edf2f7; }
+
+    /* GRID UTAMA MENU AKSI RAMAH JARI */
+    .action-grid { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 10px; 
+      margin-top: 15px; 
+      padding-top: 15px; 
+      border-top: 1px dashed #e2e8f0; 
+    }
+    .btn-action-panel { 
+      padding: 11px; 
+      font-weight: 700; 
+      font-size: 0.9rem; 
+      border-radius: 10px; 
+      border: none; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 6px; 
+      transition: all 0.1s ease;
+    }
+    .btn-action-panel:active { transform: scale(0.95); }
+    
+    .btn-action-panel.pay { background-color: #198754; color: #ffffff; }
+    .btn-action-panel.print { background-color: #4a5568; color: #ffffff; }
+    .btn-action-panel.edit { background-color: #ffc107; color: #212529; }
+    .btn-action-panel.delete { background-color: #dc3545; color: #ffffff; }
+    .btn-action-panel:disabled { background-color: #e2e8f0 !important; color: #a0aec0 !important; cursor: not-allowed; transform: none; }
+
+    /* LOADING LAYAR PENUH */
+    .loading-overlay { 
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(255,255,255,0.95); 
+      display: flex; justify-content: center; align-items: center; 
+      z-index: 9999; display: none; 
+    }
+
+    /* MATRIKS DOKUMEN CETAK: AUTO-WRAP & EKSTRA PEKAT */
+    #areaStruk { display: none; }
+    @media print {
+      body * { display: none !important; }
+      #areaStruk { 
+        display: block !important;
+        position: absolute; 
+        left: 0; 
+        top: 0; 
+        width: 100% !important; 
+        margin: 0 !important; 
+        padding: 0mm 2mm !important;
+        background: #ffffff !important; 
+        color: #000000 !important;
+        
+        font-family: "Courier New", Courier, monospace !important; 
+        font-size: 15pt !important; /* Ukuran pas seimbang untuk printer thermal */
+        
+        /* Trik super tebal ganda (Font-weight + stroke + shadow) */
+        font-weight: 900 !important; 
+        -webkit-text-stroke: 1px #000000;
+        text-shadow: 0.5px 0px 0px #000000;
+        
+        /* Menjamin teks panjang otomatis turun ke bawah secara aman */
+        white-space: pre-wrap !important; 
+        word-wrap: break-word !important;
+        word-break: break-word !important;
+        line-height: 1.3 !important;
+      }
+      @page { 
+        size: auto; 
+        margin: 0mm !important; 
+      }
+    }
   </style>
 </head>
 <body>
- 
-<div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
-    <h2 class="fw-bold text-primary m-0">BILLING PS DODI JAYA</h2>
-    <div>
-      <button onclick="load()" class="btn btn-dark shadow-sm">🔄 REFRESH DATA</button>
+
+  <div id="loading" class="loading-overlay">
+    <div class="text-center">
+      <div class="spinner-border text-dark" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-3 fw-bold text-muted">Sinkronisasi Database Cloud...</p>
     </div>
   </div>
- 
-  <div id="content" class="row">
-    <div class="text-center mt-5">Memuat Sistem Kasir...</div>
-  </div>
-</div>
- 
-<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
- 
-<script>
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuZZn52NlwNehwSV_rbxZXC0318hUgxaX9AvedQEsIn6OKKTiO9JVaCsEWkVEVFtfx/exec";
 
-  let intervals = {};
-  let menuGlobal = [];
-  let dataPSGlobal = [];
-  let tomSelectInstances = {};
- 
-  function panggilServer(urlParams, callbackSukses) {
-    const callbackName = "jsonp_" + Math.round(100000 * Math.random());
-    window[callbackName] = (data) => {
-      delete window[callbackName];
-      var scriptEl = document.getElementById(callbackName);
-      if(scriptEl) scriptEl.remove();
-      if (data && data.error) alert("Error Server: " + data.error); else callbackSukses(data);
-    };
-    const script = document.createElement("script");
-    script.id = callbackName;
-    script.src = GOOGLE_SCRIPT_URL + urlParams + "&callback=" + callbackName;
-    script.onerror = () => {
-      try {
-        if(urlParams.includes("getAppData")) {
-          google.script.run.withSuccessHandler(callbackSukses).getAppData();
-        }
-      } catch(e) {
-        alert("Gagal terhubung ke server database Google Sheets.");
-      }
-    };
-    document.body.appendChild(script);
-  }
+  <nav class="navbar navbar-custom shadow-sm mb-4">
+    <div class="container">
+      <span class="navbar-brand mb-0 h1 text-white fw-bold fs-4">
+        <i class="fa-solid fa-layer-group text-warning me-2"></i> Kiki Kredit Solution <span class="badge bg-light text-dark fs-6 ms-2">V2.5 PRO</span>
+      </span>
+    </div>
+  </nav>
 
-  function load() {
-    Object.keys(tomSelectInstances).forEach(k => {
-      if(tomSelectInstances[k]) tomSelectInstances[k].destroy();
-    });
-    tomSelectInstances = {};
+  <div class="container mb-5">
     
-    document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-primary mb-2"></div><br>Memuat Data Terbaru...</div>';
-    panggilServer("?action=getAppData", render);
-  }
- 
-  function render(data) {
-    Object.keys(intervals).forEach(k => clearInterval(intervals[k]));
-    
-    menuGlobal = data.menu || [];
-    dataPSGlobal = data.ps || [];
-    const container = document.getElementById('content');
-    container.innerHTML = '';
- 
-    if(dataPSGlobal.length === 0) {
-      container.innerHTML = '<div class="text-center mt-5 text-muted">Tidak ada data Station PS di sheet Dashboard.</div>';
-      return;
-    }
- 
-    dataPSGlobal.forEach(item => {
-      const isMain = item.status.includes("🔴 MAIN") || item.status.includes("🔴 SEWA") || item.status.includes("MAIN");
-      const safeId = item.noPS.replace(/\s+/g, '');
+    <div class="row mb-4 g-3">
+      <div class="col-6 col-md-6">
+        <div class="card card-stats p-3 h-100">
+          <span class="info-title">Total Outstanding Piutang</span>
+          <h2 class="fw-bold text-primary mb-0 mt-1" id="statTotalPiutang" style="font-size: calc(1.1rem + 0.6vw);">Rp 0</h2>
+        </div>
+      </div>
+      <div class="col-6 col-md-6">
+        <div class="card card-stats success p-3 h-100">
+          <span class="info-title">Konsumen Aktif</span>
+          <h2 class="fw-bold text-success mb-0 mt-1" id="statPelangganAktif" style="font-size: calc(1.1rem + 0.6vw);">0 Jiwa</h2>
+        </div>
+      </div>
+    </div>
 
-      let options = `<option value="">Cari/Pilih Jajanan...</option>`;
-      menuGlobal.forEach(m => {
-        if(m && m[0] !== undefined) {
-          if(!m[1] || m[1] === 0 || m[1] === "") {
-            options += `<option value="" disabled class="fw-bold text-secondary">${m[0]}</option>`;
-          } else {
-            let hargaClean = m[1].toString().replace(/[^0-9.-]+/g,"");
-            let hargaJajan = parseFloat(hargaClean) || 0;
-            options += `<option value="${hargaJajan}" data-nama="${m[0]}">${m[0]} (Rp${hargaJajan.toLocaleString('id-ID')})</option>`;
-          }
-        }
-      });
- 
-      let jamSelesaiTampil = item.selesai || "00:00";
-      let riwayatJajananTeks = "";
-      
-      if (item.selesai && item.selesai.indexOf(" | Jrn:") !== -1) {
-        let bagian = item.selesai.split(" | Jrn:");
-        jamSelesaiTampil = bagian[0];
-        riwayatJajananTeks = bagian[1];
-      }
-      
-      var matchJam = jamSelesaiTampil.match(/(\d{2}):(\d{2})/);
-      let jamSelesaiBersih = matchJam ? matchJam[1] + ":" + matchJam[2] : "00:00";
- 
-      const div = document.createElement('div');
-      div.className = 'col-md-4';
-      
-      let htmlContent = `
-        <div class="card card-ps">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-              <h4 class="m-0 fw-bold text-dark">${item.noPS}</h4>
-              <span class="status-badge ${isMain ? 'bg-danger text-white' : 'bg-success text-white'}">${isMain ? '🔴 MAIN' : '🟢 Tersedia'}</span>
-            </div>
-            <hr class="my-2">
-      `;
- 
-      if (isMain) {
-        let labelCetak = "🖨️ CETAK NOTA SEWA";
-        if(item.status.toUpperCase().includes("WIFI")) labelCetak = "🖨️ CETAK NOTA WIFI";
-        else if(item.status.toUpperCase().includes("PS2")) labelCetak = "🖨️ CETAK NOTA PS2";
-        else if(item.status.toUpperCase().includes("PS4")) labelCetak = "🖨️ CETAK NOTA PS4";
- 
-        htmlContent += `
-          <div class="text-center timer my-2" id="t-${safeId}">--:--:--</div>
-          <p class="text-center text-muted small mb-3">Selesai: <b>${jamSelesaiBersih} WIB</b><br>Total Billing: <b>Rp ${(item.biaya || 0).toLocaleString('id-ID')}</b></p>
-          <button onclick="cetakNotaLangsung('${item.noPS}')" class="btn btn-outline-secondary w-100 fw-bold mb-2">${labelCetak}</button>
-          <button onclick="stop('${item.noPS}')" class="btn btn-danger w-100 fw-bold mb-2">SELESAI & BAYAR</button>
-        `;
-      } else {
-        htmlContent += `
-          <div class="py-2">
-            <label class="small text-muted fw-bold mb-1">Pilih Mesin / Layanan:</label>
-            <select id="type-${safeId}" class="form-select mb-2">
-              <option value="PS3">🎮 PLAYSTATION 3 (Rp5.000/Jam)</option>
-              <option value="PS2">🎮 PLAYSTATION 2 (Rp5.000/Jam)</option>
-              <option value="PS4">🎮 PLAYSTATION 4 (Rp10.000/Jam)</option>
-              <option value="WIFI">📶 SEWA WIFI (Rp5.000/Jam)</option>
-            </select>
-            
-            <label class="small text-muted fw-bold mb-1">Atur Durasi (Jam):</label>
-            <div class="input-group mb-3">
-              <input type="number" id="h-${safeId}" class="form-control" placeholder="Contoh: 2" min="0.5" step="0.5">
-              <button onclick="start('${item.noPS}')" class="btn btn-success px-4 fw-bold">MULAI</button>
-            </div>
-            <button onclick="cetakKuponAwal('${item.noPS}')" class="btn btn-sm btn-outline-primary w-100 fw-bold mb-1">🎟️ CETAK KUPON DI AWAL</button>
-          </div>
-        `;
-      }
- 
-      htmlContent += `
-        <div class="jajanan-section">
-          <label class="small fw-bold text-dark d-block mb-1">🛒 Tambah Jajanan / Snack Kasir:</label>
-          <div class="mb-2">
-            <select id="m-${safeId}" class="form-select dropdown-pencarian">${options}</select>
-          </div>
-          <button onclick="pesan('${item.noPS}')" class="btn btn-warning btn-sm w-100 fw-bold text-dark" ${isMain ? '' : 'disabled'}>➕ Masukkan ke Billing</button>
-          <div class="list-jajanan-lokal" id="list-jajanan-${safeId}">
-            ${riwayatJajananTeks ? 'Terbeli: ' + riwayatJajananTeks : 'Belum belanja jajanan'}
+    <div class="control-panel mb-4">
+      <div class="row g-3">
+        <div class="col-12 col-md-8">
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0 px-3"><i class="fa-solid fa-search text-muted"></i></span>
+            <input type="text" id="inputCari" class="form-control bg-light border-start-0 input-jumbo" placeholder="Cari nama, alamat atau tipe barang..." oninput="filterDataSistem()">
           </div>
         </div>
-      `;
- 
-      htmlContent += '</div></div>';
-      div.innerHTML = htmlContent;
-      container.appendChild(div);
- 
-      tomSelectInstances[safeId] = new TomSelect(`#m-${safeId}`, {
-        create: false,
-        sortField: { field: "text", direction: "asc" },
-        placeholder: "Ketik nama jajanan..."
+        <div class="col-12 col-md-4">
+          <button class="btn btn-primary btn-jumbo w-100 shadow-sm" onclick="bukaModalForm()">
+            <i class="fa-solid fa-circle-plus me-1"></i> Daftarkan Kredit Baru
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-wallet text-secondary me-2"></i> File Database Kolektif</h5>
+      <span class="badge bg-secondary px-3 py-2 rounded-3" id="lblInfoCount">Data Ter-Load: 0</span>
+    </div>
+    
+    <div id="containerDataKonsumen" class="row"></div>
+
+  </div>
+
+  <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-header border-bottom-0 pt-4 px-4">
+          <h5 class="modal-title fw-bold text-dark" id="modalFormTitle">Form Berkas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="formPelanggan" onsubmit="prosesSimpanData(event)">
+          <div class="modal-body px-4">
+            <input type="hidden" id="formRowNum">
+            <div class="mb-3"><label class="form-label fw-bold small text-muted">Nama Lengkap Konsumen</label><input type="text" id="formNama" class="form-control form-control-lg rounded-3" required></div>
+            <div class="mb-3"><label class="form-label fw-bold small text-muted">Alamat Domisili KTP</label><input type="text" id="formAlamat" class="form-control form-control-lg rounded-3" required></div>
+            <div class="mb-3"><label class="form-label fw-bold small text-muted">Deskripsi Barang Kredit</label><input type="text" id="formBarang" class="form-control form-control-lg rounded-3" required></div>
+            <div class="row">
+              <div class="col-6 mb-3"><label class="form-label fw-bold small text-muted">Harga Pokok (Rp)</label><input type="number" id="formTotalHarga" class="form-control form-control-lg rounded-3" required oninput="sinkronSisaUtang()"></div>
+              <div class="col-6 mb-3"><label class="form-label fw-bold small text-muted">Sisa Pokok (Rp)</label><input type="number" id="formSisaUtang" class="form-control form-control-lg rounded-3" required></div>
+            </div>
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label fw-bold small text-muted">Skema Periode</label>
+                <select id="formTipeTenor" class="form-select form-select-lg rounded-3"><option value="Bulanan">Bulanan</option><option value="Mingguan">Mingguan</option><option value="Harian">Harian</option></select>
+              </div>
+              <div class="col-6 mb-3"><label class="form-label fw-bold small text-muted">Tenor Batas Waktu</label><input type="number" id="formTenor" class="form-control form-control-lg rounded-3" required></div>
+            </div>
+          </div>
+          <div class="modal-footer border-top-0 pb-4 px-4"><button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Tutup Berkas</button><button type="submit" class="btn btn-primary px-4 rounded-3 fw-bold">Otorisasi Data</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalBayar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-header border-bottom-0 pt-4 px-4"><h5 class="modal-title fw-bold text-dark">Validasi Kasir</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <form id="formBayar" onsubmit="prosesBayarManual(event)">
+          <div class="modal-body px-4">
+            <input type="hidden" id="bayarRowNum">
+            <div class="mb-3"><label class="form-label small text-muted d-block mb-0">Nama Terkait</label><input type="text" id="bayarNama" class="form-control-plaintext fw-bold text-primary fs-5 p-0" readonly></div>
+            <div class="mb-3"><label class="form-label fw-bold small text-muted">Nominal Angsuran (Rp)</label><input type="number" id="bayarNominal" class="form-control form-control-lg rounded-3 text-success fw-bold fs-4" required placeholder="0"></div>
+          </div>
+          <div class="modal-footer border-top-0 pb-4 px-4"><button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn btn-success w-100 rounded-3 fw-bold py-2">Posting Pembayaran</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <pre id="areaStruk"></pre>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzeWIBiIVGYMmLNi-OLD2TkhbX1ab1LDpY4uMTjEGEojHRjtiu1ElqO72bnZWYHoug/exec";
+
+    let listPelanggan = [];
+    const bootstrapModalForm = new bootstrap.Modal(document.getElementById('modalForm'));
+    const bootstrapModalBayar = new bootstrap.Modal(document.getElementById('modalBayar'));
+
+    document.addEventListener("DOMContentLoaded", muatDataDashboard);
+
+    function tunjukkanLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
+    function formatRupiah(angka) { return "Rp " + Number(angka).toLocaleString('id-ID'); }
+    function sinkronSisaUtang() { if(!document.getElementById('formRowNum').value) document.getElementById('formSisaUtang').value = document.getElementById('formTotalHarga').value; }
+
+    function muatDataDashboard() {
+      tunjukkanLoading(true);
+      fetch(`${API_URL}?action=ambilData`)
+        .then(res => res.json())
+        .then(res => {
+          tunjukkanLoading(false);
+          if (res.error) return Swal.fire("Sistem Error", res.error, "error");
+          
+          listPelanggan = res.pelanggan || [];
+          document.getElementById('statTotalPiutang').innerText = formatRupiah(res.stats.totalPiutang);
+          document.getElementById('statPelangganAktif').innerText = res.stats.aktif + " Orang";
+          document.getElementById('lblInfoCount').innerText = "Data Ter-Load: " + listPelanggan.length;
+          
+          renderDataKeSistemGrid(listPelanggan);
+        }).catch(err => { tunjukkanLoading(false); Swal.fire("Koneksi Putus", "Gagal memproses konektivitas API.", "error"); });
+    }
+
+    function renderDataKeSistemGrid(dataArray) {
+      const container = document.getElementById('containerDataKonsumen');
+      container.innerHTML = dataArray.length === 0 ? '<div class="col-12 text-center text-muted py-5 fs-6 card bg-white border rounded-4 shadow-sm">Pencarian tidak menemukan kecocokan berkas data.</div>' : '';
+      
+      dataArray.forEach(p => {
+        const totalHarga = Number(p.total) || 1;
+        const sisaUtang = Number(p.sisa) || 0;
+        const persentaseTerbayar = Math.min(100, Math.max(0, ((totalHarga - sisaUtang) / totalHarga) * 100));
+
+        const divCol = document.createElement('div');
+        divCol.className = "col-12 col-md-6 col-lg-4";
+        
+        divCol.innerHTML = `
+          <div class="loan-card ${p.status === 'LUNAS' ? 'lunas' : ''}">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div style="max-width: 70%;">
+                <span class="info-title d-block">Nama Nasabah</span>
+                <span class="info-desc text-truncate d-block" style="font-size: 1.2rem;">${p.nama}</span>
+              </div>
+              <span class="badge ${p.status === 'AKTIF' ? 'bg-primary' : 'bg-success'} px-3 py-2 rounded-pill fw-bold" style="font-size:0.75rem;">${p.status}</span>
+            </div>
+            
+            <div class="text-muted small mb-3"><i class="fa-solid fa-map-marker-alt text-danger me-1"></i> ${p.alamat}</div>
+            
+            <div class="p-3 bg-light rounded-3 mb-3" style="font-size: 0.9rem;">
+              <div class="row g-2">
+                <div class="col-6">
+                  <span class="info-title d-block">Kredit Barang</span>
+                  <span class="fw-bold text-dark">${p.barang}</span>
+                </div>
+                <div class="col-6">
+                  <span class="info-title d-block">Kontrak Pembelian</span>
+                  <span class="fw-bold text-muted">${formatRupiah(p.total)}</span>
+                </div>
+                <div class="col-6 mt-2">
+                  <span class="info-title d-block">Skema Angsuran</span>
+                  <span class="fw-bold text-dark">Ke-${p.cicilanKe} <span class="text-muted fw-normal">/ ${p.tenor}x (${p.tipe})</span></span>
+                </div>
+                <div class="col-6 mt-2">
+                  <span class="info-title d-block">Beban Sisa Utang</span>
+                  <span class="fw-bold text-danger d-block fs-6">${formatRupiah(p.sisa)}</span>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <div class="d-flex justify-content-between small text-muted mb-1 fw-bold" style="font-size: 0.7rem;">
+                  <span>RASIO PELUNASAN</span>
+                  <span>${persentaseTerbayar.toFixed(0)}%</span>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar ${p.status === 'LUNAS' ? 'bg-success' : 'bg-primary'}" role="progressbar" style="width: ${persentaseTerbayar}%"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="action-grid">
+              <button class="btn-action-panel pay" ${p.status !== 'AKTIF'?'disabled':''} onclick="bukaModalBayar(${p.rowNum}, '${p.nama}')">
+                <i class="fa-solid fa-receipt"></i> Kasir
+              </button>
+              <button class="btn-action-panel print" onclick="cetakUlangStruk(${p.rowNum})">
+                <i class="fa-solid fa-print"></i> Struk
+              </button>
+              <button class="btn-action-panel edit" onclick="bukaModalForm(${p.rowNum})">
+                <i class="fa-solid fa-user-gear"></i> Mengatur
+              </button>
+              <button class="btn-action-panel delete" onclick="prosesHapusData(${p.rowNum})">
+                <i class="fa-solid fa-trash-can"></i> Hapus
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(divCol);
       });
-      
-      if (isMain && jamSelesaiBersih !== "00:00") {
-        runTimerPintar(item.noPS, jamSelesaiBersih);
-      }
-    });
-  }
- 
-  function runTimerPintar(id, jamSelesaiStr) {
-    try {
-      var matchJam = jamSelesaiStr.match(/(\d{2}):(\d{2})/);
-      if (!matchJam) return;
-      const targetJam = parseInt(matchJam[1], 10);
-      const targetMenit = parseInt(matchJam[2], 10);
-      const safeId = id.replace(/\s+/g, '');
-      
-      function hitung() {
-        const sekarang = new Date();
-        const target = new Date();
-        target.setHours(targetJam, targetMenit, 0, 0);
-        
-        if (target.getTime() < sekarang.getTime() && (sekarang.getTime() - target.getTime() > 6 * 60 * 60 * 1000)) {
-          target.setDate(target.getDate() + 1);
-        }
-        
-        const diff = target.getTime() - sekarang.getTime();
-        const el = document.getElementById('t-' + safeId);
-        if (!el) return;
-        
-        if (diff <= 0) { 
-          el.innerHTML = "WAKTU HABIS!"; 
-          el.style.color = "orange"; 
-          clearInterval(intervals[safeId]);
-          return; 
-        }
-        
-        const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
-        const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-        const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-        el.innerHTML = h + ':' + m + ':' + s;
-      }
-      hitung();
-      intervals[safeId] = setInterval(hitung, 1000);
-    } catch(e) { console.log(e); }
-  }
- 
-  function start(id) {
-    const safeId = id.replace(/\s+/g, '');
-    const jam = document.getElementById('h-' + safeId).value;
-    const tipePS = document.getElementById('type-' + safeId).value;
-    if (!jam || parseFloat(jam) <= 0) return alert("Isi durasi waktu terlebih dahulu!");
-    
-    document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-success"></div><br>Menyimpan Sesi Main...</div>';
-    panggilServer(`?action=mulaiMain&id=${id}&jam=${jam}&tipe=${tipePS}`, load);
-  }
- 
-  function pesan(id) {
-    const safeId = id.replace(/\s+/g, '');
-    const selectEl = document.getElementById('m-' + safeId);
-    if(!selectEl || selectEl.value === "") return alert("Silakan pilih jajanan terlebih dahulu!");
-    
-    const harga = parseFloat(selectEl.value);
-    const selectedOption = selectEl.options[selectEl.selectedIndex];
-    const namaJajanan = selectedOption.getAttribute('data-nama') || selectedOption.text;
-    
-    document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-warning"></div><br>Memasukkan Jajanan ke Billing...</div>';
-    panggilServer(`?action=tambahJajanan&id=${id}&nama=${encodeURIComponent(namaJajanan)}&harga=${harga}`, load);
-  }
- 
-  function cetakKuponAwal(id) {
-    const safeId = id.replace(/\s+/g, '');
-    const inputJam = document.getElementById('h-' + safeId).value;
-    const tipePS = document.getElementById('type-' + safeId).value;
-    if (!inputJam || parseFloat(inputJam) <= 0) return alert("Silakan isi jumlah Jam durasi sewa!");
- 
-    const durasiJam = parseFloat(inputJam);
-    let hargaPerJam = 5000;
-    if (tipePS === "PS4") hargaPerJam = 10000;
-    
-    const totalHargaKupon = durasiJam * hargaPerJam;
-    const kodeUnik = "KP-" + Math.floor(1000 + Math.random() * 9000);
-    
-    let labelHeader = "RENTAL " + tipePS;
-    if (tipePS === "WIFI") labelHeader = "SEWA WIFI";
- 
-    const winKupon = window.open("", "_blank");
-    winKupon.document.write('<html><head><title>Kupon</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:5px;}.text-center{text-align:center;}.line{border-top:1px dashed #000;margin:5px 0;}.box{border:1px solid #000;padding:3px;margin:3px 0;font-weight:bold;}</style></head><body><div class="text-center"><b>🎟️ KUPON ' + labelHeader + '</b><br>DODI JAYA GAME SOLUTION</div><div class="line"></div><div class="text-center box">' + kodeUnik + '</div>Layanan: ' + id + '<br>Durasi: ' + durasiJam + ' Jam<br>Total: Rp ' + totalHargaKupon.toLocaleString('id-ID') + '<div class="line"></div><div class="text-center"><b>STATUS: LUNAS DI AWAL</b></div></body></html>');
-    winKupon.document.close();
-    setTimeout(function(){ winKupon.print(); winKupon.close(); }, 300);
-  }
- 
-  function cetakNotaLangsung(id) {
-    const item = dataPSGlobal.find(p => p.noPS === id);
-    if (!item) return alert("Data tidak ditemukan!");
-    const waktuSekarang = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
-    
-    let riwayatJajananTeks = "Tidak ada";
-    if (item.selesai && item.selesai.indexOf(" | Jrn:") !== -1) {
-      riwayatJajananTeks = item.selesai.split(" | Jrn:")[1];
     }
- 
-    let judulNota = "BILLING RENTAL";
-    if (item.status.toUpperCase().includes("WIFI")) judulNota = "BILLING SEWA WIFI";
- 
-    const win = window.open("", "_blank");
-    win.document.write('<html><head><title>Nota</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:4px;}table{width:100%;font-size:10px;}.line{border-top:1px dashed #000;margin:5px 0;}</style></head><body><div style="text-align:center;"><b>' + judulNota + '</b><br>DODI JAYA GAME SOLUTION</div><div class="line"></div>Waktu Cetak: ' + waktuSekarang + '<br><table><tr><td>Station/Room</td><td>: ' + item.noPS + '</td></tr><tr><td>Durasi sewa</td><td>: ' + item.durasi + ' Jam</td></tr></table><div class="line"></div><b>Rincian Belanja Jajanan:</b><br>' + riwayatJajananTeks + '<div class="line"></div><table><tr><td><b>TOTAL BAYAR</b></td><td style="text-align:right;"><b>Rp ' + item.biaya.toLocaleString('id-ID') + '</b></td></tr></table><div class="line"></div><div style="text-align:center;margin-top:5px;">Terima Kasih Atas Kunjungan Anda!</div></body></html>');
-    win.document.close();
-    setTimeout(function(){ win.print(); win.close(); }, 300);
-  }
- 
-  function stop(id) {
-    if (confirm("Selesaikan sesi " + id + " dan simpan laporan?")) {
-      document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-danger"></div><br>Menyimpan Omset & Mereset Station...</div>';
-      panggilServer(`?action=resetPS&id=${id}`, load);
+
+    function filterDataSistem() {
+      const input = document.getElementById('inputCari');
+      if (!input) return;
+      const kataKunci = input.value.toLowerCase().trim();
+      
+      const hasilFilter = listPelanggan.filter(p => 
+        (p.nama && p.nama.toLowerCase().includes(kataKunci)) || 
+        (p.alamat && p.alamat.toLowerCase().includes(kataKunci)) ||
+        (p.barang && p.barang.toLowerCase().includes(kataKunci))
+      );
+      renderDataKeSistemGrid(hasilFilter);
     }
-  }
- 
-  window.onload = load;
-</script>
+
+    function bukaModalForm(rowNum = null) {
+      document.getElementById('formPelanggan').reset();
+      document.getElementById('formRowNum').value = rowNum || '';
+      document.getElementById('modalFormTitle').innerText = rowNum ? "⚙️ Perbarui Kontrak Manajemen" : "👤 Daftarkan Konsumen Baru";
+      if(rowNum) {
+        const p = listPelanggan.find(i => i.rowNum === rowNum);
+        if(p) {
+          document.getElementById('formNama').value = p.nama; document.getElementById('formAlamat').value = p.alamat;
+          document.getElementById('formBarang').value = p.barang; document.getElementById('formTotalHarga').value = p.total;
+          document.getElementById('formSisaUtang').value = p.sisa; document.getElementById('formTipeTenor').value = p.tipe;
+          document.getElementById('formTenor').value = p.tenor;
+        }
+      }
+      bootstrapModalForm.show();
+    }
+
+    function prosesSimpanData(e) {
+      e.preventDefault();
+      const payload = {
+        action: "simpanData",
+        data: {
+          rowNum: document.getElementById('formRowNum').value, nama: document.getElementById('formNama').value,
+          alamat: document.getElementById('formAlamat').value, barang: document.getElementById('formBarang').value,
+          totalHarga: document.getElementById('formTotalHarga').value, sisaUtang: document.getElementById('formSisaUtang').value,
+          tipeTenor: document.getElementById('formTipeTenor').value, tenor: document.getElementById('formTenor').value
+        }
+      };
+      bootstrapModalForm.hide(); tunjukkanLoading(true);
+      irimKeApi(payload);
+    }
+
+    function bukaModalBayar(rowNum, nama) {
+      document.getElementById('formBayar').reset();
+      document.getElementById('bayarRowNum').value = rowNum;
+      document.getElementById('bayarNama').value = nama;
+      bootstrapModalBayar.show();
+    }
+
+    function prosesBayarManual(e) {
+      e.preventDefault();
+      const payload = {
+        action: "bayarManual",
+        rowNum: document.getElementById('bayarRowNum').value,
+        nominal: document.getElementById('bayarNominal').value
+      };
+      bootstrapModalBayar.hide(); tunjukkanLoading(true);
+      
+      fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(res => {
+          if(res.error) { tunjukkanLoading(false); return Swal.fire("Gagal", res.error, "error"); }
+          tunjukkanLoading(false);
+          
+          pemicuKertasThermal(res.hasilBayar.tgl, res.hasilBayar.nama, res.hasilBayar.barang, res.hasilBayar.nominal, res.hasilBayar.sisa);
+          muatDataDashboard();
+        }).catch(() => { tunjukkanLoading(false); Swal.fire("Kesalahan Kasir", "Gagal memproses transaksi finansial.", "error"); });
+    }
+
+    function cetakUlangStruk(rowNum) {
+      const p = listPelanggan.find(i => i.rowNum === rowNum);
+      if (p) {
+        let opsi = { year: '2-digit', month: 'numeric', day: 'numeric' };
+        let tglSkg = new Date().toLocaleDateString('id-ID', opsi);
+        pemicuKertasThermal(tglSkg, p.nama, p.barang, 0, p.sisa);
+      }
+    }
+
+    /* ENGINE MULTI-LINE AUTO-WRAP AGAR TEKS PANJANG JATUH KE BAWAH SECARA RAPI */
+    function buatBarisStruk(label, value) {
+      const LEBAR_KERTAS = 18; 
+      const lebarMaksValue = LEBAR_KERTAS - label.length;
+      
+      if (value.length <= lebarMaksValue) {
+        const sisaSpasi = LEBAR_KERTAS - (label.length + value.length);
+        return label + " ".repeat(sisaSpasi) + value + "\n";
+      } else {
+        let hasilBaris = "";
+        let sisaText = value;
+        let barisPertama = true;
+        
+        while (sisaText.length > 0) {
+          if (barisPertama) {
+            let chunk = sisaText.substring(0, lebarMaksValue);
+            const sisaSpasi = LEBAR_KERTAS - (label.length + chunk.length);
+            hasilBaris += label + " ".repeat(sisaSpasi) + chunk + "\n";
+            sisaText = sisaText.substring(lebarMaksValue);
+            barisPertama = false;
+          } else {
+            let chunk = sisaText.substring(0, LEBAR_KERTAS);
+            hasilBaris += " ".repeat(LEBAR_KERTAS - chunk.length) + chunk + "\n";
+            sisaText = sisaText.substring(LEBAR_KERTAS);
+          }
+        }
+        return hasilBaris;
+      }
+    }
+
+    function pemicuKertasThermal(tgl, nama, barang, nominal, sisa) {
+      const _nominalDisplay = nominal > 0 ? formatRupiah(nominal) : "- Re-Print -";
+      const strukPre = document.getElementById('areaStruk');
+      
+      let streamTeks = "";
+      streamTeks += "SLIP PEMBAYARAN SAH\n";
+      streamTeks += "KIKI KREDIT KASIR\n";
+      streamTeks += "==================\n"; 
+      streamTeks += buatBarisStruk("Tgl:", tgl);
+      streamTeks += buatBarisStruk("Nma:", nama);   // Auto lipat ke bawah jika terlalu panjang
+      streamTeks += buatBarisStruk("Brg:", barang); // Auto lipat ke bawah jika terlalu panjang
+      streamTeks += "------------------\n";
+      streamTeks += buatBarisStruk("BYR:", _nominalDisplay);
+      streamTeks += buatBarisStruk("SIS:", formatRupiah(sisa));
+      streamTeks += "------------------\n";
+      streamTeks += " * TERIMA KASIH * \n";
+      streamTeks += "SIMPAN BUKTI INI\n\n\n"; 
+
+      strukPre.textContent = streamTeks;
+      window.print();
+    }
+
+    function prosesHapusData(rowNum) {
+      Swal.fire({ 
+        title: "Konfirmasi Hapus Data?", 
+        text: "Menghapus berakibat hilangnya rekam jejak cicilan konsumen secara permanen!", 
+        icon: "warning", 
+        showCancelButton: true, 
+        confirmButtonColor: "#dc3545", 
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Ya, Hapus Data!" 
+      }).then((result) => {
+        if (result.isConfirmed) {
+          tunjukkanLoading(true);
+          irimKeApi({ action: "hapusData", rowNum: rowNum });
+        }
+      });
+    }
+
+    function irimKeApi(payload) {
+      fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(pesan => { 
+          tunjukkanLoading(false); 
+          Swal.fire("Berhasil", typeof pesan === 'string' ? pesan : "Transaksi Berhasil Di-Posting!", "success"); 
+          muatDataDashboard(); 
+        })
+        .catch(() => { 
+          tunjukkanLoading(false); 
+          Swal.fire("Kesalahan Server", "Gagal mengirimkan instruksi mutasi ke Cloud.", "error"); 
+        });
+    }
+  </script>
 </body>
 </html>
