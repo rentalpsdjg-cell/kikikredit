@@ -13,7 +13,6 @@
     .btn { padding: 10px 16px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
     .btn-dark { background-color: #2c3e50; color: white; }
     .btn-dark:hover { background-color: #1a252f; }
-    .btn-success { background-color: #2ecc71; color: white; width: 100%; margin-top: 5px; }
     .btn-danger { background-color: #e74c3c; color: white; width: 100%; margin-top: 5px; margin-bottom: 8px; }
     .btn-warning { background-color: #f1c40f; color: #333; width: 100%; margin-top: 5px; font-weight: bold; }
     .row { display: flex; flex-wrap: wrap; margin: 0 -10px; }
@@ -167,9 +166,6 @@
             <label style="font-size:0.75rem; font-weight:bold; color:#7f8c8d;">🛒 Menu Jajanan:</label>
             <select id="m-${item.noPS}" class="form-control" style="margin-top:4px;">${options}</select>
             <button onclick="pesan('${item.noPS}')" class="btn btn-warning" ${isMain ? '' : 'disabled'}>➕ Masukkan ke Billing</button>
-            <div class="jajanan-list" id="list-jajanan-${item.noPS}">
-              ${item.jajanan ? 'Item: ' + item.jajanan : 'Belum jajan'}
-            </div>
           </div>
         </div>
       `;
@@ -195,7 +191,7 @@
         const target = new Date();
         target.setHours(targetJam, targetMenit, 0, 0);
         
-        if (target.getTime() < Thermal && (sekarang.getTime() - target.getTime() > 6 * 60 * 60 * 1000)) {
+        if (target.getTime() < sekarang.getTime() && (sekarang.getTime() - target.getTime() > 6 * 60 * 60 * 1000)) {
           target.setDate(target.getDate() + 1);
         }
         
@@ -248,13 +244,12 @@
   function cetakNotaLangsung(id) {
     const item = dataPSGlobal.find(p => p.noPS === id);
     if (!item) return alert("Gagal mencetak nota.");
-    let riwayat = item.jajanan ? item.jajanan : "Tidak ada jajanan";
     let jamSelesaiClean = "00:00";
     var matchJam = item.selesai.match(/(\d{2}):(\d{2})/);
     if(matchJam) jamSelesaiClean = matchJam[1] + ":" + matchJam[2];
     
     const win = window.open("", "_blank");
-    win.document.write('<html><head><title>NOTA</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:4px;}.line{border-top:1px dashed #000;margin:5px 0;}.text-center{text-align:center;}</style></head><body><div class="text-center"><b>BILLING DODI JAYA</b></div><div class="line"></div>Station : ' + item.noPS + '<br>Durasi  : ' + item.durasi + ' Jam<br>Selesai : ' + jamSelesaiClean + ' WIB<div class="line"></div><b>Jajanan:</b><br>' + riwayat + '<div class="line"></div><b>TOTAL: Rp ' + item.biaya.toLocaleString('id-ID') + '</b><br><div class="line"></div><div class="text-center">Terima Kasih!</div></body></html>');
+    win.document.write('<html><head><title>NOTA</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:4px;}.line{border-top:1px dashed #000;margin:5px 0;}.text-center{text-align:center;}</style></head><body><div class="text-center"><b>BILLING DODI JAYA</b></div><div class="line"></div>Station : ' + item.noPS + '<br>Durasi  : ' + item.durasi + ' Jam<br>Selesai : ' + jamSelesaiClean + ' WIB<div class="line"></div><b>TOTAL: Rp ' + item.biaya.toLocaleString('id-ID') + '</b><br><div class="line"></div><div class="text-center">Terima Kasih!</div></body></html>');
     win.document.close();
     setTimeout(function(){ win.print(); win.close(); }, 300);
   }
