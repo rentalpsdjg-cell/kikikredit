@@ -22,7 +22,6 @@
   <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
     <h2 class="fw-bold text-primary m-0">BILLING PS DODI JAYA</h2>
     <div>
-      <button onclick="cetakLaporanBulanan()" class="btn btn-warning fw-bold shadow-sm me-2">📊 Cetak Bulanan</button>
       <button onclick="load()" class="btn btn-dark shadow-sm">🔄 REFRESH DATA</button>
     </div>
   </div>
@@ -35,7 +34,6 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
  
 <script>
-  // URL JONP Google Apps Script sebagai pengaman jika eksekusi standar diblokir browser
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuZZn52NlwNehwSV_rbxZXC0318hUgxaX9AvedQEsIn6OKKTiO9JVaCsEWkVEVFtfx/exec";
 
   let intervals = {};
@@ -43,7 +41,6 @@
   let dataPSGlobal = [];
   let tomSelectInstances = {};
  
-  // Fungsi jembatan pemanggil server universal agar anti-macet
   function panggilServer(urlParams, callbackSukses) {
     const callbackName = "jsonp_" + Math.round(100000 * Math.random());
     window[callbackName] = (data) => {
@@ -56,7 +53,6 @@
     script.id = callbackName;
     script.src = GOOGLE_SCRIPT_URL + urlParams + "&callback=" + callbackName;
     script.onerror = () => {
-      // Jika JSONP gagal, coba eksekusi lewat google.script.run bawaan Apps Script
       try {
         if(urlParams.includes("getAppData")) {
           google.script.run.withSuccessHandler(callbackSukses).getAppData();
@@ -117,7 +113,6 @@
         riwayatJajananTeks = bagian[1];
       }
       
-      // Ambil jam bersih saja untuk kalkulasi hitung mundur cadangan
       var matchJam = jamSelesaiTampil.match(/(\d{2}):(\d{2})/);
       let jamSelesaiBersih = matchJam ? matchJam[1] + ":" + matchJam[2] : "00:00";
  
@@ -136,9 +131,9 @@
  
       if (isMain) {
         let labelCetak = "🖨️ CETAK NOTA SEWA";
-        if(item.tipePS === "WiFi" || item.status.toUpperCase().includes("WIFI")) labelCetak = "🖨️ CETAK NOTA WIFI";
-        else if(item.tipePS === "PS2" || item.status.toUpperCase().includes("PS2")) labelCetak = "🖨️ CETAK NOTA PS2";
-        else if(item.tipePS === "PS4" || item.status.toUpperCase().includes("PS4")) labelCetak = "🖨️ CETAK NOTA PS4";
+        if(item.status.toUpperCase().includes("WIFI")) labelCetak = "🖨️ CETAK NOTA WIFI";
+        else if(item.status.toUpperCase().includes("PS2")) labelCetak = "🖨️ CETAK NOTA PS2";
+        else if(item.status.toUpperCase().includes("PS4")) labelCetak = "🖨️ CETAK NOTA PS4";
  
         htmlContent += `
           <div class="text-center timer my-2" id="t-${safeId}">--:--:--</div>
@@ -209,7 +204,6 @@
         const target = new Date();
         target.setHours(targetJam, targetMenit, 0, 0);
         
-        // Pengaman anti loncat hari jika melewati jam 12 malam
         if (target.getTime() < sekarang.getTime() && (sekarang.getTime() - target.getTime() > 6 * 60 * 60 * 1000)) {
           target.setDate(target.getDate() + 1);
         }
@@ -290,42 +284,13 @@
       riwayatJajananTeks = item.selesai.split(" | Jrn:")[1];
     }
  
-    let judulNota = "BILLING RENTAL " + (item.tipePS || "PS");
+    let judulNota = "BILLING RENTAL";
     if (item.status.toUpperCase().includes("WIFI")) judulNota = "BILLING SEWA WIFI";
  
     const win = window.open("", "_blank");
-    win.document.write('<html><head><title>Nota</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:5px;}table{width:100%;font-size:10px;}.line{border-top:1px dashed #000;margin:5px 0;}</style></head><body><div style="text-align:center;"><b>' + judulNota + '</b><br>DODI JAYA GAME SOLUTION</div><div class="line"></div>Waktu Cetak: ' + waktuSekarang + '<br><table><tr><td>Station/Room</td><td>: ' + item.noPS + '</td></tr><tr><td>Durasi sewa</td><td>: ' + item.durasi + ' Jam</td></tr></table><div class="line"></div><b>Rincian Belanja Jajanan:</b><br>' + riwayatJajananTeks + '<div class="line"></div><table><tr><td><b>TOTAL BAYAR</b></td><td style="text-align:right;"><b>Rp ' + item.biaya.toLocaleString('id-ID') + '</b></td></tr></table><div class="line"></div><div style="text-align:center;margin-top:5px;">Terima Kasih Atas Kunjungan Anda!</div></body></html>');
+    win.document.write('<html><head><title>Nota</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:4px;}table{width:100%;font-size:10px;}.line{border-top:1px dashed #000;margin:5px 0;}</style></head><body><div style="text-align:center;"><b>' + judulNota + '</b><br>DODI JAYA GAME SOLUTION</div><div class="line"></div>Waktu Cetak: ' + waktuSekarang + '<br><table><tr><td>Station/Room</td><td>: ' + item.noPS + '</td></tr><tr><td>Durasi sewa</td><td>: ' + item.durasi + ' Jam</td></tr></table><div class="line"></div><b>Rincian Belanja Jajanan:</b><br>' + riwayatJajananTeks + '<div class="line"></div><table><tr><td><b>TOTAL BAYAR</b></td><td style="text-align:right;"><b>Rp ' + item.biaya.toLocaleString('id-ID') + '</b></td></tr></table><div class="line"></div><div style="text-align:center;margin-top:5px;">Terima Kasih Atas Kunjungan Anda!</div></body></html>');
     win.document.close();
     setTimeout(function(){ win.print(); win.close(); }, 300);
-  }
- 
-  function cetakLaporanBulanan() {
-    document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-warning"></div><br>Mengunduh Laporan Mingguan/Bulanan...</div>';
-    panggilServer("?action=getLaporanBulanan", function(dataLaporan) {
-      // Jika data dibungkus dalam objek laporan
-      let listLog = dataLaporan.laporan || dataLaporan || [];
-      if (listLog.length === 0) {
-        alert("Tidak ada data laporan terkini di tab Laporan.");
-        load();
-        return;
-      }
-      let total = 0;
-      let baris = "";
-      listLog.forEach(log => {
-        if(log.pemasukan || log[3]) {
-          let tgl = log.tanggal || log[0];
-          let nPS = log.noPS || log[1];
-          let uang = parseFloat(log.pemasukan) || parseFloat(log[3]) || 0;
-          total += uang;
-          baris += '<tr><td>' + tgl + ' - ' + nPS + '</td><td style="text-align: right;">Rp ' + uang.toLocaleString('id-ID') + '</td></tr>';
-        }
-      });
- 
-      const winLaporan = window.open("", "_blank");
-      winLaporan.document.write('<html><head><title>Laporan</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:4px;}table{width:100%;font-size:9px;}.line{border-top:1px dashed #000;margin:5px 0;}</style></head><body><div style="text-align:center;"><b>REKAP OMSET BULANAN</b></div><div class="line"></div><table> ' + baris + '</table><div class="line"></div><table><tr><td><b>TOTAL</b></td><td style="text-align:right;"><b>Rp ' + total.toLocaleString('id-ID') + '</b></td></tr></table></body></html>');
-      winLaporan.document.close();
-      setTimeout(function(){ winLaporan.print(); winLaporan.close(); load(); }, 300);
-    });
   }
  
   function stop(id) {
