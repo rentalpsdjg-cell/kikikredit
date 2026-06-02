@@ -4,163 +4,198 @@
   <base target="_top">
   <meta charset="UTF-8">
   <title>BILLING PS DODI JAYA</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-    body { background-color: #f4f6f9; padding: 20px; color: #333; }
-    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #ddd; }
-    .title { color: #2c3e50; font-weight: bold; }
-    .btn { padding: 10px 16px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
-    .btn-dark { background-color: #2c3e50; color: white; }
-    .btn-dark:hover { background-color: #1a252f; }
-    .btn-danger { background-color: #e74c3c; color: white; width: 100%; margin-top: 5px; margin-bottom: 8px; }
-    .row { display: flex; flex-wrap: wrap; margin: 0 -10px; }
-    .col { flex: 0 0 33.333%; padding: 0 10px; margin-bottom: 20px; }
-    @media (max-width: 900px) { .col { flex: 0 0 50%; } }
-    @media (max-width: 600px) { .col { flex: 0 0 100%; } }
-    .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .ps-title { font-size: 1.3rem; font-weight: bold; }
-    .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; color: white; }
-    .bg-success { background-color: #2ecc71; }
-    .bg-danger { background-color: #e74c3c; }
-    .timer { font-size: 2.2rem; font-weight: bold; text-align: center; color: #e74c3c; font-family: monospace; margin: 12px 0; background: #fdf2f2; border-radius: 8px; padding: 5px; letter-spacing: 2px; }
-    .info-text { text-align: center; font-size: 0.85rem; color: #7f8c8d; margin-bottom: 12px; line-height: 1.4; }
-    .form-group { margin-bottom: 10px; }
-    .form-group label { display: block; font-size: 0.75rem; font-weight: bold; color: #7f8c8d; margin-bottom: 4px; }
-    .form-control { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; background-color: #fff; }
-    .loading-screen { text-align: center; padding: 60px 0; width: 100%; }
-    .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #2c3e50; border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .alert-error { background-color: #fde8e7; color: #9c241a; padding: 25px; border-radius: 8px; border: 1px solid #f5c2be; text-align: center; width: 100%; }
+    body { background-color: #f0f2f5; font-family: sans-serif; padding: 15px; }
+    .card-ps { border: none; border-radius: 15px; transition: 0.3s; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .timer { font-size: 2.2rem; font-weight: bold; color: #d63031; font-family: monospace; letter-spacing: 2px; }
+    .status-badge { font-size: 0.8rem; padding: 5px 15px; border-radius: 50px; font-weight: bold; }
+    .jajanan-section { background: #fff9db; padding: 12px; border-radius: 10px; border: 2px dashed #f59f00; margin-top: 15px; }
+    .list-jajanan-lokal { font-size: 0.85rem; color: #d63031; margin-top: 5px; font-weight: bold; }
+    .ts-wrapper { background: #fff; border-radius: 5px; }
   </style>
 </head>
 <body>
-
-<div class="header-bar">
-  <h2 class="title">BILLING PS DODI JAYA</h2>
-  <div class="btn-group-header">
-    <button onclick="load()" class="btn btn-dark">🔄 REFRESH DATA</button>
+ 
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
+    <h2 class="fw-bold text-primary m-0">BILLING PS DODI JAYA</h2>
+    <div>
+      <button onclick="cetakLaporanBulanan()" class="btn btn-warning fw-bold shadow-sm me-2">📊 Cetak Bulanan</button>
+      <button onclick="load()" class="btn btn-dark shadow-sm">🔄 REFRESH DATA</button>
+    </div>
+  </div>
+ 
+  <div id="content" class="row">
+    <div class="text-center mt-5">Memuat Sistem Kasir...</div>
   </div>
 </div>
-
-<div id="content" class="row">
-  <div class="loading-screen">
-    <div class="spinner"></div>
-    <h3>Sinkronisasi Database...</h3>
-  </div>
-</div>
-
+ 
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+ 
 <script>
+  // URL JONP Google Apps Script sebagai pengaman jika eksekusi standar diblokir browser
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuZZn52NlwNehwSV_rbxZXC0318hUgxaX9AvedQEsIn6OKKTiO9JVaCsEWkVEVFtfx/exec";
-  
-  window.SistemKasir = {
-    withSuccessHandler: function(cb) { this.successCb = cb; return this; },
-    withFailureHandler: function(cb) { this.failCb = cb; return this; },
-    panggilServer: function(urlParams) {
-      const callbackName = "jsonp_" + Math.round(100000 * Math.random());
-      window[callbackName] = (data) => {
-        delete window[callbackName];
-        var scriptEl = document.getElementById(callbackName);
-        if(scriptEl) scriptEl.remove();
-        if (data && data.error) this.failCb(data.error); else this.successCb(data);
-      };
-      const script = document.createElement("script");
-      script.id = callbackName;
-      script.src = GOOGLE_SCRIPT_URL + urlParams + "&callback=" + callbackName;
-      script.onerror = () => this.failCb("Gagal tersambung ke Server Google Script.");
-      document.body.appendChild(script);
-    },
-    getAppData: function() { this.panggilServer("?action=getAppData"); },
-    mulaiMain: function(id, jam, tipe) { this.panggilServer(`?action=mulaiMain&id=${id}&jam=${jam}&tipe=${tipe}`); },
-    resetPS: function(id) { this.panggilServer(`?action=resetPS&id=${id}`); }
-  };
 
   let intervals = {};
+  let menuGlobal = [];
   let dataPSGlobal = [];
+  let tomSelectInstances = {};
+ 
+  // Fungsi jembatan pemanggil server universal agar anti-macet
+  function panggilServer(urlParams, callbackSukses) {
+    const callbackName = "jsonp_" + Math.round(100000 * Math.random());
+    window[callbackName] = (data) => {
+      delete window[callbackName];
+      var scriptEl = document.getElementById(callbackName);
+      if(scriptEl) scriptEl.remove();
+      if (data && data.error) alert("Error Server: " + data.error); else callbackSukses(data);
+    };
+    const script = document.createElement("script");
+    script.id = callbackName;
+    script.src = GOOGLE_SCRIPT_URL + urlParams + "&callback=" + callbackName;
+    script.onerror = () => {
+      // Jika JSONP gagal, coba eksekusi lewat google.script.run bawaan Apps Script
+      try {
+        if(urlParams.includes("getAppData")) {
+          google.script.run.withSuccessHandler(callbackSukses).getAppData();
+        }
+      } catch(e) {
+        alert("Gagal terhubung ke server database Google Sheets.");
+      }
+    };
+    document.body.appendChild(script);
+  }
 
   function load() {
-    Object.keys(intervals).forEach(k => clearInterval(intervals[k]));
-    document.getElementById('content').innerHTML = '<div class="loading-screen"><div class="spinner"></div><h3>Sinkronisasi Database...</h3></div>';
-    SistemKasir.withSuccessHandler(render).withFailureHandler(tanganiError).getAppData();
+    Object.keys(tomSelectInstances).forEach(k => {
+      if(tomSelectInstances[k]) tomSelectInstances[k].destroy();
+    });
+    tomSelectInstances = {};
+    
+    document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-primary mb-2"></div><br>Memuat Data Terbaru...</div>';
+    panggilServer("?action=getAppData", render);
   }
-
-  function tanganiError(err) {
-    // Jika server google bermasalah, paksa render data default agar aplikasi tidak stuck putih/loading terus
-    console.log("Koneksi gagal, memicu data lokal cadangan:", err);
-    let cadanganData = { ps: [] };
-    for (let i = 1; i <= 10; i++) {
-      cadanganData.ps.push({ noPS: "PS " + i, status: "Tersedia", mulai: "", durasi: 0, selesai: "", biaya: 0 });
-    }
-    render(cadanganData);
-  }
-
+ 
   function render(data) {
-    dataPSGlobal = (data && data.ps) ? data.ps : [];
+    Object.keys(intervals).forEach(k => clearInterval(intervals[k]));
+    
+    menuGlobal = data.menu || [];
+    dataPSGlobal = data.ps || [];
     const container = document.getElementById('content');
     container.innerHTML = '';
-
-    if (dataPSGlobal.length === 0) {
-      container.innerHTML = '<div class="alert-error"><h3>⚠️ Data Dari Google Sheets Kosong</h3><p>Pastikan nama tab di file excel Anda adalah "Dashboard"</p></div>';
+ 
+    if(dataPSGlobal.length === 0) {
+      container.innerHTML = '<div class="text-center mt-5 text-muted">Tidak ada data Station PS di sheet Dashboard.</div>';
       return;
     }
-
+ 
     dataPSGlobal.forEach(item => {
-      const isMain = item.status && (item.status.toUpperCase().indexOf("MAIN") !== -1 || item.status.toUpperCase().indexOf("🔴") !== -1);
-      
-      let jamSelesaiTampil = "00:00";
-      if (item.selesai) {
-        var matchJam = item.selesai.match(/(\d{2}):(\d{2})/);
-        if (matchJam) {
-          jamSelesaiTampil = matchJam[1] + ":" + matchJam[2];
+      const isMain = item.status.includes("🔴 MAIN") || item.status.includes("🔴 SEWA") || item.status.includes("MAIN");
+      const safeId = item.noPS.replace(/\s+/g, '');
+
+      let options = `<option value="">Cari/Pilih Jajanan...</option>`;
+      menuGlobal.forEach(m => {
+        if(m && m[0] !== undefined) {
+          if(!m[1] || m[1] === 0 || m[1] === "") {
+            options += `<option value="" disabled class="fw-bold text-secondary">${m[0]}</option>`;
+          } else {
+            let hargaClean = m[1].toString().replace(/[^0-9.-]+/g,"");
+            let hargaJajan = parseFloat(hargaClean) || 0;
+            options += `<option value="${hargaJajan}" data-nama="${m[0]}">${m[0]} (Rp${hargaJajan.toLocaleString('id-ID')})</option>`;
+          }
         }
-      }
-
-      const col = document.createElement('div');
-      col.className = 'col';
+      });
+ 
+      let jamSelesaiTampil = item.selesai || "00:00";
+      let riwayatJajananTeks = "";
       
-      let cardHTML = `
-        <div class="card">
-          <div class="card-header">
-            <span class="ps-title">${item.noPS}</span>
-            <span class="badge ${isMain ? 'bg-danger' : 'bg-success'}">${isMain ? '🔴 MAIN' : '🟢 Tersedia'}</span>
-          </div>
+      if (item.selesai && item.selesai.indexOf(" | Jrn:") !== -1) {
+        let bagian = item.selesai.split(" | Jrn:");
+        jamSelesaiTampil = bagian[0];
+        riwayatJajananTeks = bagian[1];
+      }
+      
+      // Ambil jam bersih saja untuk kalkulasi hitung mundur cadangan
+      var matchJam = jamSelesaiTampil.match(/(\d{2}):(\d{2})/);
+      let jamSelesaiBersih = matchJam ? matchJam[1] + ":" + matchJam[2] : "00:00";
+ 
+      const div = document.createElement('div');
+      div.className = 'col-md-4';
+      
+      let htmlContent = `
+        <div class="card card-ps">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h4 class="m-0 fw-bold text-dark">${item.noPS}</h4>
+              <span class="status-badge ${isMain ? 'bg-danger text-white' : 'bg-success text-white'}">${isMain ? '🔴 MAIN' : '🟢 Tersedia'}</span>
+            </div>
+            <hr class="my-2">
       `;
-
+ 
       if (isMain) {
-        cardHTML += `
-          <div class="timer" id="t-${item.noPS.replace(/\s+/g, '')}">--:--:--</div>
-          <div class="info-text">Jam Selesai: <b>${jamSelesaiTampil} WIB</b><br>Total Billing: <b>Rp ${Number(item.biaya || 0).toLocaleString('id-ID')}</b></div>
-          <button onclick="cetakNotaLangsung('${item.noPS}')" class="btn btn-dark" style="width:100%; margin-bottom:6px;">🖨️ CETAK NOTA KASIR</button>
-          <button onclick="stop('${item.noPS}')" class="btn btn-danger">SELESAI & SIMPAN OMSET</button>
+        let labelCetak = "🖨️ CETAK NOTA SEWA";
+        if(item.tipePS === "WiFi" || item.status.toUpperCase().includes("WIFI")) labelCetak = "🖨️ CETAK NOTA WIFI";
+        else if(item.tipePS === "PS2" || item.status.toUpperCase().includes("PS2")) labelCetak = "🖨️ CETAK NOTA PS2";
+        else if(item.tipePS === "PS4" || item.status.toUpperCase().includes("PS4")) labelCetak = "🖨️ CETAK NOTA PS4";
+ 
+        htmlContent += `
+          <div class="text-center timer my-2" id="t-${safeId}">--:--:--</div>
+          <p class="text-center text-muted small mb-3">Selesai: <b>${jamSelesaiBersih} WIB</b><br>Total Billing: <b>Rp ${(item.biaya || 0).toLocaleString('id-ID')}</b></p>
+          <button onclick="cetakNotaLangsung('${item.noPS}')" class="btn btn-outline-secondary w-100 fw-bold mb-2">${labelCetak}</button>
+          <button onclick="stop('${item.noPS}')" class="btn btn-danger w-100 fw-bold mb-2">SELESAI & BAYAR</button>
         `;
       } else {
-        cardHTML += `
-          <div class="form-group">
-            <label>Pilih Mesin / Layanan:</label>
-            <select id="type-${item.noPS.replace(/\s+/g, '')}" class="form-control">
+        htmlContent += `
+          <div class="py-2">
+            <label class="small text-muted fw-bold mb-1">Pilih Mesin / Layanan:</label>
+            <select id="type-${safeId}" class="form-select mb-2">
               <option value="PS3">🎮 PLAYSTATION 3 (Rp5.000/Jam)</option>
+              <option value="PS2">🎮 PLAYSTATION 2 (Rp5.000/Jam)</option>
               <option value="PS4">🎮 PLAYSTATION 4 (Rp10.000/Jam)</option>
               <option value="WIFI">📶 SEWA WIFI (Rp5.000/Jam)</option>
             </select>
+            
+            <label class="small text-muted fw-bold mb-1">Atur Durasi (Jam):</label>
+            <div class="input-group mb-3">
+              <input type="number" id="h-${safeId}" class="form-control" placeholder="Contoh: 2" min="0.5" step="0.5">
+              <button onclick="start('${item.noPS}')" class="btn btn-success px-4 fw-bold">MULAI</button>
+            </div>
+            <button onclick="cetakKuponAwal('${item.noPS}')" class="btn btn-sm btn-outline-primary w-100 fw-bold mb-1">🎟️ CETAK KUPON DI AWAL</button>
           </div>
-          <div class="form-group">
-            <label>Set Jam Main:</label>
-            <input type="number" id="h-${item.noPS.replace(/\s+/g, '')}" class="form-control" placeholder="Berapa jam? misal: 2" min="0.5" step="0.5">
-          </div>
-          <button onclick="start('${item.noPS}')" class="btn btn-dark" style="width:100%;">START BILLING</button>
         `;
       }
-
-      cardHTML += `</div>`;
-      col.innerHTML = cardHTML;
-      container.appendChild(col);
-
-      if (isMain && jamSelesaiTampil !== "00:00") {
-        runTimerPintar(item.noPS, jamSelesaiTampil);
+ 
+      htmlContent += `
+        <div class="jajanan-section">
+          <label class="small fw-bold text-dark d-block mb-1">🛒 Tambah Jajanan / Snack Kasir:</label>
+          <div class="mb-2">
+            <select id="m-${safeId}" class="form-select dropdown-pencarian">${options}</select>
+          </div>
+          <button onclick="pesan('${item.noPS}')" class="btn btn-warning btn-sm w-100 fw-bold text-dark" ${isMain ? '' : 'disabled'}>➕ Masukkan ke Billing</button>
+          <div class="list-jajanan-lokal" id="list-jajanan-${safeId}">
+            ${riwayatJajananTeks ? 'Terbeli: ' + riwayatJajananTeks : 'Belum belanja jajanan'}
+          </div>
+        </div>
+      `;
+ 
+      htmlContent += '</div></div>';
+      div.innerHTML = htmlContent;
+      container.appendChild(div);
+ 
+      tomSelectInstances[safeId] = new TomSelect(`#m-${safeId}`, {
+        create: false,
+        sortField: { field: "text", direction: "asc" },
+        placeholder: "Ketik nama jajanan..."
+      });
+      
+      if (isMain && jamSelesaiBersih !== "00:00") {
+        runTimerPintar(item.noPS, jamSelesaiBersih);
       }
     });
   }
-
+ 
   function runTimerPintar(id, jamSelesaiStr) {
     try {
       var matchJam = jamSelesaiStr.match(/(\d{2}):(\d{2})/);
@@ -174,6 +209,7 @@
         const target = new Date();
         target.setHours(targetJam, targetMenit, 0, 0);
         
+        // Pengaman anti loncat hari jika melewati jam 12 malam
         if (target.getTime() < sekarang.getTime() && (sekarang.getTime() - target.getTime() > 6 * 60 * 60 * 1000)) {
           target.setDate(target.getDate() + 1);
         }
@@ -184,7 +220,7 @@
         
         if (diff <= 0) { 
           el.innerHTML = "WAKTU HABIS!"; 
-          el.style.color = "#d35400"; 
+          el.style.color = "orange"; 
           clearInterval(intervals[safeId]);
           return; 
         }
@@ -198,38 +234,107 @@
       intervals[safeId] = setInterval(hitung, 1000);
     } catch(e) { console.log(e); }
   }
-
+ 
   function start(id) {
     const safeId = id.replace(/\s+/g, '');
     const jam = document.getElementById('h-' + safeId).value;
-    const tipe = document.getElementById('type-' + safeId).value;
-    if (!jam || parseFloat(jam) <= 0) return alert("Durasi main belum diisi!");
-    document.getElementById('content').innerHTML = '<div class="loading-screen"><div class="spinner"></div><h3>Sedang Menyimpan Sesi Main...</h3></div>';
-    SistemKasir.withSuccessHandler(load).withFailureHandler(tanganiError).mulaiMain(id, jam, tipe);
+    const tipePS = document.getElementById('type-' + safeId).value;
+    if (!jam || parseFloat(jam) <= 0) return alert("Isi durasi waktu terlebih dahulu!");
+    
+    document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-success"></div><br>Menyimpan Sesi Main...</div>';
+    panggilServer(`?action=mulaiMain&id=${id}&jam=${jam}&tipe=${tipePS}`, load);
   }
-
-  function stop(id) {
-    if (confirm("Selesaikan billing " + id + " dan simpan pendapatan?")) {
-      document.getElementById('content').innerHTML = '<div class="loading-screen"><div class="spinner"></div><h3>Menyimpan Pendapatan...</h3></div>';
-      SistemKasir.withSuccessHandler(load).withFailureHandler(tanganiError).resetPS(id);
-    }
+ 
+  function pesan(id) {
+    const safeId = id.replace(/\s+/g, '');
+    const selectEl = document.getElementById('m-' + safeId);
+    if(!selectEl || selectEl.value === "") return alert("Silakan pilih jajanan terlebih dahulu!");
+    
+    const harga = parseFloat(selectEl.value);
+    const selectedOption = selectEl.options[selectEl.selectedIndex];
+    const namaJajanan = selectedOption.getAttribute('data-nama') || selectedOption.text;
+    
+    document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-warning"></div><br>Memasukkan Jajanan ke Billing...</div>';
+    panggilServer(`?action=tambahJajanan&id=${id}&nama=${encodeURIComponent(namaJajanan)}&harga=${harga}`, load);
   }
-
+ 
+  function cetakKuponAwal(id) {
+    const safeId = id.replace(/\s+/g, '');
+    const inputJam = document.getElementById('h-' + safeId).value;
+    const tipePS = document.getElementById('type-' + safeId).value;
+    if (!inputJam || parseFloat(inputJam) <= 0) return alert("Silakan isi jumlah Jam durasi sewa!");
+ 
+    const durasiJam = parseFloat(inputJam);
+    let hargaPerJam = 5000;
+    if (tipePS === "PS4") hargaPerJam = 10000;
+    
+    const totalHargaKupon = durasiJam * hargaPerJam;
+    const kodeUnik = "KP-" + Math.floor(1000 + Math.random() * 9000);
+    
+    let labelHeader = "RENTAL " + tipePS;
+    if (tipePS === "WIFI") labelHeader = "SEWA WIFI";
+ 
+    const winKupon = window.open("", "_blank");
+    winKupon.document.write('<html><head><title>Kupon</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:5px;}.text-center{text-align:center;}.line{border-top:1px dashed #000;margin:5px 0;}.box{border:1px solid #000;padding:3px;margin:3px 0;font-weight:bold;}</style></head><body><div class="text-center"><b>🎟️ KUPON ' + labelHeader + '</b><br>DODI JAYA GAME SOLUTION</div><div class="line"></div><div class="text-center box">' + kodeUnik + '</div>Layanan: ' + id + '<br>Durasi: ' + durasiJam + ' Jam<br>Total: Rp ' + totalHargaKupon.toLocaleString('id-ID') + '<div class="line"></div><div class="text-center"><b>STATUS: LUNAS DI AWAL</b></div></body></html>');
+    winKupon.document.close();
+    setTimeout(function(){ winKupon.print(); winKupon.close(); }, 300);
+  }
+ 
   function cetakNotaLangsung(id) {
     const item = dataPSGlobal.find(p => p.noPS === id);
-    if (!item) return alert("Gagal mencetak nota.");
-    let jamSelesaiClean = "00:00";
-    if (item.selesai) {
-      var matchJam = item.selesai.match(/(\d{2}):(\d{2})/);
-      if(matchJam) jamSelesaiClean = matchJam[1] + ":" + matchJam[2];
-    }
+    if (!item) return alert("Data tidak ditemukan!");
+    const waktuSekarang = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
     
+    let riwayatJajananTeks = "Tidak ada";
+    if (item.selesai && item.selesai.indexOf(" | Jrn:") !== -1) {
+      riwayatJajananTeks = item.selesai.split(" | Jrn:")[1];
+    }
+ 
+    let judulNota = "BILLING RENTAL " + (item.tipePS || "PS");
+    if (item.status.toUpperCase().includes("WIFI")) judulNota = "BILLING SEWA WIFI";
+ 
     const win = window.open("", "_blank");
-    win.document.write('<html><head><title>NOTA</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:4px;}.line{border-top:1px dashed #000;margin:5px 0;}.text-center{text-align:center;}</style></head><body><div class="text-center"><b>BILLING DODI JAYA</b></div><div class="line"></div>Station : ' + item.noPS + '<br>Durasi  : ' + (item.durasi || 0) + ' Jam<br>Selesai : ' + jamSelesaiClean + ' WIB<div class="line"></div><b>TOTAL: Rp ' + Number(item.biaya || 0).toLocaleString('id-ID') + '</b><br><div class="line"></div><div class="text-center">Terima Kasih!</div></body></html>');
+    win.document.write('<html><head><title>Nota</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:5px;}table{width:100%;font-size:10px;}.line{border-top:1px dashed #000;margin:5px 0;}</style></head><body><div style="text-align:center;"><b>' + judulNota + '</b><br>DODI JAYA GAME SOLUTION</div><div class="line"></div>Waktu Cetak: ' + waktuSekarang + '<br><table><tr><td>Station/Room</td><td>: ' + item.noPS + '</td></tr><tr><td>Durasi sewa</td><td>: ' + item.durasi + ' Jam</td></tr></table><div class="line"></div><b>Rincian Belanja Jajanan:</b><br>' + riwayatJajananTeks + '<div class="line"></div><table><tr><td><b>TOTAL BAYAR</b></td><td style="text-align:right;"><b>Rp ' + item.biaya.toLocaleString('id-ID') + '</b></td></tr></table><div class="line"></div><div style="text-align:center;margin-top:5px;">Terima Kasih Atas Kunjungan Anda!</div></body></html>');
     win.document.close();
     setTimeout(function(){ win.print(); win.close(); }, 300);
   }
-
+ 
+  function cetakLaporanBulanan() {
+    document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-warning"></div><br>Mengunduh Laporan Mingguan/Bulanan...</div>';
+    panggilServer("?action=getLaporanBulanan", function(dataLaporan) {
+      // Jika data dibungkus dalam objek laporan
+      let listLog = dataLaporan.laporan || dataLaporan || [];
+      if (listLog.length === 0) {
+        alert("Tidak ada data laporan terkini di tab Laporan.");
+        load();
+        return;
+      }
+      let total = 0;
+      let baris = "";
+      listLog.forEach(log => {
+        if(log.pemasukan || log[3]) {
+          let tgl = log.tanggal || log[0];
+          let nPS = log.noPS || log[1];
+          let uang = parseFloat(log.pemasukan) || parseFloat(log[3]) || 0;
+          total += uang;
+          baris += '<tr><td>' + tgl + ' - ' + nPS + '</td><td style="text-align: right;">Rp ' + uang.toLocaleString('id-ID') + '</td></tr>';
+        }
+      });
+ 
+      const winLaporan = window.open("", "_blank");
+      winLaporan.document.write('<html><head><title>Laporan</title><style>body{font-family:monospace;width:52mm;font-size:10px;margin:0;padding:4px;}table{width:100%;font-size:9px;}.line{border-top:1px dashed #000;margin:5px 0;}</style></head><body><div style="text-align:center;"><b>REKAP OMSET BULANAN</b></div><div class="line"></div><table> ' + baris + '</table><div class="line"></div><table><tr><td><b>TOTAL</b></td><td style="text-align:right;"><b>Rp ' + total.toLocaleString('id-ID') + '</b></td></tr></table></body></html>');
+      winLaporan.document.close();
+      setTimeout(function(){ winLaporan.print(); winLaporan.close(); load(); }, 300);
+    });
+  }
+ 
+  function stop(id) {
+    if (confirm("Selesaikan sesi " + id + " dan simpan laporan?")) {
+      document.getElementById('content').innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-danger"></div><br>Menyimpan Omset & Mereset Station...</div>';
+      panggilServer(`?action=resetPS&id=${id}`, load);
+    }
+  }
+ 
   window.onload = load;
 </script>
 </body>
